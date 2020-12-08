@@ -78,7 +78,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         getCurrentProfile();
         iv_profile = (ImageView)findViewById(R.id.ImageForUpdate);
-        profileImage = new ProfileImage(getCacheDir(),myUid);
+        profileImage = new ProfileImage(getApplicationContext(),myUid);
         profileImage.showProfileImage(iv_profile);
 
 

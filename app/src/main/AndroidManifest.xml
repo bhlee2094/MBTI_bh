@@ -28,7 +28,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MBTI">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".FriendListActivity"></activity>
         <activity android:name=".MyprofileActivity" />
         <activity android:name=".SearchingPersonActivity" />

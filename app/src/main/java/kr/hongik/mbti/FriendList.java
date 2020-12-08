@@ -157,10 +157,16 @@ public class FriendList{
 
     }
 
-    //테스트용 함수
-    public void ForTest(String OtherUserNum){
+    //데모 시연용 데이터 만듦
+    public void makeSampleData(String OtherUserNum){
         CollectionReference colRef = db.collection("friendList/"+ UserNum +"/friendRequets");
+        if(OtherUserNum != null)
         colRef.document(OtherUserNum).set(emptyObject);
+
+        colRef.document("4MEeO638oeZqTzaQ545suXEOgF82").set(emptyObject);
+        colRef.document("YP6jS2oqzPc4gSaAGXBGJB5aWIf1").set(emptyObject);
+        colRef.document("rwH4ZolyfHTUscod2gs49sWRqu33").set(emptyObject);
+
     }
 
 }

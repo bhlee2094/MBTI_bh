@@ -128,7 +128,7 @@ public class JoinActivity extends AppCompatActivity {
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri profileImage = data.getData();
             imageview.setImageURI(profileImage);
-            ProfileImage profile = new ProfileImage(getCacheDir(),currentUser.getUid());
+            ProfileImage profile = new ProfileImage(getApplicationContext(),currentUser.getUid());
             profile.uploadProfileImage(profileImage);
         }
     }

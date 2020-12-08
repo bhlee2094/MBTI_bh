@@ -1,13 +1,20 @@
 package kr.hongik.mbti;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 
 /**
@@ -41,10 +48,15 @@ public class FriendRequetsFragment extends Fragment {
         FriendList friendList = new FriendList();
         adapter = new FriendListAdapter(getActivity(),0, friendList.Friends);
 
+        friendList.makeSampleData(null);
+
         //친구요청 가져오기
         friendList.getFriendRequets(adapter);
 
         lv_friend_req.setAdapter(adapter);
+
+
         return v;
     }
+
 }

@@ -2,15 +2,17 @@ package kr.hongik.mbti;
 
 import androidx.annotation.NonNull;
 
+import android.Manifest;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -38,17 +40,20 @@ public class ProfileImage {
     File cacheDir;
     File cacheFile;
     String userNum;
+    Context context;
+    ImageView tempiv;
 
     /**
-     * 
+     *
      * @param cacheDir
      * @param userNum 이 이름으로 cache파일이 생성됩니다.
      */
-    public ProfileImage(File cacheDir, String userNum){
+    public ProfileImage(Context context, String userNum){
+        this.context = context;
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        cacheDir = cacheDir;
+        cacheDir = context.getCacheDir();
         this.userNum=userNum;
-        cacheFile = new File(cacheDir.getAbsolutePath(), userNum + ".jpg");
+        cacheFile = new File(cacheDir.getAbsolutePath(), userNum + ".jpeg");
     }
 
     /**
@@ -63,53 +68,82 @@ public class ProfileImage {
         {
             setProfileImageCache(iv);
         }
-        else{
-            Log.d(TAG, " showProfileImage: no Cache");
-            if(downloadProfileImage(userNum))
-                setProfileImageCache(iv);
+        else {
+            tempiv = iv;
+            downloadProfileImage(userNum);
         }
-        Log.d(TAG, " showProfileImage: success");
+
+
     }
 
     /**
      * firebase Storage에 profileImage를 업로드 합니다.
      * @param profileImageUri 이미지 URI
      */
-    public void uploadProfileImage(Uri profileImageUri){
+    public void uploadProfileImage(Uri profileImageUri) {
 
-        StorageReference imageRef = mStorageRef.child("profileImages/"+userNum+".jpg");
-        imageRef.putFile(profileImageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Log.d(TAG,"uploadProfileImage :Success");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Log.d(TAG,"uploadProfileImage : Fail");
-                    }
-                });
-        
+        int compressQuality = 20;
 
-        
+        //Uri to bitmap
+        try {
+
+            try {
+
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), profileImageUri);
+                //bitmap to cacheFile and compress
+                FileOutputStream filestream = null;
+                try {
+                    filestream = new FileOutputStream(cacheFile);
+                    //quality : 숫자가 작을수록 압축률 높음
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, filestream);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG, "uploaded file size: " + cacheFile.length()/1000+"kb");
+
+                StorageReference imageRef = mStorageRef.child("profileImages/" + userNum + ".jpeg");
+
+                imageRef.putFile(Uri.fromFile(cacheFile))
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.d(TAG, "uploadProfileImage :Success");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                Log.d(TAG, "uploadProfileImage : Fail");
+                            }
+                        });
+            } catch (FileNotFoundException ex) {
+                // insert code to run when exception occurs
+            }
+
+        } catch (IOException ioe) {
+
+        }
+
+
     }
 
     /**
      * firebase Storage에서 profileImage 다운로드 후 cache를 생성합니다.
+     * 모든 이미지 파일은 jpeg파일이라고 가정
      * @param userNum 이 유저의 프로필을 가져옵니다.
+     *
      */
     public boolean downloadProfileImage(String userNum){
         try {
             File localFile = File.createTempFile("Temp", "");
-            StorageReference imageRef = mStorageRef.child("profileImages/" + userNum + ".jpg");
+            StorageReference imageRef = mStorageRef.child("profileImages/" + userNum + ".jpeg");
             imageRef.getFile(localFile)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             //다운받은 파일(local) cache로 저장
                             makeCacheProfileImage(localFile);
+                            setProfileImageCache(tempiv);
                             Log.d(TAG, "onSuccess: profile 다운로드 후 cache 저장");
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -187,9 +221,6 @@ public class ProfileImage {
         Log.d(TAG, "setBitmapToImageView: no cache File");
 
     }
-
-
-
 
 
 }
