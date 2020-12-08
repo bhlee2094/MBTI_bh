@@ -6,11 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".FriendListActivity">
 
-    <ListView
-        android:id="@+id/user_friends"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="156dp" />
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_weight = "1"
+            android:id="@+id/fragmentLayout" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight = "0"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내친구"
+                android:id="@+id/btn_my_friend_list"
+                android:layout_weight = "1"
+                android:layout_marginRight="3dp"
+                ></Button>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="친구 신청 확인"
+                android:id="@+id/btn_friending"
+                android:layout_weight = "1"
+                ></Button>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

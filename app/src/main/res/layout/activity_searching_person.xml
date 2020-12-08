@@ -31,7 +31,7 @@
                 android:textSize="24sp" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btn_send_friend_request"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="친구신청하기" />

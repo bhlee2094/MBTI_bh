@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference usersRef = db.collection("users").document(user.getUid());
-    // 마지막으로 뒤로가기 버튼을 눌렀던 시간 저장
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
@@ -152,6 +151,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    /**
+     *     Firebase 로그아웃
+     *      @author 장혜리
+     */
     public void logout(FirebaseAuth mFirebaseAuth) {
 
         if (mFirebaseAuth.getCurrentUser() != null) {
@@ -175,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      *     뒤로가기 두번 누르면 앱 종료
+     *      @author 장혜리
      */
     private long backKeyPressedTime = 0;
     @Override

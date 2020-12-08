@@ -100,6 +100,7 @@ public class SearchingActivity extends AppCompatActivity {
 
                                     Intent intent = new Intent(SearchingActivity.this, SearchingPersonActivity.class);
                                     intent.putExtra("MemberInfo", m);
+                                    intent.putExtra("otherUserNum", document.getId());
                                     startActivity(intent);
                                 }
                             } else {

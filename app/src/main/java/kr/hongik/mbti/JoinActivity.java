@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class JoinActivity extends AppCompatActivity {
 
@@ -33,12 +34,15 @@ public class JoinActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     private StorageReference mStorageRef;
 
-    private String myUid = currentUser.getUid();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
+
+        mfirebaseAuth = FirebaseAuth.getInstance();
+        currentUser = mfirebaseAuth.getCurrentUser();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+
         imageview = (ImageView)findViewById(R.id.Image);
         imageview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +67,7 @@ public class JoinActivity extends AppCompatActivity {
         JoinButton = findViewById(R.id.JoinButton);
 
         JoinButton.setOnClickListener(mClickListener);
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+
 
     }
 
@@ -78,8 +82,6 @@ public class JoinActivity extends AppCompatActivity {
 
 
     private void profileUpdate(){
-        mfirebaseAuth = FirebaseAuth.getInstance();
-        currentUser = mfirebaseAuth.getCurrentUser();
 
         String nickname = ((EditText)findViewById(R.id.nickname)).getText().toString();
         String gender = ((EditText)findViewById(R.id.gender)).getText().toString();
@@ -126,8 +128,8 @@ public class JoinActivity extends AppCompatActivity {
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri profileImage = data.getData();
             imageview.setImageURI(profileImage);
-            ProfileImage profile = new ProfileImage(getCacheDir());
-            profile.uploadProfileImage(profileImage, myUid);
+            ProfileImage profile = new ProfileImage(getCacheDir(),currentUser.getUid());
+            profile.uploadProfileImage(profileImage);
         }
     }
 

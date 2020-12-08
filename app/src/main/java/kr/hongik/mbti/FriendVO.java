@@ -1,5 +1,10 @@
 package kr.hongik.mbti;
 
+
+/**
+ * Freind value object
+ * @author 장혜리
+ **/
 public class FriendVO {
 
     private String userNum;

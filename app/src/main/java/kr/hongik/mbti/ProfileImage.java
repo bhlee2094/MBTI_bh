@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 /**
- * profileImage를 처리하기 위한 클래스
+ * profileImage를 처리하기 위한 클래스. (Model)
+ * 프로필 이미지는 프로필 뿐만 아니라 채팅 등 여러 뷰에서 사용되는 만큼 profile과 따로 분리하여 작성하였습니다.
+ * NOTE: 화면 업데이트는 Model에 있을 기능이 아님. 추후 수정할 것.
  * @author 장혜리
  **/
 
@@ -35,11 +37,18 @@ public class ProfileImage {
     final String TAG = ProfileImage.class.getName();
     File cacheDir;
     File cacheFile;
+    String userNum;
 
-    public ProfileImage(File cacheDir){
+    /**
+     * 
+     * @param cacheDir
+     * @param userNum 이 이름으로 cache파일이 생성됩니다.
+     */
+    public ProfileImage(File cacheDir, String userNum){
         mStorageRef = FirebaseStorage.getInstance().getReference();
         cacheDir = cacheDir;
-        cacheFile = new File(cacheDir.getAbsolutePath(), FirebaseAuth.getInstance().getUid() + ".jpg");
+        this.userNum=userNum;
+        cacheFile = new File(cacheDir.getAbsolutePath(), userNum + ".jpg");
     }
 
     /**
@@ -47,9 +56,8 @@ public class ProfileImage {
      *  cache가 있으면 cache 파일 사용
      *  cache가 없으면 firebase Strorage에서 다운로드
      * @param iv
-     * @param userNum 이 유저의 프로필을 가져옵니다.
      */
-    public void showProfileImage(ImageView iv , String userNum)
+    public void showProfileImage(ImageView iv)
     {
         if((cacheFile.exists()))
         {
@@ -66,9 +74,8 @@ public class ProfileImage {
     /**
      * firebase Storage에 profileImage를 업로드 합니다.
      * @param profileImageUri 이미지 URI
-     * @param userNum 이 유저의 프로필을 가져옵니다.
      */
-    public void uploadProfileImage(Uri profileImageUri, String userNum){
+    public void uploadProfileImage(Uri profileImageUri){
 
         StorageReference imageRef = mStorageRef.child("profileImages/"+userNum+".jpg");
         imageRef.putFile(profileImageUri)

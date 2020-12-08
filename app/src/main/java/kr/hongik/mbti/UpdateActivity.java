@@ -78,8 +78,8 @@ public class UpdateActivity extends AppCompatActivity {
 
         getCurrentProfile();
         iv_profile = (ImageView)findViewById(R.id.ImageForUpdate);
-        profileImage = new ProfileImage(getCacheDir());
-        profileImage.showProfileImage(iv_profile,myUid);
+        profileImage = new ProfileImage(getCacheDir(),myUid);
+        profileImage.showProfileImage(iv_profile);
 
 
         //iv_profile 클릭시 프로필이미지 재업로드 가능
@@ -106,7 +106,7 @@ public class UpdateActivity extends AppCompatActivity {
                         "stateMessage",((EditText)findViewById(R.id.u_stateMessage)).getText().toString());
 
         if(profileImageUri!=null) {
-            profileImage.uploadProfileImage(profileImageUri,myUid);
+            profileImage.uploadProfileImage(profileImageUri);
             File localFile = new File(getRealPathFromURI(profileImageUri));
             profileImage.makeCacheProfileImage(localFile);
 
