@@ -1,14 +1,13 @@
 package kr.hongik.mbti;
 
-import android.content.Context;
+import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,10 +35,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-
+/**
+ * class LoginActivity
+ * @author 장혜리
+ */
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -61,12 +60,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        btn_login_google = findViewById(R.id.btn_google_login);
+        setLoginButton();
 
-        // 파이어베이스 인증 객체 선언
+        checkPermission();
+
+        //1.파이어베이스 인증 객체 선언
         mFirebaseAuth= FirebaseAuth.getInstance();
 
-        // Configure Google Sign In
+        //2.Google Sign In 설정
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -85,9 +86,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-        //facebook login
+        //3.facebook login 설정
         mCallbackManager = CallbackManager.Factory.create();
-        btn_login_facebook = (LoginButton) findViewById(R.id.btn_facebook_login);
         btn_login_facebook.setReadPermissions("email", "public_profile");
         btn_login_facebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -115,8 +115,33 @@ public class LoginActivity extends AppCompatActivity {
         checkUser(currentUser);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //페이스북 로그인
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
-    // google token
+        // 구글 로그인
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // 로그인 성공
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+
+            }
+        }
+
+
+    }
+
+
+    /**
+     * google Token으로 firebase 로그인
+     * 공식 문서를 바탕으로 변형하였습니다. 자세한 사항은 공식 문서를 참조바랍니다.
+     * @param acct
+     */
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -141,7 +166,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    // facebook Token
+    /**
+     * facebook Token으로 firebase 로그인
+     * 공식 문서를 바탕으로 변형하였습니다. 자세한 사항은 공식 문서를 참조바랍니다.
+     * @param token
+     */
     private void handleFacebookAccessToken(AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mFirebaseAuth.signInWithCredential(credential)
@@ -164,35 +193,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //페이스북 로그인
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
-        // 구글 로그인
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // 로그인 성공
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-
-            }
-        }
-
-
-
-    }
-
-
-
+    /**
+     * firebae 유저 확인 및 화면 전환
+     * @param user
+     */
     public void checkUser(FirebaseUser user) {
-        //유저 확인 및 화면 전환
         if (user != null) {
             Toast.makeText(LoginActivity.this, mFirebaseAuth.getUid() + "님이 현재 접속중입니다", Toast.LENGTH_SHORT).show();
             myStartActivity(MainActivity.class);
+            finish();
         }
 
     }
@@ -201,5 +211,40 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, c);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+
+    /**
+     * 외부저장소 권한허가, 거부 시 프로필 이미지 이용에 문제 있을 수 있음
+     */
+    private void checkPermission()    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    //Toast.makeText(this, "외부 저장소 사용을 위한 읽기/쓰기 권한을 요청합니다", Toast.LENGTH_SHORT).show();
+                }
+
+                requestPermissions(new String[]
+                                {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},
+                        2);
+
+            } 
+        }
+    }
+
+
+    /**
+     *  로그인 버튼 text 변경
+     */
+    private void setLoginButton(){
+
+        btn_login_google = findViewById(R.id.btn_google_login);
+        TextView textView = (TextView)btn_login_google.getChildAt(0);
+        textView.setText(getString(R.string.sing_in_google));
+
+        btn_login_facebook = (LoginButton) findViewById(R.id.btn_facebook_login);
+        btn_login_facebook.setLoginText(getString(R.string.sing_in_facebook));
+
     }
 }

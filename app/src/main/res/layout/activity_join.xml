@@ -5,82 +5,105 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context=".Join">
+    tools:context=".JoinActivity">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="144dp"
-        tools:layout_editor_absoluteY="-1dp">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/Join"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:text="상세정보입력"
-            android:textSize="30sp" />
-
-        <EditText
-            android:id="@+id/nickname"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="nickname"
-            android:inputType="textPersonName" />
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="144dp"
+            tools:layout_editor_absoluteY="-1dp">
 
-        <EditText
-            android:id="@+id/age"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="age"
-            android:inputType="textPersonName" />
+            <TextView
+                android:id="@+id/Join"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="상세정보입력"
+                android:textSize="30sp" />
 
-        <EditText
-            android:id="@+id/mbti"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="mbti"
-            android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/nickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="닉네임"
+                android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="address"
-            android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="남자/여자 로 적어주세요"
+                android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/stateMessage"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:ems="10"
-            android:hint="stateMessage"
-            android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="나이"
+                android:inputType="textPersonName" />
 
-        <ImageView
-            android:id="@+id/Image"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_image" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/JoinButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="회원가입" />
+                <EditText
+                    android:id="@+id/mbti"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="mbti (소문자)"
+                    android:inputType="textPersonName" />
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/mbtiLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="mbti 검사하러가기"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="주소"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/stateMessage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:ems="10"
+                android:hint="상태메시지"
+                android:inputType="textPersonName" />
+
+            <ImageView
+                android:id="@+id/Image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_image" />
+
+            <Button
+                android:id="@+id/JoinButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="회원가입"
+                android:textSize="18sp" />
+
+        </LinearLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

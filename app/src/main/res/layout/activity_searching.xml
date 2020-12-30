@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MatchingActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/matching"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:gravity="center"
+                    android:text="매칭 옵션 설정"
+                    android:textSize="36sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="최소나이"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/m_minage"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="min age"
+                        android:inputType="textPersonName" />
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="최대나이"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/m_maxage"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="max age"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="원하는 MBTI"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/m_mbti"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="mbti (소문자)"
+                        android:inputType="textPersonName" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_matchingOption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="설정 완료" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/mbtiChartImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="350dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/mbtichart" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
