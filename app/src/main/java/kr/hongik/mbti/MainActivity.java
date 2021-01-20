@@ -8,7 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +25,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
+    boolean isPageOpen = false;
+
+    Animation translateLeftAnim;
+    Animation translateRightAnim;
+
+    LinearLayout page;
+    Button menubutton;
+
 
     private TextView my_mbti;
     private Button btn_logout2, btn_searching, btn_matching, btn_userdata, btn_friend_list;
@@ -46,6 +58,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+
+        page = findViewById(R.id.page);
+
+        translateLeftAnim = AnimationUtils.loadAnimation(this, R.anim.translate_left); //왼쪽 이동
+        translateRightAnim = AnimationUtils.loadAnimation(this, R.anim.translate_right); //오른쪽이동
+
+        SlidingPageAnimationListener animListener = new SlidingPageAnimationListener(); //슬라이딩 애니메이션
+        translateLeftAnim.setAnimationListener(animListener); //왼쪽 이동 애니메이션
+        translateRightAnim.setAnimationListener(animListener); //오른쪽 이동 애니메이션
+
+        menubutton = findViewById(R.id.btn_menu); //메뉴 버튼
+        menubutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isPageOpen){
+                    page.startAnimation(translateRightAnim);
+                } else {
+                    page.setVisibility(View.VISIBLE);
+                    page.startAnimation(translateLeftAnim);
+                }
+            }
+        });
 
         mfirebaseAuth = FirebaseAuth.getInstance();
         currentUser = mfirebaseAuth.getCurrentUser();
@@ -148,6 +182,26 @@ public class MainActivity extends AppCompatActivity {
                 );
             }
         }
+
+    private class SlidingPageAnimationListener implements Animation.AnimationListener { //슬라이딩 애니메이션
+        public void onAnimationEnd(Animation animation) {
+            if (isPageOpen) {
+                page.setVisibility(View.INVISIBLE);
+
+                menubutton.setText("Open");
+                isPageOpen = false;
+            } else {
+                menubutton.setText("Close");
+                isPageOpen = true;
+            }
+        }
+
+        @Override
+        public void onAnimationStart(Animation animation) { }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) { }
+    }
 
 
 
