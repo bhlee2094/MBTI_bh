@@ -33,9 +33,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout page;
     Button menubutton;
 
-
     private TextView my_mbti;
-    private Button btn_logout2, btn_searching, btn_matching, btn_userdata, btn_friend_list;
+    private Button btn_logout2, btn_searching, btn_matching, btn_userdata, btn_friend_list, btn_chat, btn_board;
 
 
     FirebaseAuth mfirebaseAuth;
@@ -107,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
                                        });
 
         btn_logout2 = findViewById(R.id.btn_logout2);
-
         btn_logout2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btn_matching = findViewById(R.id.btn_matching);
-
         btn_matching.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,17 +124,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btn_searching = findViewById(R.id.btn_searching);
-
         btn_searching.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 myStartActivity(SearchingActivity.class);
-                finish();
             }
         });
 
         btn_userdata = findViewById(R.id.btn_userdata);
-
         btn_userdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,6 +144,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 myStartActivity(FriendListActivity.class);
+            }
+        });
+
+        btn_chat=findViewById(R.id.btn_chat);
+        btn_chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(ChatActivity.class);
+            }
+        });
+
+        btn_board=findViewById(R.id.btn_board);
+        btn_board.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(BoardActivity.class);
             }
         });
 
