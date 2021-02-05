@@ -21,7 +21,7 @@ public class FriendListActivity extends AppCompatActivity {
 
     final String TAG = FriendListActivity.class.getName();
 
-    Button btn_my_friend_list;
+    Button btn_my_friend_list, btn_accept;
 
     final Map<String, Object> emptyObject = new HashMap<>();
 
@@ -49,7 +49,7 @@ public class FriendListActivity extends AppCompatActivity {
         btn_my_friend_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchFragment(new FriendRequetsFragment() );
+                switchFragment(new FriendRequestsFragment() );
             }
         });
 

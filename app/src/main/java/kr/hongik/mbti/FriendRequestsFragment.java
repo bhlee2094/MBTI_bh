@@ -21,13 +21,13 @@ import com.google.android.gms.tasks.Task;
  * 나에게 온 친구 요청을 확인하고 수락하기 위한 Fragment
  * @author 장혜리
  **/
-public class FriendRequetsFragment extends Fragment {
+public class FriendRequestsFragment extends Fragment {
 
-    final String TAG = FriendRequetsFragment.class.getName();
+    final String TAG = FriendRequestsFragment.class.getName();
     FriendListAdapter adapter;
     ListView lv_friend_req;
 
-    public FriendRequetsFragment() {
+    public FriendRequestsFragment() {
     }
 
 
@@ -48,10 +48,10 @@ public class FriendRequetsFragment extends Fragment {
         FriendList friendList = new FriendList();
         adapter = new FriendListAdapter(getActivity(),0, friendList.Friends);
 
-        friendList.makeSampleData(null);
+        //friendList.makeSampleData(null);
 
         //친구요청 가져오기
-        friendList.getFriendRequets(adapter);
+        friendList.getFriendRequests(adapter);
 
         lv_friend_req.setAdapter(adapter);
 

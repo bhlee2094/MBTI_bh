@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         btn_chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myStartActivity(ChatActivity.class);
+                myStartActivity(ChatlistActivity.class);
             }
         });
 

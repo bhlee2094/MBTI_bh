@@ -27,7 +27,7 @@ public class SearchingActivity extends AppCompatActivity {
 
     private Button btn_searchingOption;
     private static final String TAG = "SearchingActivity";
-    String mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, ck_gender, mp_gender2;
+    String mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, ck_gender, mp_gender2, mp_userNum;
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -95,8 +95,9 @@ public class SearchingActivity extends AppCompatActivity {
                                     mp_mbti = document.getString("mbti");
                                     mp_address = document.getString("address");
                                     mp_stateMessage = document.getString("stateMessage");
+                                    mp_userNum = document.getString("userNum");
 
-                                    MemberInfo m = new MemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage);
+                                    MemberInfo m = new MemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, mp_userNum);
 
                                     Intent intent = new Intent(SearchingActivity.this, SearchingPersonActivity.class);
                                     intent.putExtra("MemberInfo", m);
