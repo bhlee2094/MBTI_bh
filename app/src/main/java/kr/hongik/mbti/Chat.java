@@ -1,15 +1,15 @@
 package kr.hongik.mbti;
 
 public class Chat {
-    String email;
+    String userNum;
     String text;
 
-    public String getEmail() {
-        return email;
+    public String getUserNum() {
+        return userNum;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
     }
 
     public String getText() {

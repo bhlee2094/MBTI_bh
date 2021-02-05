@@ -11,7 +11,8 @@ import java.util.ArrayList;
 
 public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
 
-    private ArrayList<Chat> localDataSet;
+    ArrayList<Chat> localDataSet;
+    String otherUserNum;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -29,8 +30,18 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
         }
     }
 
-    public chatAdapter(ArrayList<Chat> dataSet) {
+    public chatAdapter(ArrayList<Chat> dataSet, String otherUserNum) {
         localDataSet = dataSet;
+        this.otherUserNum= otherUserNum;
+    }
+
+    @Override
+    public int getItemViewType(int position){
+        if(localDataSet.get(position).userNum.equals(otherUserNum)){
+            return 1;
+        }else {
+            return 2;
+        }
     }
 
     // Create new views (invoked by the layout manager)
@@ -39,6 +50,10 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.text_row_item, viewGroup, false);
+        if(viewType == 1){
+            view = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.right_row_item, viewGroup, false);
+        }
 
         return new ViewHolder(view);
     }

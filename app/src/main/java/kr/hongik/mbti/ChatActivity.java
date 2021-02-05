@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,10 +34,19 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     EditText editText;
     Button btnFinish, btnSend;
+    String otherUserNum;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     Calendar c =Calendar.getInstance();
     ArrayList<Chat> chatArrayList;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            myStartActivity(MainActivity.class);
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +54,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         Intent intent = getIntent();
-        String otherUserNum =intent.getStringExtra("otherUserNum");
+        otherUserNum =intent.getStringExtra("otherUserNum");
 
         editText = (EditText) findViewById(R.id.edittext);
         chatArrayList = new ArrayList<>();
@@ -59,7 +69,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         String[] myDataset = {"test1", "test2"};
-        mAdapter = new chatAdapter(chatArrayList);
+        mAdapter = new chatAdapter(chatArrayList, otherUserNum);
         recyclerView.setAdapter(mAdapter);
 
         ChildEventListener childEventListener = new ChildEventListener() {
@@ -124,8 +134,13 @@ public class ChatActivity extends AppCompatActivity {
                 numbers.put("text", stText);
                 numbers.put("userNum", otherUserNum);
                 myRef.setValue(numbers);
+
             }
         });
 
+    }
+    private void myStartActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivityForResult(intent, 1);
     }
 }
