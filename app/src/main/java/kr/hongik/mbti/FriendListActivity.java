@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -26,6 +28,14 @@ public class FriendListActivity extends AppCompatActivity {
     final Map<String, Object> emptyObject = new HashMap<>();
 
     private boolean isFreindsFragment = true ;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            myStartActivity(MainActivity.class);
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +78,9 @@ public class FriendListActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-
+    private void myStartActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivityForResult(intent, 1);
+    }
 }
 

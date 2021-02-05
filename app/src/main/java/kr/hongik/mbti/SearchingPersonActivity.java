@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,12 +29,12 @@ import java.util.Arrays;
 public class SearchingPersonActivity extends AppCompatActivity {
 
     private TextView textView_memberinfo;
-    private Button btn_send_friend_request, btn_chatOthers;
+    private Button btn_send_friend_request, btn_chatOthers, btn_deleteFriend;
     private static final String TAG = "SearchingPersonActivity";
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String UserNum = user.getUid();
-    //CollectionReference friendRef = db.collection("friendList/"+ UserNum + "friends");
+    CollectionReference friendRef = db.collection("friendList/"+ UserNum + "/friends");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,8 @@ public class SearchingPersonActivity extends AppCompatActivity {
         String otherUserNum =intent.getStringExtra("otherUserNum");
         textView_memberinfo = (TextView) findViewById(R.id.sp_searchingPerson);
         textView_memberinfo.setText("닉네임 : " + memberInfo.getNickname() + "\n\n성별 : " + memberInfo.getGender() + "\n\n나이 : " + memberInfo.getAge() + "\n\nmbti : " + memberInfo.getMbti() + "\n\n주소 : " + memberInfo.getAddress() + "\n\n상태메시지 : " + memberInfo.getStateMessage());
+
+        CollectionReference friendRef2 = db.collection("friendlist/" + memberInfo.getUserNum() +"/friends");
 
         btn_send_friend_request = findViewById(R.id.btn_send_friend_request);
         btn_chatOthers = findViewById(R.id.btn_chatOhters);
@@ -71,6 +75,7 @@ public class SearchingPersonActivity extends AppCompatActivity {
                 FriendList friendList = new FriendList();
                 friendList.sendFriendRequest(otherUserNum);
                 startToast("친구신청완료");
+                myStartActivity(FriendListActivity.class);
             }
         });
 
@@ -81,6 +86,42 @@ public class SearchingPersonActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        btn_deleteFriend=findViewById(R.id.btn_delete_friend);
+        btn_deleteFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                friendRef.document(memberInfo.getUserNum())
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                startToast("친구 삭제 완료");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                startToast("친구 삭제 실패");
+                            }
+                        });
+                friendRef2.document(UserNum)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                myStartActivity(FriendListActivity.class);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                startToast("친구 삭제 실패");
+                            }
+                        });
+            }
+        });
+
 
     }
 
