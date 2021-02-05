@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -47,26 +48,30 @@ public class SearchingPersonActivity extends AppCompatActivity {
         textView_memberinfo = (TextView) findViewById(R.id.sp_searchingPerson);
         textView_memberinfo.setText("닉네임 : " + memberInfo.getNickname() + "\n\n성별 : " + memberInfo.getGender() + "\n\n나이 : " + memberInfo.getAge() + "\n\nmbti : " + memberInfo.getMbti() + "\n\n주소 : " + memberInfo.getAddress() + "\n\n상태메시지 : " + memberInfo.getStateMessage());
 
-        CollectionReference friendRef2 = db.collection("friendlist/" + memberInfo.getUserNum() +"/friends");
-
         btn_send_friend_request = findViewById(R.id.btn_send_friend_request);
         btn_chatOthers = findViewById(R.id.btn_chatOhters);
+        btn_deleteFriend=findViewById(R.id.btn_delete_friend);
 
-        /*friendRef.whereIn("friends", Arrays.asList(memberInfo.getUserNum()))
-                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                btn_send_friend_request.setVisibility(View.GONE);
-                                btn_chatOthers.setVisibility(View.VISIBLE);
-                            }
+        DocumentReference docRef = friendRef.document(memberInfo.getUserNum());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            btn_deleteFriend.setVisibility(View.VISIBLE);
+                            btn_chatOthers.setVisibility(View.VISIBLE);
+                            btn_send_friend_request.setVisibility(View.GONE);
                         } else {
+                            btn_deleteFriend.setVisibility(View.GONE);
+                            btn_chatOthers.setVisibility(View.GONE);
                             btn_send_friend_request.setVisibility(View.VISIBLE);
                         }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
                     }
-                });*/
+                }
+            });
 
 
         btn_send_friend_request.setOnClickListener(new View.OnClickListener() {
@@ -87,38 +92,13 @@ public class SearchingPersonActivity extends AppCompatActivity {
             }
         });
 
-        btn_deleteFriend=findViewById(R.id.btn_delete_friend);
         btn_deleteFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                friendRef.document(memberInfo.getUserNum())
-                        .delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                startToast("친구 삭제 완료");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                startToast("친구 삭제 실패");
-                            }
-                        });
-                friendRef2.document(UserNum)
-                        .delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                myStartActivity(FriendListActivity.class);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                startToast("친구 삭제 실패");
-                            }
-                        });
+                docRef.delete();
+                db.collection("friendList/" + memberInfo.getUserNum() +"/friends").document(UserNum).delete();
+                startToast("친구 삭제 성공");
+                myStartActivity(FriendListActivity.class);
             }
         });
 

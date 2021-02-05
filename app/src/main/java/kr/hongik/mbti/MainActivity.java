@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             if (isPageOpen) {
                 page.setVisibility(View.INVISIBLE);
 
-                menubutton.setText("Open");
+                menubutton.setText("menu");
                 isPageOpen = false;
             } else {
                 menubutton.setText("Close");
