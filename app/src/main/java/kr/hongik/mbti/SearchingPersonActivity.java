@@ -87,7 +87,9 @@ public class SearchingPersonActivity extends AppCompatActivity {
         btn_chatOthers.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                myStartActivity(ChatActivity.class);
+                Intent intent = new Intent(SearchingPersonActivity.this, ChatActivity.class);
+                intent.putExtra("otherUserNum", otherUserNum);
+                startActivity(intent);
                 finish();
             }
         });

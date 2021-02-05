@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +42,9 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        Intent intent = getIntent();
+        String otherUserNum =intent.getStringExtra("otherUserNum");
 
         editText = (EditText) findViewById(R.id.edittext);
         chatArrayList = new ArrayList<>();
@@ -111,7 +115,6 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String stText = editText.getText().toString();
-                Toast.makeText(ChatActivity.this, stText, Toast.LENGTH_LONG).show();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 String datetime = dateFormat.format(c.getTime());
                 DatabaseReference myRef = database.getReference("message").child(datetime);
@@ -119,7 +122,7 @@ public class ChatActivity extends AppCompatActivity {
                 Hashtable<String, String> numbers
                         = new Hashtable<String, String>();
                 numbers.put("text", stText);
-
+                numbers.put("userNum", otherUserNum);
                 myRef.setValue(numbers);
             }
         });
