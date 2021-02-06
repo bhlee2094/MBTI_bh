@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     Button menubutton;
 
     private TextView my_mbti;
-    private Button btn_logout2, btn_searching, btn_matching, btn_userdata, btn_friend_list, btn_chat, btn_board;
+    private Button btn_logout2, btn_searching, btn_matching, btn_userdata, btn_friend_list, btn_board;
 
 
     FirebaseAuth mfirebaseAuth;
@@ -144,14 +144,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 myStartActivity(FriendListActivity.class);
-            }
-        });
-
-        btn_chat=findViewById(R.id.btn_chat);
-        btn_chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myStartActivity(ChatlistActivity.class);
             }
         });
 

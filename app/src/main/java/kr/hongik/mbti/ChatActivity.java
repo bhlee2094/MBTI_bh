@@ -43,7 +43,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            myStartActivity(MainActivity.class);
+            myStartActivity(FriendListActivity.class);
         }
         return false;
     }
@@ -81,7 +81,6 @@ public class ChatActivity extends AppCompatActivity {
                 String stText = chat.getText();
                 chatArrayList.add(chat);
                 mAdapter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -135,6 +134,7 @@ public class ChatActivity extends AppCompatActivity {
                 numbers.put("userNum", otherUserNum);
                 myRef.setValue(numbers);
 
+                editText.setText(null);
             }
         });
 
