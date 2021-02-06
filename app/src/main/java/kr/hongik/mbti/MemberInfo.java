@@ -13,11 +13,6 @@ public class MemberInfo  implements Serializable {
     private String stateMessage;
     private String userNum;
 
-    public MemberInfo(String nickname) {
-        this.profile_image = profile_image;
-        this.nickname = nickname;
-    }
-
     public MemberInfo(String nickname, String gender, String age, String address, String mbti, String stateMessage, String userNum){
         this.nickname=nickname;
         this.gender=gender;

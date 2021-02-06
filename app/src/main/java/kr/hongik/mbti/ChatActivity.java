@@ -37,7 +37,6 @@ public class ChatActivity extends AppCompatActivity {
     String otherUserNum;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    Calendar c =Calendar.getInstance();
     ArrayList<Chat> chatArrayList;
 
     @Override
@@ -124,6 +123,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String stText = editText.getText().toString();
+                Calendar c =Calendar.getInstance();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 String datetime = dateFormat.format(c.getTime());
                 DatabaseReference myRef = database.getReference("message").child(datetime);

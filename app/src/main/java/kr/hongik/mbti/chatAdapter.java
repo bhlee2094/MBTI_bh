@@ -16,7 +16,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
+        public TextView textView;
 
         public ViewHolder(View view) {
             super(view);
@@ -25,9 +25,6 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
             textView = (TextView) view.findViewById(R.id.tvChat);
         }
 
-        public TextView getTextView() {
-            return textView;
-        }
     }
 
     public chatAdapter(ArrayList<Chat> dataSet, String otherUserNum) {
@@ -60,11 +57,11 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getTextView().setText(localDataSet.get(position).getText());
+        viewHolder.textView.setText(localDataSet.get(position).getText());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
