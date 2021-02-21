@@ -11,7 +11,12 @@ public class MemberInfo  implements Serializable {
     private String address;
     private String mbti;
     private String stateMessage;
-    private String userNum;
+
+    public static String userNum;
+    public static String post = "post";
+
+    public static String title = "title";
+    public static String contents = "contents";
 
     public MemberInfo(String nickname, String gender, String age, String address, String mbti, String stateMessage, String userNum){
         this.nickname=nickname;
