@@ -1,12 +1,15 @@
-package kr.hongik.mbti;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
+package kr.hongik.mbti.navigation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,29 +22,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class BoardActivity extends AppCompatActivity implements View.OnClickListener {
 
+import kr.hongik.mbti.MemberInfo;
+import kr.hongik.mbti.Post;
+import kr.hongik.mbti.PostActivity;
+import kr.hongik.mbti.PostAdapter;
+import kr.hongik.mbti.R;
+
+
+public class BoardFragment extends Fragment implements View.OnClickListener {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore mStore = FirebaseFirestore.getInstance();
-
     private RecyclerView mPostRecyclerView;
     private PostAdapter mAdapter;
     private List<Post> mDatas;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_board);
-
-        mPostRecyclerView = (RecyclerView)findViewById(R.id.board_recyclerView);
-        mDatas = new ArrayList<>();
-
-        findViewById(R.id.btn_edit).setOnClickListener(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        View root = inflater.inflate(R.layout.fragment_board, container, false);
+        Button btn_edit = (Button)root.findViewById(R.id.btn_edit);
+        btn_edit.setOnClickListener(this);
+        return root;
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
+        mPostRecyclerView = (RecyclerView) getView().findViewById(R.id.board_recyclerView);
         mDatas = new ArrayList<>();
+
         mStore.collection(MemberInfo.post)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -68,6 +77,12 @@ public class BoardActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        startActivity(new Intent(BoardActivity.this, PostActivity.class));
+        switch (v.getId()){
+            case R.id.btn_edit:
+            {
+                Intent intent = new Intent(getActivity(), PostActivity.class);
+                startActivity(intent);
+            }
+        }
     }
 }

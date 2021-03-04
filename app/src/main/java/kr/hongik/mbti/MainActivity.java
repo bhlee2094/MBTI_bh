@@ -1,53 +1,82 @@
 package kr.hongik.mbti;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
+
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import kr.hongik.mbti.navigation.BoardFragment;
+import kr.hongik.mbti.navigation.FriendlistFragment;
+import kr.hongik.mbti.navigation.MyinfoFragment;
+import kr.hongik.mbti.navigation.PhotoFragment;
+import kr.hongik.mbti.navigation.SearchFragment;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class MainActivity extends AppCompatActivity {
-    boolean isPageOpen = false;
 
-    Animation translateLeftAnim;
-    Animation translateRightAnim;
-
-    LinearLayout page;
-    Button menubutton;
-
-    private TextView my_mbti;
-    private Button btn_logout2, btn_searching, btn_matching, btn_userdata, btn_friend_list, btn_board;
-
-
-    FirebaseAuth mfirebaseAuth;
-    FirebaseUser currentUser;
     private static final String TAG = "MainActivity";
+    PhotoFragment photo_fragment;
+    SearchFragment search_fragment;
+    FriendlistFragment friendlist_fragment;
+    BoardFragment board_fragment;
+    MyinfoFragment myinfo_fragment;
+    FirebaseAuth mfirebaseAuth;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference usersRef = db.collection("users").document(user.getUid());
 
+    private String myUid = user.getUid();
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            myStartActivity(MainActivity.class);
+            AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
+            dlg.setTitle("로그아웃"); //제목
+            dlg.setMessage("로그아웃 하시겠습니까?"); // 메시지
+            dlg.setPositiveButton("확인",new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialog, int which) {
+                    mfirebaseAuth = FirebaseAuth.getInstance();
+                    logout(mfirebaseAuth);
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            dlg.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startToast("취소되었습니다.");
+                }
+            });
+            dlg.show();
         }
         return false;
     }
@@ -58,102 +87,40 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
 
-        page = findViewById(R.id.page);
+        friendlist_fragment = new FriendlistFragment();
+        photo_fragment = new PhotoFragment();
+        search_fragment = new SearchFragment();
+        board_fragment = new BoardFragment();
+        myinfo_fragment = new MyinfoFragment();
 
-        translateLeftAnim = AnimationUtils.loadAnimation(this, R.anim.translate_left); //왼쪽 이동
-        translateRightAnim = AnimationUtils.loadAnimation(this, R.anim.translate_right); //오른쪽이동
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, photo_fragment).commit();
 
-        SlidingPageAnimationListener animListener = new SlidingPageAnimationListener(); //슬라이딩 애니메이션
-        translateLeftAnim.setAnimationListener(animListener); //왼쪽 이동 애니메이션
-        translateRightAnim.setAnimationListener(animListener); //오른쪽 이동 애니메이션
-
-        menubutton = findViewById(R.id.btn_menu); //메뉴 버튼
-        menubutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isPageOpen){
-                    page.startAnimation(translateRightAnim);
-                } else {
-                    page.setVisibility(View.VISIBLE);
-                    page.startAnimation(translateLeftAnim);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.action_board:
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, board_fragment).commit();
+                                return true;
+                            case R.id.action_myinfo:
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfo_fragment).commit();
+                                return true;
+                            case R.id.action_friendlist:
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, friendlist_fragment).commit();
+                                return true;
+                            case R.id.action_search:
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, search_fragment).commit();
+                                return true;
+                            case R.id.action_photo:
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container, photo_fragment).commit();
+                                return true;
+                        }
+                        return false;
+                    }
                 }
-            }
-        });
-
-        mfirebaseAuth = FirebaseAuth.getInstance();
-        currentUser = mfirebaseAuth.getCurrentUser();
-        String userNum = currentUser.getUid();
-
-        my_mbti = findViewById(R.id.mymbti);
-
-        usersRef.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                           @Override
-                                           public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                               if (task.isSuccessful()) {
-                                                   DocumentSnapshot document = task.getResult();
-                                                   if (document.exists()) {
-                                                       Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                                       my_mbti.setText("나의 MBTI는 " + document.getString("mbti") + "입니다");
-
-                                                   } else {
-                                                       Log.d(TAG, "No such document");
-                                                   }
-                                               } else {
-                                                   Log.d(TAG, "get failed with ", task.getException());
-                                               }
-                                           }
-                                       });
-
-        btn_logout2 = findViewById(R.id.btn_logout2);
-        btn_logout2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logout(mfirebaseAuth);
-                myStartActivity(LoginActivity.class);
-                finish();
-            }
-        });
-
-        btn_matching = findViewById(R.id.btn_matching);
-        btn_matching.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myStartActivity(MatchingActivity.class);
-            }
-        });
-
-        btn_searching = findViewById(R.id.btn_searching);
-        btn_searching.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myStartActivity(SearchingActivity.class);
-            }
-        });
-
-        btn_userdata = findViewById(R.id.btn_userdata);
-        btn_userdata.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myStartActivity(MyprofileActivity.class);
-            }
-        });
-
-        btn_friend_list=findViewById(R.id.btn_friend_list);
-        btn_friend_list.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myStartActivity(FriendListActivity.class);
-            }
-        });
-
-        btn_board=findViewById(R.id.btn_board);
-        btn_board.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myStartActivity(BoardActivity.class);
-            }
-        });
+        );
 
         }
 
@@ -185,27 +152,42 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-    private class SlidingPageAnimationListener implements Animation.AnimationListener { //슬라이딩 애니메이션
-        public void onAnimationEnd(Animation animation) {
-            if (isPageOpen) {
-                page.setVisibility(View.INVISIBLE);
+    public void Myinfo() {
+        TextView my_nickname = (TextView)findViewById(R.id.my_nickname);
+        TextView my_gender = (TextView)findViewById(R.id.my_gender);
+        TextView my_age = (TextView)findViewById(R.id.my_age);
+        TextView my_mbti = (TextView)findViewById(R.id.my_mbti);
+        TextView my_address = (TextView)findViewById(R.id.my_address);
+        TextView my_stateMessage = (TextView)findViewById(R.id.my_stateMessage);
+        ImageView my_profile = findViewById(R.id.my_profile);
 
-                menubutton.setText("menu");
-                isPageOpen = false;
-            } else {
-                menubutton.setText("Close");
-                isPageOpen = true;
-            }
-        }
+        //프로필 이미지
+        ProfileImage profileImage = new ProfileImage(getApplicationContext(),myUid);
+        profileImage.showProfileImage(my_profile);
+        usersRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                my_nickname.setText(document.getString("nickname"));
+                                my_gender.setText(document.getString("gender"));
+                                my_age.setText(document.getString("age"));
+                                my_mbti.setText(document.getString("mbti"));
+                                my_address.setText(document.getString("address"));
+                                my_stateMessage.setText(document.getString("stateMessage"));
 
-        @Override
-        public void onAnimationStart(Animation animation) { }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) { }
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
     }
-
-
 
     /**
      *     Firebase 로그아웃
@@ -221,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void myStartActivity(Class c) {
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 1);
@@ -229,24 +210,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void startToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
-    }
-
-
-    /**
-     *     뒤로가기 두번 누르면 앱 종료
-     *      @author 장혜리
-     */
-    private long backKeyPressedTime = 0;
-    @Override
-    public void onBackPressed() {
-        // 500 milliseconds = 0.5 seconds
-        if (System.currentTimeMillis() > backKeyPressedTime + 500) {
-            backKeyPressedTime = System.currentTimeMillis();
-            return;
-        }
-        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            finish();
-        }
     }
 
 }

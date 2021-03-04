@@ -1,16 +1,16 @@
-package kr.hongik.mbti;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+package kr.hongik.mbti.navigation;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,9 +23,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class SearchingActivity extends AppCompatActivity {
+import kr.hongik.mbti.MemberInfo;
+import kr.hongik.mbti.R;
+import kr.hongik.mbti.SearchingPersonActivity;
 
-    private Button btn_searchingOption;
+public class SearchFragment extends Fragment implements View.OnClickListener {
+
     private static final String TAG = "SearchingActivity";
     String mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, ck_gender, mp_gender2, mp_userNum;
 
@@ -34,18 +37,25 @@ public class SearchingActivity extends AppCompatActivity {
     CollectionReference usersRef = db.collection("users");
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            myStartActivity(MainActivity.class);
-        }
-        return false;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        View root = inflater.inflate(R.layout.fragment_searching, container, false);
+        Button btn_searchingOption = (Button)root.findViewById(R.id.btn_searchingOption);
+        btn_searchingOption.setOnClickListener(this);
+        return root;
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_searching);
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.btn_searchingOption:
+            {
 
+                searchingAlgorithm();
+            }
+        }
+    }
+
+    private void searchingAlgorithm() {
         usersRef.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -58,23 +68,9 @@ public class SearchingActivity extends AppCompatActivity {
             }
         });
 
-
-        btn_searchingOption = findViewById(R.id.btn_matchingOption);
-
-        btn_searchingOption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchingAlgorithm();
-            }
-        });
-
-    }
-
-    private void searchingAlgorithm() {
-
-        String m_mbti = ((EditText) findViewById(R.id.m_mbti)).getText().toString();
-        String m_minage = ((EditText) findViewById(R.id.m_minage)).getText().toString();
-        String m_maxage = ((EditText) findViewById(R.id.m_maxage)).getText().toString();
+        String m_mbti = ((EditText) getView().findViewById(R.id.m_mbti)).getText().toString();
+        String m_minage = ((EditText) getView().findViewById(R.id.m_minage)).getText().toString();
+        String m_maxage = ((EditText) getView().findViewById(R.id.m_maxage)).getText().toString();
 
         if (m_mbti.length() > 0 && m_minage.length() > 0 && m_maxage.length() > 0) {
             usersRef.whereEqualTo("gender", mp_gender2)
@@ -99,7 +95,7 @@ public class SearchingActivity extends AppCompatActivity {
 
                                     MemberInfo m = new MemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, mp_userNum);
 
-                                    Intent intent = new Intent(SearchingActivity.this, SearchingPersonActivity.class);
+                                    Intent intent = new Intent(getActivity(), SearchingPersonActivity.class);
                                     intent.putExtra("MemberInfo", m);
                                     intent.putExtra("otherUserNum", document.getId());
                                     startActivity(intent);
@@ -110,16 +106,7 @@ public class SearchingActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            startToast("옵션을 전부 입력해주세요");
+
         }
-    }
-
-    private void myStartActivity(Class c) {
-        Intent intent = new Intent(this, c);
-        startActivityForResult(intent, 1);
-    }
-
-    private void startToast(String msg){
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
 }

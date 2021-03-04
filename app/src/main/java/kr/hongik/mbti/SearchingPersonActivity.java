@@ -80,7 +80,7 @@ public class SearchingPersonActivity extends AppCompatActivity {
                 FriendList friendList = new FriendList();
                 friendList.sendFriendRequest(otherUserNum);
                 startToast("친구신청완료");
-                myStartActivity(FriendListActivity.class);
+                finish();
             }
         });
 

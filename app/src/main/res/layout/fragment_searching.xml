@@ -90,7 +90,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/btn_matchingOption"
+                    android:id="@+id/btn_searchingOption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="설정 완료" />
