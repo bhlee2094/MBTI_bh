@@ -1,5 +1,6 @@
 package kr.hongik.mbti;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,36 +9,43 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Comment;
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
+import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     EditText editText;
     Button btnFinish, btnSend;
     String otherUserNum;
-
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    ArrayList<Chat> chatArrayList;
+    private String uid;
+    private String chatRoomUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +53,10 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_chat);
 
         Intent intent = getIntent();
-        otherUserNum =intent.getStringExtra("otherUserNum");
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //로그인된 아이디
+        otherUserNum =intent.getStringExtra("otherUserNum"); //채팅 당하는 아이디
 
         editText = (EditText) findViewById(R.id.edittext);
-        chatArrayList = new ArrayList<>();
 
         btnFinish = (Button) findViewById(R.id.btnFinish);
         btnFinish.setOnClickListener((v) -> {finish();});
@@ -56,83 +64,109 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true); //높이 고정
 
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        String[] myDataset = {"test1", "test2"};
-        mAdapter = new chatAdapter(chatArrayList, otherUserNum);
-        recyclerView.setAdapter(mAdapter);
-
-        ChildEventListener childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-
-                Chat chat = dataSnapshot.getValue(Chat.class);
-                String stText = chat.getText();
-                chatArrayList.add(chat);
-                mAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-
-                Chat chat = dataSnapshot.getValue(Chat.class);
-                String commentKey = dataSnapshot.getKey();
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-                String commentKey = dataSnapshot.getKey();
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
-                Comment movedComment = dataSnapshot.getValue(Comment.class);
-                String commentKey = dataSnapshot.getKey();
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "postComments:onCancelled", databaseError.toException());
-                Toast.makeText(ChatActivity.this, "Failed to load comments.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        };
-        DatabaseReference ref = database.getReference(otherUserNum);
-        ref.addChildEventListener(childEventListener);
-
         btnSend = (Button) findViewById(R.id.btnSend);
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String stText = editText.getText().toString();
-                Calendar c =Calendar.getInstance();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                String datetime = dateFormat.format(c.getTime());
-                DatabaseReference myRef = database.getReference(otherUserNum).child(datetime);
+                Chat chat = new Chat();
+                chat.users.put(uid,true);
+                chat.users.put(otherUserNum,true);
 
-                Hashtable<String, String> numbers
-                        = new Hashtable<String, String>();
-                numbers.put("text", stText);
-                //numbers.put("userNum", otherUserNum);
-                myRef.setValue(numbers);
+                if(chatRoomUid == null){
+                    btnSend.setEnabled(false);
+                    FirebaseDatabase.getInstance().getReference().child("chatrooms").push().setValue(chat).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            checkChatRoom();
+                        }
+                    });
 
-                editText.setText(null);
+                }else{
+                    Chat.Comment comment = new Chat.Comment();
+                    comment.uid = uid;
+                    comment.message = editText.getText().toString();
+                    FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments").push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            editText.setText("");
+                        }
+                    });
+                }
             }
         });
-
+        checkChatRoom();
     }
-    private void myStartActivity(Class c) {
-        Intent intent = new Intent(this, c);
-        startActivityForResult(intent, 1);
+
+    void checkChatRoom(){
+        FirebaseDatabase.getInstance().getReference().child("chatrooms").orderByChild("users/"+uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot item : snapshot.getChildren()){
+                    Chat chat = item.getValue(Chat.class);
+                    if(chat.users.containsKey(otherUserNum)){
+                        chatRoomUid = item.getKey();
+                        btnSend.setEnabled(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+                        recyclerView.setAdapter(new RecyclerViewAdapter());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
+        List<Chat.Comment> comments;
+
+        public RecyclerViewAdapter(){
+            comments = new ArrayList<>();
+
+            FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    comments.clear();
+                    for(DataSnapshot item : snapshot.getChildren()){
+                        comments.add(item.getValue(Chat.Comment.class));
+                    }
+                    notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.text_row_item, parent, false);
+
+            return new MessageViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position){
+            ((MessageViewHolder)holder).textView_message.setText(comments.get(position).message);
+        }
+
+        @Override
+        public int getItemCount(){
+            return comments.size();
+        }
+
+        private class MessageViewHolder extends RecyclerView.ViewHolder {
+            public TextView textView_message;
+
+            public MessageViewHolder(View view) {
+                super(view);
+                textView_message = view.findViewById(R.id.tvChat);
+            }
+        }
     }
 }

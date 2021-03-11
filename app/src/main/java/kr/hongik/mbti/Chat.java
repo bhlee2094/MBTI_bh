@@ -1,22 +1,14 @@
 package kr.hongik.mbti;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Chat {
-    String userNum;
-    String text;
+    public Map<String,Boolean> users = new HashMap<>();
+    public Map<String,Comment> comments = new HashMap<>();
 
-    public String getUserNum() {
-        return userNum;
-    }
-
-    public void setUserNum(String userNum) {
-        this.userNum = userNum;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+    public static class Comment {
+        public String uid;
+        public String message;
     }
 }
