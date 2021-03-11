@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class MemberInfo  implements Serializable {
     private static final long serialVersionUID = 1L;
+    private int profile_image;
     private String nickname;
     private String gender;
     private String age;
@@ -11,16 +12,28 @@ public class MemberInfo  implements Serializable {
     private String mbti;
     private String stateMessage;
 
-    public MemberInfo(String nickname, String gender, String age, String address, String mbti, String stateMessage){
+    public static String userNum;
+    public static String post = "post";
+
+    public static String title = "title";
+    public static String contents = "contents";
+
+    public MemberInfo(String nickname, String gender, String age, String address, String mbti, String stateMessage, String userNum){
         this.nickname=nickname;
         this.gender=gender;
         this.age=age;
         this.address=address;
         this.mbti=mbti;
         this.stateMessage=stateMessage;
-
+        this.userNum=userNum;
     }
 
+    public int getProfile_image() {
+        return profile_image;
+    }
+    public void setProfile_image(int profile_image) {
+        this.profile_image = profile_image;
+    }
     public String getNickname(){
         return this.nickname;
     }
@@ -56,5 +69,13 @@ public class MemberInfo  implements Serializable {
     }
     public void setStateMessage(String stateMessage){
         this.stateMessage=stateMessage;
+    }
+
+    public String getUserNum() {
+        return userNum;
+    }
+
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
     }
 }

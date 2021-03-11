@@ -93,8 +93,9 @@ public class JoinActivity extends AppCompatActivity {
         if(nickname.length()>0 && gender.length()>0 && age.length()>0 && mbti.length()>0 && address.length()>0 && stateMessage.length()>0){
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String UserNum = user.getUid();
 
-            MemberInfo memberInfo = new MemberInfo(nickname, gender, age, address, mbti, stateMessage);
+            MemberInfo memberInfo = new MemberInfo(nickname, gender, age, address, mbti, stateMessage, UserNum);
             if(user !=null){
                 db.collection("users").document(user.getUid()).set(memberInfo)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {

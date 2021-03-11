@@ -24,6 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 
+import kr.hongik.mbti.navigation.MyinfoFragment;
+
 public class UpdateActivity extends AppCompatActivity {
 
     private Button btn_updateButton, mbti_link;
@@ -70,7 +72,6 @@ public class UpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 profileUpdate2();
-                myStartActivity(MyprofileActivity.class);
                 finish();
             }
         });

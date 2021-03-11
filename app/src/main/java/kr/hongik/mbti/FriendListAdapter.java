@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -94,6 +95,8 @@ public class FriendListAdapter extends BaseAdapter {
             public void onClick(View view) {
                 FriendList friendList = new FriendList();
                 friendList.acceptFriendRequest(Data.get(position).getUserNum());
+                Intent intent =new Intent(context, FriendListActivity.class);
+                context.startActivity(intent);
             }
         });
 
@@ -138,8 +141,9 @@ public class FriendListAdapter extends BaseAdapter {
                         String mp_mbti = document.getString("mbti");
                         String mp_address = document.getString("address");
                         String mp_stateMessage = document.getString("stateMessage");
+                        String userNum = document.getString("userNum");
 
-                        MemberInfo m = new MemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage);
+                        MemberInfo m = new MemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, userNum);
 
                         Intent intent = new Intent(context, SearchingPersonActivity.class);
                         intent.putExtra("MemberInfo", m);
@@ -179,6 +183,5 @@ public class FriendListAdapter extends BaseAdapter {
 
          */
     }
-
 
 }

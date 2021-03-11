@@ -38,7 +38,7 @@ public class FriendList{
     String UserNum = user.getUid();
 
     public ArrayList<FriendVO> Friends = new ArrayList<FriendVO>();
-    public ArrayList<FriendVO> friendRequets = new ArrayList<FriendVO>();
+    public ArrayList<FriendVO> friendRequests = new ArrayList<FriendVO>();
     public ArrayList<FriendVO> sentFriendRequests = new ArrayList<FriendVO>();
 
     public FriendList(){
@@ -57,7 +57,7 @@ public class FriendList{
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String friendUserNum =document.getId();
-                        getUserinfo(friendUserNum, Friends,adapter);
+                        getUserinfo(friendUserNum, Friends, adapter);
                     }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
@@ -70,22 +70,22 @@ public class FriendList{
      * 파이어베이스에서 내게 온 친구신청을 가져온다.
      * @param adapter
      */
-    public void getFriendRequets(FriendListAdapter adapter ){
-        CollectionReference colRef = db.collection("friendList/"+user.getUid()+"/friendRequets");
+    public void getFriendRequests(FriendListAdapter adapter ){
+        CollectionReference colRef = db.collection("friendList/"+user.getUid()+"/friendRequests");
         colRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String friendUserNum =document.getId();
-                        getUserinfo(friendUserNum, Friends,adapter);
+                        getUserinfo(friendUserNum, Friends, adapter);
                     }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
-        Log.d(TAG, "getFriendRequets: 친구 목록을 가져왔습니다.");
+        Log.d(TAG, "getFriendRequests: 친구 목록을 가져왔습니다.");
     }
 
 
@@ -127,7 +127,7 @@ public class FriendList{
         colRef.document(otherUserNum).set(emptyObject);
 
         //상대방 친구 요청 목록(friendingList)에 나 추가
-        CollectionReference  colRef2 = db.collection("friendList/"+otherUserNum+"/friendRequets");
+        CollectionReference  colRef2 = db.collection("friendList/"+otherUserNum+"/friendRequests");
         colRef2.document(UserNum).set(emptyObject);
     }
 
@@ -144,7 +144,7 @@ public class FriendList{
         CollectionReference colRef = db.collection("friendList/"+ UserNum +"/friends");
         colRef.document(otherUserNum).set(emptyObject);
 
-        colRef = db.collection("friendList/"+ UserNum +"/friendRequets");
+        colRef = db.collection("friendList/"+ UserNum +"/friendRequests");
         colRef.document(otherUserNum).delete();
 
         //상대방 친구 목록에 나 추가
@@ -154,11 +154,10 @@ public class FriendList{
         colRef2 = db.collection("friendList/"+otherUserNum+"/sentFriendRequests");
         colRef2.document(UserNum).delete();
 
-
     }
 
     //데모 시연용 데이터 만듦
-    public void makeSampleData(String OtherUserNum){
+    /*public void makeSampleData(String OtherUserNum){
         CollectionReference colRef = db.collection("friendList/"+ UserNum +"/friendRequets");
         if(OtherUserNum != null)
         colRef.document(OtherUserNum).set(emptyObject);
@@ -167,6 +166,6 @@ public class FriendList{
         colRef.document("YP6jS2oqzPc4gSaAGXBGJB5aWIf1").set(emptyObject);
         colRef.document("rwH4ZolyfHTUscod2gs49sWRqu33").set(emptyObject);
 
-    }
+    }*/
 
 }

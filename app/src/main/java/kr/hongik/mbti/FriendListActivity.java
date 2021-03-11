@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,16 +23,24 @@ public class FriendListActivity extends AppCompatActivity {
 
     final String TAG = FriendListActivity.class.getName();
 
-    Button btn_my_friend_list;
+    Button btn_my_friend_list, btn_accept;
 
     final Map<String, Object> emptyObject = new HashMap<>();
 
     private boolean isFreindsFragment = true ;
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            myStartActivity(MainActivity.class);
+        }
+        return false;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friend_list);
+        setContentView(R.layout.activity_friendlist);
 
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
@@ -49,7 +59,7 @@ public class FriendListActivity extends AppCompatActivity {
         btn_my_friend_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchFragment(new FriendRequetsFragment() );
+                switchFragment(new FriendRequestsFragment() );
             }
         });
 
@@ -68,6 +78,9 @@ public class FriendListActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-
+    private void myStartActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivityForResult(intent, 1);
+    }
 }
 
