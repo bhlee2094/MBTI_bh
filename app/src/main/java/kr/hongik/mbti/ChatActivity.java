@@ -144,8 +144,20 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         @Override
+        public int getItemViewType(int position){
+            if(comments.get(position).uid.equals(otherUserNum)){
+                return 1;
+            }else{
+                return 2;
+            }
+        }
+        @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.text_row_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.right_row_item, parent, false);
+
+            if(viewType == 1){
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.text_row_item, parent, false);
+            }
 
             return new MessageViewHolder(view);
         }
