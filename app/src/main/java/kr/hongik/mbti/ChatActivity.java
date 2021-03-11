@@ -40,14 +40,6 @@ public class ChatActivity extends AppCompatActivity {
     ArrayList<Chat> chatArrayList;
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            myStartActivity(FriendListActivity.class);
-        }
-        return false;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_chat);
@@ -115,7 +107,7 @@ public class ChatActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         };
-        DatabaseReference ref = database.getReference("message");
+        DatabaseReference ref = database.getReference(otherUserNum);
         ref.addChildEventListener(childEventListener);
 
         btnSend = (Button) findViewById(R.id.btnSend);
@@ -126,12 +118,12 @@ public class ChatActivity extends AppCompatActivity {
                 Calendar c =Calendar.getInstance();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 String datetime = dateFormat.format(c.getTime());
-                DatabaseReference myRef = database.getReference("message").child(datetime);
+                DatabaseReference myRef = database.getReference(otherUserNum).child(datetime);
 
                 Hashtable<String, String> numbers
                         = new Hashtable<String, String>();
                 numbers.put("text", stText);
-                numbers.put("userNum", otherUserNum);
+                //numbers.put("userNum", otherUserNum);
                 myRef.setValue(numbers);
 
                 editText.setText(null);

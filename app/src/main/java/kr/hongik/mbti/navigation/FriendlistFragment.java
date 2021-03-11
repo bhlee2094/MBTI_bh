@@ -10,6 +10,7 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 
 import kr.hongik.mbti.FriendListActivity;
+import kr.hongik.mbti.MatchingActivity;
 import kr.hongik.mbti.R;
 
 public class FriendlistFragment extends Fragment implements View.OnClickListener {
@@ -18,7 +19,9 @@ public class FriendlistFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View root = inflater.inflate(R.layout.fragment_friendlist, container, false);
         Button btn1 = (Button)root.findViewById(R.id.btn1);
+        Button btn3 = (Button)root.findViewById(R.id.btn3);
         btn1.setOnClickListener(this);
+        btn3.setOnClickListener(this);
         return root;
     }
 
@@ -29,6 +32,13 @@ public class FriendlistFragment extends Fragment implements View.OnClickListener
             {
                 Intent intent = new Intent(getActivity(), FriendListActivity.class);
                 startActivity(intent);
+                break;
+            }
+            case R.id.btn3:
+            {
+                Intent intent = new Intent(getActivity(), MatchingActivity.class);
+                startActivity(intent);
+                break;
             }
         }
     }

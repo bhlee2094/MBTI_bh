@@ -3,8 +3,6 @@ package kr.hongik.mbti;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,8 +12,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,16 +25,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import kr.hongik.mbti.navigation.BoardFragment;
 import kr.hongik.mbti.navigation.FriendlistFragment;
 import kr.hongik.mbti.navigation.MyinfoFragment;
 import kr.hongik.mbti.navigation.PhotoFragment;
 import kr.hongik.mbti.navigation.SearchFragment;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -30,14 +30,6 @@ public class FriendListActivity extends AppCompatActivity {
     private boolean isFreindsFragment = true ;
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            myStartActivity(MainActivity.class);
-        }
-        return false;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendlist);

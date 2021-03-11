@@ -100,7 +100,7 @@ public class SearchingPersonActivity extends AppCompatActivity {
                 docRef.delete();
                 db.collection("friendList/" + memberInfo.getUserNum() +"/friends").document(UserNum).delete();
                 startToast("친구 삭제 성공");
-                myStartActivity(FriendListActivity.class);
+                finish();
             }
         });
 
