@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import kr.hongik.mbti.MainActivity;
 import kr.hongik.mbti.R;
 import kr.hongik.mbti.UpdateActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class MyinfoFragment extends Fragment implements View.OnClickListener {
@@ -37,7 +41,7 @@ public class MyinfoFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_update:
             {
                 Intent intent = new Intent(getActivity(), UpdateActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1000);
             }
         }
     }

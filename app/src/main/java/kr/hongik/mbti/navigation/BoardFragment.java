@@ -41,10 +41,12 @@ import kr.hongik.mbti.MemberInfo;
 import kr.hongik.mbti.PostActivity;
 import kr.hongik.mbti.R;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class BoardFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "BoardFragment";
-    private ArrayList<Board> mlist = new ArrayList<>();
+    private ArrayList<Board> mlist;
     private RecyclerView mRecyclerView;
     private BoardAdapter mAdapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -53,8 +55,12 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         ViewGroup root = (ViewGroup)inflater.inflate(R.layout.fragment_board, container, false);
 
+        Context context = root.getContext();
+        mlist = new ArrayList<>();
         mRecyclerView = (RecyclerView) root.findViewById(R.id.board_RecyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setHasFixedSize(true);
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), 1));
         db.collection("board")
                 .get()
@@ -93,7 +99,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
             case R.id.btnEdit :
             {
                 Intent intent = new Intent(getActivity(), PostActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 100);
                 break;
             }
         }

@@ -20,5 +20,6 @@
         android:layout_height="wrap_content"
         android:text="글쓰기"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@android:color/holo_green_light"
         app:layout_constraintEnd_toEndOf="@+id/board_RecyclerView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

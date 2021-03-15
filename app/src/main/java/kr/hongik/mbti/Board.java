@@ -7,6 +7,12 @@ public class Board {
     private String up;
     private String comment;
 
+    public static String p_title = "title";
+    public static String p_content = "content";
+    public static String p_nickname = "nickname";
+    public static String p_up = "up";
+    public static String p_comment = "comment";
+
     public Board() {
     }
 

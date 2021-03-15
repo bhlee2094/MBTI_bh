@@ -114,12 +114,6 @@ public class UpdateActivity extends AppCompatActivity {
         }
     }
 
-    private void myStartActivity(Class c) {
-        Intent intent = new Intent(this, c);
-        startActivityForResult(intent, 1);
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -173,10 +167,5 @@ public class UpdateActivity extends AppCompatActivity {
         cursor.close();
         return path;
     }
-
-
-
-
-
 
 }
