@@ -7,34 +7,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Comment;
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Hashtable;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
@@ -50,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_chat);
+        setContentView(R.layout.activity_chat);
 
         Intent intent = getIntent();
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //로그인된 아이디
@@ -61,7 +50,7 @@ public class ChatActivity extends AppCompatActivity {
         btnFinish = (Button) findViewById(R.id.btnFinish);
         btnFinish.setOnClickListener((v) -> {finish();});
 
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.chat_recyclerview);
         recyclerView.setHasFixedSize(true); //높이 고정
 
         btnSend = (Button) findViewById(R.id.btnSend);

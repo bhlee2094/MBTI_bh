@@ -1,40 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".PostActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-    <EditText
-        android:id="@+id/title_edit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Title"
-        android:textStyle="bold"
-        android:textSize="24sp"/>
-
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/holo_blue_light"
-            android:text="save"/>
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/contents_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Contents"
-        android:background="@null"
-        android:textSize="16sp"/>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
