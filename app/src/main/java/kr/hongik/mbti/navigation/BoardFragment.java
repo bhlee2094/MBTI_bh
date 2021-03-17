@@ -175,10 +175,10 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                     public void onClick(View v) {
                         int position = getAdapterPosition();
                         Intent intent = new Intent(getActivity(), BoardActivity.class);
-                        intent.putExtra("title", "1");
-                        intent.putExtra("content", "2");
-                        intent.putExtra("up", "3");
-                        intent.putExtra("comment", "4");
+                        intent.putExtra("title", list.get(getAdapterPosition()).getTitle());
+                        intent.putExtra("content", list.get(getAdapterPosition()).getContent());
+                        intent.putExtra("up", list.get(getAdapterPosition()).getUp());
+                        intent.putExtra("comment", list.get(getAdapterPosition()).getComment());
                         startActivityForResult(intent, 101);
                     }
                 });
@@ -216,19 +216,33 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                                     String strcomment = list.get(getAdapterPosition()).getComment();
                                     String strboardId = list.get(getAdapterPosition()).getBoardId();
                                     Board board = new Board(strTitle, strContent, strnickname, strup, strcomment, strboardId);
-                                    list.set(getAdapterPosition(), board);
-                                    notifyItemChanged(getAdapterPosition());
 
-                                    dialog.dismiss();
+                                    db.collection("board").document(list.get(getAdapterPosition()).getBoardId())
+                                            .update("title", strTitle, "content", strContent)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    list.set(getAdapterPosition(), board);
+                                                    notifyItemChanged(getAdapterPosition());
+                                                    dialog.dismiss();
+                                                }
+                                            });
                                 }
                             });
                             dialog.show();
                             break;
 
                         case R.id.menu_delete:
-                            list.remove(getAdapterPosition());
-                            notifyItemRemoved(getAdapterPosition());
-                            notifyItemRangeChanged(getAdapterPosition(), list.size());
+                            db.collection("board").document(list.get(getAdapterPosition()).getBoardId())
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            list.remove(getAdapterPosition());
+                                            notifyItemRemoved(getAdapterPosition());
+                                            notifyItemRangeChanged(getAdapterPosition(), list.size());
+                                        }
+                                    });
                     }
                     return true;
                 }
