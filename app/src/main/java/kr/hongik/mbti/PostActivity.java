@@ -63,6 +63,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
             data.put(Board.p_nickname, mnickname);
             data.put(Board.p_up, "추천 수 : 0");
             data.put(Board.p_comment, "댓글 수 : 0");
+            data.put(Board.p_boardId, postId);
             db.collection("board").document(postId).set(data, SetOptions.merge());
             myStartActivity(MainActivity.class);
         }

@@ -6,22 +6,25 @@ public class Board {
     private String nickname;
     private String up;
     private String comment;
+    private String boardId;
 
     public static String p_title = "title";
     public static String p_content = "content";
     public static String p_nickname = "nickname";
     public static String p_up = "up";
     public static String p_comment = "comment";
+    public static String p_boardId = "boardId";
 
     public Board() {
     }
 
-    public Board(String title, String content, String nickname, String up, String comment) {
+    public Board(String title, String content, String nickname, String up, String comment, String boardId) {
         this.title = title;
         this.content = content;
         this.nickname = nickname;
         this.up = up;
         this.comment = comment;
+        this.boardId = boardId;
     }
 
     public String getTitle() {
@@ -62,5 +65,13 @@ public class Board {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(String boardId) {
+        this.boardId = boardId;
     }
 }

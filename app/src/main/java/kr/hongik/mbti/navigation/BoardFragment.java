@@ -1,5 +1,6 @@
 package kr.hongik.mbti.navigation;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -43,6 +46,7 @@ import kr.hongik.mbti.BoardActivity;
 import kr.hongik.mbti.Chat;
 import kr.hongik.mbti.ChatActivity;
 import kr.hongik.mbti.FriendListActivity;
+import kr.hongik.mbti.MainActivity;
 import kr.hongik.mbti.MemberInfo;
 import kr.hongik.mbti.PostActivity;
 import kr.hongik.mbti.R;
@@ -57,7 +61,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
     private RecyclerView mRecyclerView;
     private BoardAdapter mAdapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String all_title, all_content,all_nickname, all_up, all_comment;
+    private String all_title, all_content,all_nickname, all_up, all_comment, all_boardId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -83,7 +87,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                                     all_nickname = snap.getString("nickname");
                                     all_up = snap.getString("up");
                                     all_comment = snap.getString("comment");
-                                    Board board = new Board(all_title, all_content, all_nickname, all_up, all_comment);
+                                    all_boardId = snap.getId();
+                                    Board board = new Board(all_title, all_content, all_nickname, all_up, all_comment, all_boardId);
                                     mlist.add(board);
                                 }
 
@@ -191,11 +196,41 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()){
                         case R.id.menu_edit:
-                            return true;
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            View view = LayoutInflater.from(context).inflate(R.layout.edit_box, null, false);
+                            builder.setView(view);
+                            final Button ButtonSubmit = (Button) view.findViewById(R.id.button_dialog_submit);
+                            final EditText editTitle = (EditText) view.findViewById(R.id.edit_title);
+                            final EditText editContent = (EditText) view.findViewById(R.id.edit_content);
+                            editTitle.setText(list.get(getAdapterPosition()).getTitle());
+                            editContent.setText(list.get(getAdapterPosition()).getContent());
+
+                            final AlertDialog dialog = builder.create();
+                            ButtonSubmit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String strTitle = editTitle.getText().toString();
+                                    String strContent = editContent.getText().toString();
+                                    String strnickname = list.get(getAdapterPosition()).getNickname();
+                                    String strup = list.get(getAdapterPosition()).getUp();
+                                    String strcomment = list.get(getAdapterPosition()).getComment();
+                                    String strboardId = list.get(getAdapterPosition()).getBoardId();
+                                    Board board = new Board(strTitle, strContent, strnickname, strup, strcomment, strboardId);
+                                    list.set(getAdapterPosition(), board);
+                                    notifyItemChanged(getAdapterPosition());
+
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                            break;
+
                         case R.id.menu_delete:
-                            return true;
+                            list.remove(getAdapterPosition());
+                            notifyItemRemoved(getAdapterPosition());
+                            notifyItemRangeChanged(getAdapterPosition(), list.size());
                     }
-                    return false;
+                    return true;
                 }
             };
         }
