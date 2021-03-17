@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -111,7 +114,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHolder>{// 게시판 어뎁터
+    public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHolder>{// 게시판 어뎁터
 
         private ArrayList<Board> list;
         private Context context;
@@ -145,7 +148,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
             return list.size();
         }
 
-        public class BoardViewHolder extends RecyclerView.ViewHolder {
+        public class BoardViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
             private TextView title;
             private TextView content;
             private TextView nickname;
@@ -160,22 +163,41 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                 up = view.findViewById(R.id.board_up);
                 comment = view.findViewById(R.id.board_comment);
 
+                view.setOnCreateContextMenuListener(this);//contextMenu 리스너
+
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int position = getAdapterPosition();
                         Intent intent = new Intent(getActivity(), BoardActivity.class);
+                        intent.putExtra("title", "1");
+                        intent.putExtra("content", "2");
+                        intent.putExtra("up", "3");
+                        intent.putExtra("comment", "4");
                         startActivityForResult(intent, 101);
                     }
                 });
-
-                view.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        return false;
-                    }
-                });
             }
+
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                MenuItem Edit = menu.add(Menu.NONE, R.id.menu_edit, 1 , "수정");
+                MenuItem Delete = menu.add(Menu.NONE, R.id.menu_delete, 2 , "삭제");
+                Edit.setOnMenuItemClickListener(onMenuItemClickListener);
+                Delete.setOnMenuItemClickListener(onMenuItemClickListener);
+            }
+            private final MenuItem.OnMenuItemClickListener onMenuItemClickListener = new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()){
+                        case R.id.menu_edit:
+                            return true;
+                        case R.id.menu_delete:
+                            return true;
+                    }
+                    return false;
+                }
+            };
         }
     }//어뎁터 마지막
 }

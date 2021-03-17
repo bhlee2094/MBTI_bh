@@ -72,7 +72,7 @@ public class UpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 profileUpdate2();
-                finish();
+                myStartActivity(MainActivity.class);
             }
         });
 
@@ -168,4 +168,8 @@ public class UpdateActivity extends AppCompatActivity {
         return path;
     }
 
+    private void myStartActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivityForResult(intent, 1);
+    }
 }
