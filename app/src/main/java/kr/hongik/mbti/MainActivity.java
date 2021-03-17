@@ -2,6 +2,7 @@ package kr.hongik.mbti;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -191,6 +192,17 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, mFirebaseAuth.getUid() + "님이 로그아웃하셨습니다", Toast.LENGTH_SHORT).show();
             mFirebaseAuth.signOut();
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 101){
+            String mtitle = data.getStringExtra("title");
+            String mcontent = data.getStringExtra("content");
+            startToast(mtitle + mcontent);
         }
     }
 

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -29,11 +30,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
 
 
 import kr.hongik.mbti.Board;
+import kr.hongik.mbti.BoardActivity;
 import kr.hongik.mbti.Chat;
 import kr.hongik.mbti.ChatActivity;
 import kr.hongik.mbti.FriendListActivity;
@@ -42,14 +45,16 @@ import kr.hongik.mbti.PostActivity;
 import kr.hongik.mbti.R;
 
 import static android.app.Activity.RESULT_OK;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
+public class BoardFragment extends Fragment implements View.OnClickListener{
 
-public class BoardFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "BoardFragment";
     private ArrayList<Board> mlist;
     private RecyclerView mRecyclerView;
     private BoardAdapter mAdapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String all_title, all_content,all_nickname, all_up, all_comment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -70,12 +75,12 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
                         if(task.isSuccessful()){
                             if(task.getResult() != null){
                                 for(DocumentSnapshot snap : task.getResult()){
-                                    String title = snap.getString("title");
-                                    String content = snap.getString("content");
-                                    String nickname = snap.getString("nickname");
-                                    String up = snap.getString("up");
-                                    String comment = snap.getString("comment");
-                                    Board board = new Board(title, content, nickname, up, comment);
+                                    all_title = snap.getString("title");
+                                    all_content = snap.getString("content");
+                                    all_nickname = snap.getString("nickname");
+                                    all_up = snap.getString("up");
+                                    all_comment = snap.getString("comment");
+                                    Board board = new Board(all_title, all_content, all_nickname, all_up, all_comment);
                                     mlist.add(board);
                                 }
 
@@ -88,6 +93,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                 });
+
         Button btnEdit = (Button)root.findViewById(R.id.btnEdit);
         btnEdit.setOnClickListener(this);
         return root;
@@ -131,6 +137,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
             holder.nickname.setText(board.getNickname());
             holder.up.setText(board.getUp());
             holder.comment.setText(board.getComment());
+
         }
 
         @Override
@@ -138,7 +145,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
             return list.size();
         }
 
-        private class BoardViewHolder extends RecyclerView.ViewHolder {
+        public class BoardViewHolder extends RecyclerView.ViewHolder {
             private TextView title;
             private TextView content;
             private TextView nickname;
@@ -152,8 +159,23 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
                 nickname = view.findViewById(R.id.board_nickname);
                 up = view.findViewById(R.id.board_up);
                 comment = view.findViewById(R.id.board_comment);
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = getAdapterPosition();
+                        Intent intent = new Intent(getActivity(), BoardActivity.class);
+                        startActivityForResult(intent, 101);
+                    }
+                });
+
+                view.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        return false;
+                    }
+                });
             }
         }
-    }
-
+    }//어뎁터 마지막
 }

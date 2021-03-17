@@ -28,7 +28,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".PostActivity"></activity>
+        <activity android:name=".BoardActivity"></activity>
+        <activity android:name=".PostActivity" />
         <activity android:name=".MatchingActivity" />
         <activity android:name=".ChatActivity" />
         <activity android:name=".FriendListActivity" />
