@@ -61,8 +61,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
     private RecyclerView mRecyclerView;
     private BoardAdapter mAdapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String all_title, all_content,all_nickname, all_up, all_comment, all_boardId;
-
+    private String all_title, all_content,all_nickname, all_boardId, all_up, all_comment;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         ViewGroup root = (ViewGroup)inflater.inflate(R.layout.fragment_board, container, false);
@@ -178,7 +177,9 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                         intent.putExtra("title", list.get(getAdapterPosition()).getTitle());
                         intent.putExtra("content", list.get(getAdapterPosition()).getContent());
                         intent.putExtra("up", list.get(getAdapterPosition()).getUp());
+                        intent.putExtra("nickname",list.get(getAdapterPosition()).getNickname());
                         intent.putExtra("comment", list.get(getAdapterPosition()).getComment());
+                        intent.putExtra("boardId", list.get(getAdapterPosition()).getBoardId());
                         startActivityForResult(intent, 101);
                     }
                 });

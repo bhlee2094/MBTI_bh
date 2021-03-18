@@ -15,6 +15,7 @@ public class Board {
     public static String p_comment = "comment";
     public static String p_boardId = "boardId";
 
+
     public Board() {
     }
 
