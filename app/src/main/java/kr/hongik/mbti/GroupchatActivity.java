@@ -8,11 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +28,7 @@ public class GroupchatActivity extends AppCompatActivity {
 
     private RecyclerView gchat_recyclerView;
     private GroupchatAdapter mAdapter;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +51,12 @@ public class GroupchatActivity extends AppCompatActivity {
     private void getData(){//그룹채팅방 데이터 입력
         List<String> listTitle = Arrays.asList("게임채팅방", "프로그래머채팅방", "예술가채팅방", "INTJ채팅방");
         List<Integer> listResId = Arrays.asList(R.drawable.game, R.drawable.developer, R.drawable.artist, R.drawable.intj);
-
+        List<String> listId = Arrays.asList("abcdefg1","abcdefg2","abcdefg3","abcdefg4");
         for(int i=0; i<listTitle.size(); i++){
             Groupchat groupchat = new Groupchat();
             groupchat.setGchat_title(listTitle.get(i));
             groupchat.setGchat_image(listResId.get(i));
+            groupchat.setGchatId(listId.get(i));
 
             mAdapter.addItem(groupchat);
         }
@@ -93,6 +102,7 @@ public class GroupchatActivity extends AppCompatActivity {
                         int position = getAdapterPosition();
                         Intent intent = new Intent(GroupchatActivity.this, DetailgchatActivity.class);
                         intent.putExtra("title", list.get(getAdapterPosition()).getGchat_title());
+                        intent.putExtra("gchatId", list.get(getAdapterPosition()).getGchatId());
                         startActivityForResult(intent, 102);
                     }
                 });

@@ -14,7 +14,6 @@ public class MemberInfo  implements Serializable {
 
     public static String userNum;
     public static String post = "post";
-
     public static String title = "title";
     public static String contents = "contents";
 
