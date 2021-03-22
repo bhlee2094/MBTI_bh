@@ -16,23 +16,23 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/btn1"
+                android:id="@+id/btn_gofriendlist"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:drawableLeft="@drawable/friends"
                 android:text="친구 목록" />
 
             <Button
-                android:id="@+id/btn3"
+                android:id="@+id/btn_matchingfriend"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:drawableLeft="@drawable/addfriend"
                 android:text="친구 찾기" />
 
             <Button
-                android:id="@+id/btn4"
+                android:id="@+id/btn_groupchat"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:drawableLeft="@drawable/groupchat"
                 android:text="그룹 채팅" />
         </LinearLayout>

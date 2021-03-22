@@ -28,7 +28,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".BoardActivity"></activity>
+        <activity android:name=".DetailgchatActivity"></activity>
+        <activity android:name=".detailgchatActivity" />
+        <activity android:name=".GroupchatActivity" />
+        <activity android:name=".BoardActivity" />
         <activity android:name=".PostActivity" />
         <activity android:name=".MatchingActivity" />
         <activity android:name=".ChatActivity" />
