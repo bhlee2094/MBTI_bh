@@ -13,13 +13,20 @@ public class MatchingActivity extends AppCompatActivity {
     private TextView roundTextView;
     TextView[] matchTV = new TextView[4];
     private Button button;
-    static int round = 0;
+    static int round;
     static int match[][] = new int[4][4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching);
+
+        round=0;
+        for(int i=0;i<match.length;i++){
+            for(int j=0;j<match[i].length;j++){
+                match[i][j]=0;
+            }
+        }
 
         matchTV[0] = (TextView) findViewById(R.id.match1);
         matchTV[1] = (TextView) findViewById(R.id.match2);

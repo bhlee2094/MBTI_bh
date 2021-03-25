@@ -52,7 +52,7 @@ public class SearchingPersonActivity extends AppCompatActivity {
         btn_chatOthers = findViewById(R.id.btn_chatOhters);
         btn_deleteFriend=findViewById(R.id.btn_delete_friend);
 
-        DocumentReference docRef = friendRef.document(memberInfo.getUserNum());
+        DocumentReference docRef = friendRef.document(otherUserNum);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
