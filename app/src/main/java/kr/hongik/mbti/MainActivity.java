@@ -4,11 +4,21 @@ package kr.hongik.mbti;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.CursorLoader;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -17,7 +27,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +38,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.io.IOException;
 
 import kr.hongik.mbti.navigation.BoardFragment;
 import kr.hongik.mbti.navigation.FriendlistFragment;
@@ -35,6 +54,11 @@ import kr.hongik.mbti.navigation.SearchFragment;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private static final int FROM_PHOTO = 1;
+    private static final int BOARD = 101;
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
+    private File file;
     PhotoFragment photo_fragment;
     SearchFragment search_fragment;
     FriendlistFragment friendlist_fragment;
@@ -78,6 +102,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},0);
+        }
 
         friendlist_fragment = new FriendlistFragment();
         photo_fragment = new PhotoFragment();
@@ -195,16 +225,65 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void selectPhoto(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        intent.setType("image/*");
+        startActivityForResult(intent, FROM_PHOTO);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 101){
-            String mtitle = data.getStringExtra("title");
-            String mcontent = data.getStringExtra("content");
-            startToast(mtitle + mcontent);
+        if(resultCode != RESULT_OK){
+            return;
+        }
+
+        switch (requestCode){
+            case FROM_PHOTO:{
+                file = new File(getRealPathFromURI(data.getData()));
+                makeConfirm();
+                break;
+            }
+            case BOARD:{
+                String mtitle = data.getStringExtra("title");
+                String mcontent = data.getStringExtra("content");
+                startToast(mtitle + mcontent);
+
+                break;
+            }
         }
     }
+
+    private String getRealPathFromURI(Uri uri) {//사진 절대경로
+
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader cursorLoader = new CursorLoader(this, uri, proj, null, null, null);
+        Cursor cursor = cursorLoader.loadInBackground();
+        int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(index);
+    }
+
+    public void makeConfirm(){
+        String filename = "_" + System.currentTimeMillis();
+        StorageReference imageRef = storageRef.child("PhotoImage/" + filename);
+        imageRef.putFile(Uri.fromFile(file))
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Log.d(TAG, "uploadProfileImage :Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Log.d(TAG, "uploadProfileImage : Fail");
+                    }
+                });
+    }
+
 
     private void myStartActivity(Class c) {
         Intent intent = new Intent(this, c);

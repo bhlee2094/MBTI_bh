@@ -67,7 +67,9 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
         ViewGroup root = (ViewGroup)inflater.inflate(R.layout.fragment_board, container, false);
 
         Context context = root.getContext();
+
         mlist = new ArrayList<>();
+
         mRecyclerView = (RecyclerView) root.findViewById(R.id.board_RecyclerView);
         mRecyclerView.setHasFixedSize(true);
 
