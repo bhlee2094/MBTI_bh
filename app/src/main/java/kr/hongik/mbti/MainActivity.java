@@ -35,6 +35,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -54,12 +55,13 @@ import kr.hongik.mbti.navigation.SearchFragment;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private static final int FROM_PHOTO = 1;
+    private static final int FROM_PHOTO = 10;
     private static final int BOARD = 101;
-    private static double photo_num;
     private FirebaseStorage storage;
-    private StorageReference storageRef;
-    private File file;
+    private  StorageReference storageRef;
+    private String photoPath;
+    private FirebaseDatabase database;
+
     PhotoFragment photo_fragment;
     SearchFragment search_fragment;
     FriendlistFragment friendlist_fragment;
@@ -105,21 +107,7 @@ public class MainActivity extends AppCompatActivity {
         init();
 
         storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference();
-        db.collection("photoNum").document("photoNum").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-              if(task.isSuccessful()){
-                  DocumentSnapshot documentSnapshot = task.getResult();
-                  if(documentSnapshot.exists()){
-                      photo_num=documentSnapshot.getDouble("photoNum");
-                  }
-              }
-            }
-        });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},0);
-        }
+        database = FirebaseDatabase.getInstance();
 
         friendlist_fragment = new FriendlistFragment();
         photo_fragment = new PhotoFragment();
@@ -254,8 +242,8 @@ public class MainActivity extends AppCompatActivity {
 
         switch (requestCode){
             case FROM_PHOTO:{
-                file = new File(getRealPathFromURI(data.getData()));
-                makeConfirm();
+                photoPath = getRealPathFromURI(data.getData());
+                upload(photoPath);
                 break;
             }
             case BOARD:{
@@ -278,23 +266,31 @@ public class MainActivity extends AppCompatActivity {
         return cursor.getString(index);
     }
 
-    public void makeConfirm(){
-        String filename = "photo_" + (photo_num++);
-        db.collection("photoNum").document("photoNum").update("photoNum", photo_num);
-        StorageReference imageRef = storageRef.child("PhotoImage/" + filename);
-        imageRef.putFile(Uri.fromFile(file))
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Log.d(TAG, "uploadProfileImage :Success");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Log.d(TAG, "uploadProfileImage : Fail");
-                    }
-                });
+    private void upload(String uri){
+        storageRef = storage.getReferenceFromUrl("gs://mbti-bd577.appspot.com/");
+        Uri file = Uri.fromFile(new File(uri));
+        StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+        UploadTask uploadTask = riversRef.putFile(file);
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if(!task.isSuccessful()){
+                    throw task.getException();
+                }
+                return riversRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if(task.isSuccessful()){
+                    Uri downloadUri = task.getResult();
+                    Photo photo = new Photo();
+                    photo.imageurl = downloadUri.toString();
+                    database.getReference().child("images").push().setValue(photo);
+                }
+            }
+        });
     }
 
 

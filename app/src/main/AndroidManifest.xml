@@ -6,13 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA"/>
-    <permission
-        android:name="kr.hongik.mbti.MatchingActivity.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature" />
 
-    <uses-permission android:name="kr.hongik.mbti.permission.MAPS_RECEIVE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
@@ -28,9 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MatchingActivity"></activity>
+        <activity android:name=".MatchingActivity" />
         <activity android:name=".DetailgchatActivity" />
-        <activity android:name=".detailgchatActivity" />
         <activity android:name=".GroupchatActivity" />
         <activity android:name=".BoardActivity" />
         <activity android:name=".PostActivity" />

@@ -1,21 +1,23 @@
 package kr.hongik.mbti;
 
+import com.google.firebase.database.PropertyName;
+
 public class Photo {
 
-    private int photo_image;
+    public String imageurl;
 
     public Photo() {
     }
 
-    public Photo(int photo_image) {
-        this.photo_image = photo_image;
+    public Photo(String imageurl) {
+        this.imageurl = imageurl;
     }
 
-    public int getPhoto_image() {
-        return photo_image;
+    public String getImageurl() {
+        return imageurl;
     }
 
-    public void setPhoto_image(int photo_image) {
-        this.photo_image = photo_image;
+    public void setImageurl(String imageurl) {
+        this.imageurl = imageurl;
     }
 }
