@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int FROM_PHOTO = 1;
     private static final int BOARD = 101;
+    private static double photo_num;
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private File file;
@@ -105,6 +106,17 @@ public class MainActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
+        db.collection("photoNum").document("photoNum").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+              if(task.isSuccessful()){
+                  DocumentSnapshot documentSnapshot = task.getResult();
+                  if(documentSnapshot.exists()){
+                      photo_num=documentSnapshot.getDouble("photoNum");
+                  }
+              }
+            }
+        });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},0);
         }
@@ -267,7 +279,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void makeConfirm(){
-        String filename = "_" + System.currentTimeMillis();
+        String filename = "photo_" + (photo_num++);
+        db.collection("photoNum").document("photoNum").update("photoNum", photo_num);
         StorageReference imageRef = storageRef.child("PhotoImage/" + filename);
         imageRef.putFile(Uri.fromFile(file))
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
