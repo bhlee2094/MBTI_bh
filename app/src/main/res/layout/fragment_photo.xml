@@ -18,9 +18,10 @@
         android:id="@+id/btnPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/holo_green_light"
         android:text="앨범선택"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@android:color/holo_green_light"
-        app:layout_constraintEnd_toEndOf="@+id/photo_recyclerview"
-        />
+        app:layout_constraintEnd_toEndOf="@+id/photo_recyclerview" />
 </androidx.constraintlayout.widget.ConstraintLayout>

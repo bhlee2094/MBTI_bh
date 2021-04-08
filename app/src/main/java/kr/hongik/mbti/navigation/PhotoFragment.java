@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +35,7 @@ import java.util.List;
 
 import kr.hongik.mbti.MainActivity;
 import kr.hongik.mbti.Photo;
+import kr.hongik.mbti.PhotoItemDecoration;
 import kr.hongik.mbti.R;
 
 
@@ -63,12 +65,13 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
 
         photo_recyclerview = (RecyclerView) root.findViewById(R.id.photo_recyclerview);
         photo_recyclerview.setHasFixedSize(true);
-        photo_recyclerview.setLayoutManager(new LinearLayoutManager(context));
-        photo_recyclerview.addItemDecoration(new DividerItemDecoration(photo_recyclerview.getContext(),1));
         photoArrayList= new ArrayList<>();
         uidLists = new ArrayList<>();
         photoAdapter = new PhotoAdapter(photoArrayList, context);
         photo_recyclerview.setAdapter(photoAdapter);
+        GridLayoutManager layoutManager = new GridLayoutManager(context,3); // 리사이클러뷰 레이아웃 변경
+        photo_recyclerview.setLayoutManager(layoutManager);
+        photo_recyclerview.addItemDecoration(new PhotoItemDecoration(photo_recyclerview.getContext()));
 
         database.getReference().child("images").addValueEventListener(new ValueEventListener() {
             @Override

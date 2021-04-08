@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import kr.hongik.mbti.MatchingActivity;
 import kr.hongik.mbti.MemberInfo;
 import kr.hongik.mbti.R;
 import kr.hongik.mbti.SearchingPersonActivity;
@@ -40,6 +41,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View root = inflater.inflate(R.layout.fragment_searching, container, false);
         Button btn_searchingOption = (Button)root.findViewById(R.id.btn_searchingOption);
+        Button btn3 = (Button)root.findViewById(R.id.btn_matchingfriend2);
+        btn3.setOnClickListener(this);
         btn_searchingOption.setOnClickListener(this);
         return root;
     }
@@ -50,6 +53,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_searchingOption:
             {
                 searchingAlgorithm();
+            }
+            case R.id.btn_matchingfriend2:
+            {
+                Intent intent = new Intent(getActivity(), MatchingActivity.class);
+                startActivity(intent);
+                break;
             }
         }
     }

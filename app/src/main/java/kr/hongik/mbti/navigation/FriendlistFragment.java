@@ -21,10 +21,8 @@ public class FriendlistFragment extends Fragment implements View.OnClickListener
         View root = inflater.inflate(R.layout.fragment_friendlist, container, false);
         Button btn1 = (Button)root.findViewById(R.id.btn_gofriendlist);
         Button btn2 = (Button)root.findViewById(R.id.btn_groupchat);
-        Button btn3 = (Button)root.findViewById(R.id.btn_matchingfriend);
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
-        btn3.setOnClickListener(this);
         return root;
     }
 
@@ -34,12 +32,6 @@ public class FriendlistFragment extends Fragment implements View.OnClickListener
             case R.id.btn_gofriendlist:
             {
                 Intent intent = new Intent(getActivity(), FriendListActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.btn_matchingfriend:
-            {
-                Intent intent = new Intent(getActivity(), MatchingActivity.class);
                 startActivity(intent);
                 break;
             }
