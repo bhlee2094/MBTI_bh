@@ -6,17 +6,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.CursorLoader;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -29,7 +23,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -44,13 +37,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Random;
 
 import kr.hongik.mbti.navigation.BoardFragment;
 import kr.hongik.mbti.navigation.FriendlistFragment;
 import kr.hongik.mbti.navigation.MyinfoFragment;
 import kr.hongik.mbti.navigation.PhotoFragment;
 import kr.hongik.mbti.navigation.SearchFragment;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -267,9 +261,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void upload(String uri){
+        Photo photo = new Photo();
         storageRef = storage.getReferenceFromUrl("gs://mbti-bd577.appspot.com/");
         Uri file = Uri.fromFile(new File(uri));
-        StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+        photo.photo_id = file.getLastPathSegment();
+        StorageReference riversRef = storageRef.child("images/"+photo.photo_id);
         UploadTask uploadTask = riversRef.putFile(file);
 
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -284,8 +280,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if(task.isSuccessful()){
+
                     Uri downloadUri = task.getResult();
-                    Photo photo = new Photo();
                     photo.imageurl = downloadUri.toString();
                     database.getReference().child("images").push().setValue(photo);
                 }
