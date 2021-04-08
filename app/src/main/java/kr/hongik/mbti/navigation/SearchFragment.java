@@ -53,6 +53,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_searchingOption:
             {
                 searchingAlgorithm();
+                break;
             }
             case R.id.btn_matchingfriend2:
             {

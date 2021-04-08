@@ -23,7 +23,7 @@
         android:layout_alignParentTop="true"
 
         android:gravity="center"
-        android:text="MBTI 연애해"
+        android:text="MBTI SNS"
         android:textSize="50dp">
 
     </TextView>

@@ -22,6 +22,7 @@
                 android:background="@drawable/edge"
                 android:gravity="center"
                 android:text="검색된 유저 정보"
+                android:textColor="#0C0000"
                 android:textSize="36sp" />
 
             <TextView

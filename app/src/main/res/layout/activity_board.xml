@@ -21,12 +21,14 @@
         android:id="@+id/mboard_content"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:background="@drawable/edge"
         android:text="content"
         android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/edge"
         android:layout_gravity="right"
         android:orientation="horizontal">
 
@@ -88,6 +90,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mboard_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@drawable/edge"/>
 
 </LinearLayout>

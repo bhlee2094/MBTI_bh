@@ -25,6 +25,7 @@
                 android:id="@+id/matching"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:background="@drawable/edge"
                 android:gravity="center"
                 android:text="검색 옵션 설정"
                 android:textSize="36sp" />
