@@ -9,6 +9,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_weight="0"
+        android:scaleType="fitCenter"
         android:contentDescription="@string/common_open_on_phone"
         app:srcCompat="@drawable/camera" />
 </LinearLayout>

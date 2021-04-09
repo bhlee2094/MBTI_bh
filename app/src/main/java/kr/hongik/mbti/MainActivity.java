@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static final int FROM_PHOTO = 10;
-    private static final int BOARD = 101;
     private FirebaseStorage storage;
     private  StorageReference storageRef;
     private String photoPath;
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         board_fragment = new BoardFragment();
         myinfo_fragment = new MyinfoFragment();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, photo_fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, photo_fragment).commit();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(
@@ -238,13 +237,6 @@ public class MainActivity extends AppCompatActivity {
             case FROM_PHOTO:{
                 photoPath = getRealPathFromURI(data.getData());
                 upload(photoPath);
-                break;
-            }
-            case BOARD:{
-                String mtitle = data.getStringExtra("title");
-                String mcontent = data.getStringExtra("content");
-                startToast(mtitle + mcontent);
-
                 break;
             }
         }

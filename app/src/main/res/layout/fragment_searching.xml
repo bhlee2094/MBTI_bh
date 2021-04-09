@@ -24,10 +24,11 @@
             <TextView
                 android:id="@+id/matching"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 android:background="@drawable/edge"
                 android:gravity="center"
                 android:text="검색 옵션 설정"
+                android:textColor="#0B0000"
                 android:textSize="36sp" />
 
             <LinearLayout
@@ -41,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="최소나이"
+                    android:textColor="#0C0000"
                     android:textSize="18sp" />
 
                 <EditText
@@ -57,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="최대나이"
+                    android:textColor="#130101"
                     android:textSize="18sp" />
 
                 <EditText
@@ -78,6 +81,7 @@
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:text="원하는 MBTI"
+                    android:textColor="#090101"
                     android:textSize="18sp" />
 
                 <EditText

@@ -29,22 +29,14 @@ public class PhotoItemDecoration extends RecyclerView.ItemDecoration {
         int position = parent.getChildAdapterPosition(view);
         int itemCount = state.getItemCount();
 
-        if(position==0||position==1){
             outRect.top = size10;
             outRect.bottom = size10;
-        }else{
-            outRect.bottom = size10;
-        }
+
 
         GridLayoutManager.LayoutParams lp = (GridLayoutManager.LayoutParams) view.getLayoutParams();
         int spanIndex = lp.getSpanIndex();
 
-        if(spanIndex==0){
             outRect.left = size10;
-            outRect.right = size5;
-        }else if(spanIndex==1){
-            outRect.left = size5;
             outRect.right = size10;
-        }
     }
 }

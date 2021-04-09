@@ -11,8 +11,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -39,8 +42,9 @@ public class BoardActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CommentAdapter commentAdapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String str_boardId, str_up, str_nickname, com_nickname, com_content;
-    private Integer i_up;
+    private String str_boardId, str_up, str_comment, str_nickname, com_nickname, com_content, commentId;
+    private Integer i_up, i_comment;
+    CollectionReference collectionReference;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
@@ -64,15 +68,17 @@ public class BoardActivity extends AppCompatActivity {
 
         str_boardId = intent.getStringExtra("boardId");
         str_up = intent.getStringExtra("up");
+        str_comment = intent.getStringExtra("comment");
         str_nickname = intent.getStringExtra("nickname");
         i_up = Integer.parseInt(str_up);
+        i_comment = Integer.parseInt(str_comment);
 
         mlist = new ArrayList<>();
         recyclerView = (RecyclerView)findViewById(R.id.mboard_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(BoardActivity.this));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),1));
-        CollectionReference collectionReference = db.collection("comment/"+str_boardId+"/comment");// collection path 항상 홀수로
+        collectionReference = db.collection("comment/"+str_boardId+"/comment");// collection path 항상 홀수로
         collectionReference.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -96,7 +102,7 @@ public class BoardActivity extends AppCompatActivity {
         b_title.setText(intent.getStringExtra("title"));
         b_content.setText(intent.getStringExtra("content"));
         b_up.setText(str_up);
-        b_comment.setText(intent.getStringExtra("comment"));
+        b_comment.setText(str_comment);
 
         ToggleButton toggleButton = (ToggleButton) findViewById(R.id.btn_up);//추천 토글 버튼
         SharedPreferences sharedPreferences = getSharedPreferences("up",MODE_PRIVATE);
@@ -151,9 +157,14 @@ public class BoardActivity extends AppCompatActivity {
                 ButtonSubmit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String str_comment = editComment.getText().toString();
-                        String commentId = db.collection("comment/"+str_boardId+"/comment").document().getId();
-                        PostComment postComment = new PostComment(str_nickname, str_comment);
+                        i_comment++;
+                        str_comment = i_comment.toString();
+                        b_comment.setText(str_comment);
+                        db.collection("board").document(str_boardId)
+                                .update("comment", str_comment);
+                        String str_comment2 = editComment.getText().toString();
+                        commentId = db.collection("comment/"+str_boardId+"/comment").document().getId();
+                        PostComment postComment = new PostComment(str_nickname, str_comment2, commentId);
                         collectionReference.document(commentId)
                                 .set(postComment)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -201,7 +212,7 @@ public class BoardActivity extends AppCompatActivity {
             return list.size();
         }
 
-        public class CommentViewHolder extends RecyclerView.ViewHolder {
+        public class CommentViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
             private TextView nickname;
             private TextView comment;
 
@@ -209,7 +220,32 @@ public class BoardActivity extends AppCompatActivity {
                 super(view);
                 nickname = view.findViewById(R.id.comment_nickname);
                 comment = view.findViewById(R.id.comment_content);
+                view.setOnCreateContextMenuListener(this);
             }
+
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                MenuItem Delete = menu.add(Menu.NONE, R.id.menu_delete, 1 , "삭제");
+                Delete.setOnMenuItemClickListener(onMenuItemClickListener);
+            }
+            private final MenuItem.OnMenuItemClickListener onMenuItemClickListener = new MenuItem.OnMenuItemClickListener() {
+
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()){
+                        case R.id.menu_delete:
+                            i_comment--;
+                            str_comment = i_comment.toString();
+                            b_comment.setText(str_comment);
+                            db.collection("board").document(str_boardId).update("comment", str_comment);
+                            collectionReference.document(list.get(getAdapterPosition()).getCommentId()).delete();
+                            list.remove(getAdapterPosition());
+                            notifyItemRemoved(getAdapterPosition());
+                            notifyItemRangeChanged(getAdapterPosition(), list.size());
+                    }
+                    return true;
+                }
+            };
         }
-    }
+    }//댓글 어뎁터 끝
 }

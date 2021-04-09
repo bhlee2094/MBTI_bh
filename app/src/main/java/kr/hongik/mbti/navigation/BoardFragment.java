@@ -182,7 +182,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                         intent.putExtra("nickname",list.get(getAdapterPosition()).getNickname());
                         intent.putExtra("comment", list.get(getAdapterPosition()).getComment());
                         intent.putExtra("boardId", list.get(getAdapterPosition()).getBoardId());
-                        startActivityForResult(intent, 101);
+                        startActivity(intent);
                     }
                 });
             }
