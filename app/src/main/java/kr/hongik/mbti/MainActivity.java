@@ -15,8 +15,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,6 +97,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.up_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.btn_my_friend_list:
+                Intent intent = new Intent(MainActivity.this,FriendListActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_groupchat:
+                intent = new Intent(MainActivity.this,GroupchatActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -121,9 +146,6 @@ public class MainActivity extends AppCompatActivity {
                                 return true;
                             case R.id.action_myinfo:
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfo_fragment).commit();
-                                return true;
-                            case R.id.action_friendlist:
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, friendlist_fragment).commit();
                                 return true;
                             case R.id.action_search:
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, search_fragment).commit();
