@@ -70,14 +70,13 @@
             android:text="0"
             android:textSize="18sp" />
 
-        <ToggleButton
-            android:id="@+id/btn_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:textOff="추천취소"
-            android:textOn="추천하기"
-            android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/starButton"
+            android:layout_width="46dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            app:srcCompat="@drawable/baseline_favorite_border_black_24dp" />
 
         <Button
             android:id="@+id/btn_comment"

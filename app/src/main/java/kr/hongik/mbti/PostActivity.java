@@ -12,6 +12,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,6 +31,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseDatabase database;
     private EditText mtitle, mcontent;
     private String mnickname;
     DocumentReference usersRef = db.collection("users").document(user.getUid());
@@ -35,6 +40,8 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+
+        database = FirebaseDatabase.getInstance();
 
         mtitle = findViewById(R.id.post_title);
         mcontent = findViewById(R.id.post_content);
@@ -64,7 +71,12 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
             data.put(Board.p_up, "0");
             data.put(Board.p_comment, "0");
             data.put(Board.p_boardId, postId);
+            data.put(Board.p_uId, user.getUid());
             db.collection("board").document(postId).set(data, SetOptions.merge());
+
+            Board board = new Board();
+            database.getReference().child("board").child(postId).setValue(board);
+
             myStartActivity(MainActivity.class);
         }
     }

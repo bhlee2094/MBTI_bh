@@ -1,6 +1,10 @@
 package kr.hongik.mbti;
 
-public class Board {
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Board implements Serializable {
     private String title;
     private String content;
     private String nickname;
@@ -8,12 +12,16 @@ public class Board {
     private String comment;
     private String boardId;
 
+    public int starCount = 0;
+    public Map<String, Boolean> stars = new HashMap<>();
+
     public static String p_title = "title";
     public static String p_content = "content";
     public static String p_nickname = "nickname";
     public static String p_up = "up";
     public static String p_comment = "comment";
     public static String p_boardId = "boardId";
+    public static String p_uId = "uId";
 
 
     public Board() {
@@ -75,4 +83,5 @@ public class Board {
     public void setBoardId(String boardId) {
         this.boardId = boardId;
     }
+
 }

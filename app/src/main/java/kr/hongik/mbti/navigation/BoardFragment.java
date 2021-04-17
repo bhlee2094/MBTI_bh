@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,33 +25,20 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.List;
-import java.util.Map;
 
 
 import kr.hongik.mbti.Board;
 import kr.hongik.mbti.BoardActivity;
-import kr.hongik.mbti.Chat;
-import kr.hongik.mbti.ChatActivity;
-import kr.hongik.mbti.FriendListActivity;
-import kr.hongik.mbti.MainActivity;
-import kr.hongik.mbti.MemberInfo;
 import kr.hongik.mbti.PostActivity;
 import kr.hongik.mbti.R;
 
-import static android.app.Activity.RESULT_OK;
-import static com.facebook.FacebookSdk.getApplicationContext;
+import static kr.hongik.mbti.BoardActivity.commentId;
 
 public class BoardFragment extends Fragment implements View.OnClickListener{
 
@@ -60,7 +46,9 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
     private ArrayList<Board> mlist;
     private RecyclerView mRecyclerView;
     private BoardAdapter mAdapter;
+    private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseDatabase database;
     private String all_title, all_content,all_nickname, all_boardId, all_up, all_comment;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -69,6 +57,9 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
         Context context = root.getContext();
 
         mlist = new ArrayList<>();
+
+        database = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         mRecyclerView = (RecyclerView) root.findViewById(R.id.board_RecyclerView);
         mRecyclerView.setHasFixedSize(true);
@@ -174,8 +165,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int position = getAdapterPosition();
                         Intent intent = new Intent(getActivity(), BoardActivity.class);
+
                         intent.putExtra("title", list.get(getAdapterPosition()).getTitle());
                         intent.putExtra("content", list.get(getAdapterPosition()).getContent());
                         intent.putExtra("up", list.get(getAdapterPosition()).getUp());
@@ -236,16 +227,20 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                             break;
 
                         case R.id.menu_delete:
+                            db.collection("up/"+all_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).delete();
+                            db.collection("comment/"+all_boardId+"/comment").document(commentId).delete();
                             db.collection("board").document(list.get(getAdapterPosition()).getBoardId())
                                     .delete()
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
+                                            database.getReference().child("board").child(all_boardId).removeValue();
                                             list.remove(getAdapterPosition());
                                             notifyItemRemoved(getAdapterPosition());
                                             notifyItemRangeChanged(getAdapterPosition(), list.size());
                                         }
                                     });
+                            break;
                     }
                     return true;
                 }

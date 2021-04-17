@@ -11,6 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,12 +23,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,9 +52,13 @@ public class BoardActivity extends AppCompatActivity {
     private ArrayList<PostComment> mlist;
     private RecyclerView recyclerView;
     private CommentAdapter commentAdapter;
+    private FirebaseDatabase database;
+    private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String str_boardId, str_up, str_comment, str_nickname, com_nickname, com_content, commentId;
+    private String str_boardId, str_up, str_comment, str_nickname, com_nickname, com_content;
+    public static String commentId;
     private Integer i_up, i_comment;
+    private ImageView starButton;
     CollectionReference collectionReference;
 
     @Override
@@ -60,6 +75,10 @@ public class BoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
         Intent intent = getIntent();
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        starButton = (ImageView)findViewById(R.id.starButton);
 
         b_title = findViewById(R.id.mboard_title);
         b_content = findViewById(R.id.mboard_content);
@@ -104,45 +123,6 @@ public class BoardActivity extends AppCompatActivity {
         b_up.setText(str_up);
         b_comment.setText(str_comment);
 
-        ToggleButton toggleButton = (ToggleButton) findViewById(R.id.btn_up);//추천 토글 버튼
-        SharedPreferences sharedPreferences = getSharedPreferences("up",MODE_PRIVATE);
-        Boolean is_up = sharedPreferences.getBoolean("b_up",false);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        toggleButton.setChecked(is_up);
-        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if(isChecked){//추천취소
-                    i_up--;
-                    String c_up = Integer.toString(i_up);
-                    b_up.setText(c_up);
-                    editor.putBoolean("b_up", true);
-                    editor.commit();
-                    db.collection("board").document(str_boardId)
-                            .update("up", c_up)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                }
-                            });
-                }else{//추천하기
-                    i_up++;
-                    String c_up = Integer.toString(i_up);
-                    b_up.setText(c_up);
-                    editor.putBoolean("b_up",false);
-                    editor.commit();
-                    db.collection("board").document(str_boardId)
-                            .update("up", c_up)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                }
-                            });
-                }
-            }
-        });//추천 토글 버튼 마지막
-
         btn_comment = (Button)findViewById(R.id.btn_comment);//댓글 버튼
         btn_comment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,7 +161,82 @@ public class BoardActivity extends AppCompatActivity {
                 dialog.show();
             }
         });//댓글 버튼 마지막
+
+        starButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onStarClicked(database.getReference().child("board").child(str_boardId));
+            }
+        });
+
+        db.collection("up/"+str_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            if(documentSnapshot.exists()){
+                                Boolean bl_up = documentSnapshot.getBoolean("up");
+                                if(bl_up==true){
+                                    starButton.setImageResource(R.drawable.baseline_favorite_black_24dp);
+                                }else{
+                                    starButton.setImageResource(R.drawable.baseline_favorite_border_black_24dp);
+                                }
+                            }
+                        }
+                    }
+                });
+
     }
+
+    private void onStarClicked(DatabaseReference postRef) { //좋아요 버튼
+        postRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Board p = mutableData.getValue(Board.class);
+                if (p == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                if (p.stars.containsKey(firebaseAuth.getCurrentUser().getUid())) {
+                    // Unstar the post and remove self from stars
+                    p.starCount = p.starCount - 1;
+                    p.stars.remove(firebaseAuth.getCurrentUser().getUid());
+                    i_up--;
+                    str_up = i_up.toString();
+                    b_up.setText(str_up);
+                    db.collection("board").document(str_boardId)
+                            .update("up", str_up);
+                    starButton.setImageResource(R.drawable.baseline_favorite_border_black_24dp);
+                    PostUp postUp = new PostUp(false);
+                    db.collection("up/"+str_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).set(postUp);
+                } else {
+                    // Star the post and add self to stars
+                    p.starCount = p.starCount + 1;
+                    p.stars.put(firebaseAuth.getCurrentUser().getUid(), true);
+                    i_up++;
+                    str_up = i_up.toString();
+                    b_up.setText(str_up);
+                    db.collection("board").document(str_boardId)
+                            .update("up", str_up);
+
+                    starButton.setImageResource(R.drawable.baseline_favorite_black_24dp);
+                    PostUp postUp = new PostUp(true);
+                    db.collection("up/"+str_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).set(postUp);
+                }
+
+                // Set value and report transaction success
+                mutableData.setValue(p);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean committed,
+                                   DataSnapshot currentData) {
+                // Transaction completed
+            }
+        });
+    } //좋아요 버튼 마지막
 
     public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder>{//댓글 어뎁터
 
