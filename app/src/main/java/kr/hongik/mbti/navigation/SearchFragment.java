@@ -1,6 +1,7 @@
 package kr.hongik.mbti.navigation;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,9 +42,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View root = inflater.inflate(R.layout.fragment_searching, container, false);
         Button btn_searchingOption = (Button)root.findViewById(R.id.btn_searchingOption);
-        Button btn3 = (Button)root.findViewById(R.id.btn_matchingfriend2);
-        btn3.setOnClickListener(this);
+        Button btn_matchingfriend = (Button)root.findViewById(R.id.btn_matchingfriend2);
+        Button btn_lovematch = (Button)root.findViewById(R.id.btn_lovematch);
+        btn_matchingfriend.setOnClickListener(this);
         btn_searchingOption.setOnClickListener(this);
+        btn_lovematch.setOnClickListener(this);
         return root;
     }
 
@@ -61,6 +64,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             }
+            case R.id.btn_lovematch:
+                Uri uri = Uri.parse("https://www.truity.com/test/which-personality-type-your-love-match");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
         }
     }
 

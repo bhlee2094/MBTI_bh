@@ -6,130 +6,141 @@
     android:layout_height="match_parent"
     tools:context=".MatchingActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/matching"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="@drawable/edge"
-                android:gravity="center"
-                android:text="검색 옵션 설정"
-                android:textColor="#0B0000"
-                android:textSize="36sp" />
-
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
+                android:layout_height="300dp"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="최소나이"
-                    android:textColor="#0C0000"
-                    android:textSize="18sp" />
+                    android:id="@+id/matching"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@drawable/edge"
+                    android:gravity="center"
+                    android:text="검색 옵션 설정"
+                    android:textColor="#0B0000"
+                    android:textSize="36sp" />
 
-                <EditText
-                    android:id="@+id/m_minage"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="min age"
-                    android:inputType="textPersonName" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="최대나이"
-                    android:textColor="#130101"
-                    android:textSize="18sp" />
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="최소나이"
+                        android:textColor="#0C0000"
+                        android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/m_maxage"
-                    android:layout_width="100dp"
+                    <EditText
+                        android:id="@+id/m_minage"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="min age"
+                        android:inputType="textPersonName" />
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="최대나이"
+                        android:textColor="#130101"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/m_maxage"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="max age"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="max age"
-                    android:inputType="textPersonName" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="원하는 MBTI"
+                        android:textColor="#090101"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/m_mbti"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="mbti (소문자)"
+                        android:inputType="textPersonName" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_searchingOption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="설정 완료" />
+
+                <Button
+                    android:id="@+id/btn_lovematch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="이상형 MBTI 테스트" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="400dp"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:text="원하는 MBTI"
-                    android:textColor="#090101"
-                    android:textSize="18sp" />
+                <ImageView
+                    android:id="@+id/mbtiChartImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="250dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/mbtichart" />
 
-                <EditText
-                    android:id="@+id/m_mbti"
-                    android:layout_width="150dp"
+                <Button
+                    android:id="@+id/btn_matchingfriend2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="mbti (소문자)"
-                    android:inputType="textPersonName" />
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="4대4 매칭"
+                    android:textSize="14sp" />
 
             </LinearLayout>
-
-            <Button
-                android:id="@+id/btn_searchingOption"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="설정 완료" />
-
         </LinearLayout>
+    </ScrollView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/mbtiChartImage"
-                android:layout_width="wrap_content"
-                android:layout_height="250dp"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/mbtichart" />
-
-            <Button
-                android:id="@+id/btn_matchingfriend2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="4대4 매칭"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
