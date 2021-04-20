@@ -19,18 +19,23 @@
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="330dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/matching"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:background="@drawable/edge"
                     android:gravity="center"
                     android:text="검색 옵션 설정"
                     android:textColor="#0B0000"
                     android:textSize="36sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="#070000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -95,15 +100,23 @@
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="#070000" />
+
                 <Button
                     android:id="@+id/btn_searchingOption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="설정 완료" />
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/round_button"
+                    android:text="설정 완료"
+                    android:textSize="18sp" />
 
                 <Button
                     android:id="@+id/btn_lovematch"
@@ -111,7 +124,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="이상형 MBTI 테스트" />
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/round_button"
+                    android:text="이상형 MBTI 테스트"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -135,8 +151,9 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginBottom="5dp"
+                    android:background="@drawable/round_button"
                     android:text="4대4 매칭"
-                    android:textSize="14sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
         </LinearLayout>

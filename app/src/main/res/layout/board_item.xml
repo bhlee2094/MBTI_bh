@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:text="title"
+        android:textColor="#050000"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -35,7 +36,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="nickname" />
+                android:text="nickname"
+                android:textColor="#8BC34A" />
 
             <TextView
                 android:id="@+id/empty"

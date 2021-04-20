@@ -37,6 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="수정"
+        android:background="@drawable/round_button"
+        android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_content" />

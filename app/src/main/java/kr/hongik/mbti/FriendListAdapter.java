@@ -150,8 +150,9 @@ public class FriendListAdapter extends BaseAdapter {
                 }
             }
         });
+    }
 
-        /*
+    /*
         ColRef.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -178,6 +179,5 @@ public class FriendListAdapter extends BaseAdapter {
 
 
          */
-    }
 
 }

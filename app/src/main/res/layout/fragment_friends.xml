@@ -9,13 +9,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30dp"
-            android:text="내 친구"
+            android:layout_weight="0"
             android:gravity="center"
-            android:layout_weight = "0"/>
+            android:text="내 친구"
+            android:textColor="#130101"
+            android:textSize="30dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#070000" />
         <ListView
             android:id="@+id/lv_friends"
             android:layout_width="match_parent"

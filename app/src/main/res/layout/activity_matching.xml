@@ -111,6 +111,8 @@
         android:id="@+id/btn_round"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/round_button"
+        android:textSize="20sp"
         android:text="라운드 진행하기" />
 
     <TextView

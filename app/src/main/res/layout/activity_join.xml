@@ -24,6 +24,7 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:text="상세정보입력"
+                android:textColor="#0C0000"
                 android:textSize="30sp" />
 
             <EditText
@@ -69,6 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="mbti 검사하러가기"
+                    android:background="@drawable/round_button"
                     android:textSize="18sp" />
             </LinearLayout>
 
@@ -101,6 +103,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="회원가입"
+                android:background="@drawable/round_button"
                 android:textSize="18sp" />
 
         </LinearLayout>

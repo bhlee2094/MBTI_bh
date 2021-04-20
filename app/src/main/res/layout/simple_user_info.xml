@@ -35,6 +35,7 @@
                 android:layout_weight="1"
                 android:text="Name"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#8BC34A"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 

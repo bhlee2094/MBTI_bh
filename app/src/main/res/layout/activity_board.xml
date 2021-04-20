@@ -17,25 +17,38 @@
         android:textColor="#070000"
         android:textSize="24sp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#070000" />
+
     <TextView
         android:id="@+id/mboard_content"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@drawable/edge"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:text="content"
         android:textSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#070000" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edge"
         android:layout_gravity="right"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:text="추천 수 :"
             android:textColor="#000000"
@@ -46,6 +59,7 @@
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center|left"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="0"
@@ -65,6 +79,7 @@
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center|left"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="0"
@@ -74,6 +89,8 @@
             android:id="@+id/starButton"
             android:layout_width="46dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:clickable="true"
             app:srcCompat="@drawable/baseline_favorite_border_black_24dp" />
@@ -82,14 +99,23 @@
             android:id="@+id/btn_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/round_button"
             android:text="댓글"
             android:textSize="18sp" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#070000" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mboard_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/edge"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

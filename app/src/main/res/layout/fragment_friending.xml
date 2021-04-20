@@ -3,19 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FriendRequetsFragment">
+    tools:context=".FriendRequestsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30dp"
-            android:text="나에게 온 친구신청"
+            android:layout_weight="0"
             android:gravity="center"
-            android:layout_weight = "0"/>
+            android:text="나에게 온 친구신청"
+            android:textColor="#050000"
+            android:textSize="30dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#070000" />
     <ListView
         android:id="@+id/lv_friend_req"
         android:layout_width="match_parent"

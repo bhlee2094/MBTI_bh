@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
         android:text="nickname"
-        android:textColor="#100000"
+        android:textColor="#8BC34A"
         android:textSize="18sp" />
 
     <TextView

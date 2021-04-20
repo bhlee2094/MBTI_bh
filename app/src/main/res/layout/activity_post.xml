@@ -14,23 +14,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Title"
-            android:textStyle="bold"
-            android:textSize="24sp"/>
+            android:hint="제목"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btn_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/holo_green_light"
-            android:text="save"/>
+            android:layout_marginRight="5dp"
+            android:background="@drawable/round_button"
+            android:text="완료"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <EditText
         android:id="@+id/post_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Contents"
         android:background="@null"
-        android:textSize="16sp"/>
+        android:hint="게시판 내용"
+        android:textSize="16sp" />
 </LinearLayout>

@@ -21,6 +21,7 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:text="회원정보수정"
+                android:textColor="#0E0000"
                 android:textSize="36sp" />
 
             <EditText
@@ -56,6 +57,9 @@
                     android:id="@+id/mbtiLink2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/round_button"
                     android:text="mbti 검사하러 가기"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -87,6 +91,10 @@
                 android:id="@+id/btn_updateButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/round_button"
                 android:text="수정 완료"
                 android:textSize="18sp" />
         </LinearLayout>

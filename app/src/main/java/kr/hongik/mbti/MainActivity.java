@@ -4,6 +4,7 @@ package kr.hongik.mbti;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.loader.content.CursorLoader;
 
 import android.app.AlertDialog;
@@ -19,14 +20,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,10 +39,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.util.Random;
 
 import kr.hongik.mbti.navigation.BoardFragment;
-import kr.hongik.mbti.navigation.FriendlistFragment;
 import kr.hongik.mbti.navigation.MyinfoFragment;
 import kr.hongik.mbti.navigation.PhotoFragment;
 import kr.hongik.mbti.navigation.SearchFragment;
@@ -60,13 +57,13 @@ public class MainActivity extends AppCompatActivity {
 
     PhotoFragment photo_fragment;
     SearchFragment search_fragment;
-    FriendlistFragment friendlist_fragment;
     BoardFragment board_fragment;
     MyinfoFragment myinfo_fragment;
     FirebaseAuth mfirebaseAuth;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference usersRef = db.collection("users").document(user.getUid());
+    Toolbar toolbar;
 
     private String myUid = user.getUid();
 
@@ -104,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) { //상단 메뉴 클릭 이벤트
         switch (item.getItemId()){
             case R.id.btn_my_friend_list:
                 Intent intent = new Intent(MainActivity.this,FriendListActivity.class);
@@ -112,6 +109,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btn_groupchat:
                 intent = new Intent(MainActivity.this,GroupchatActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_mini_game:
+                intent = new Intent(MainActivity.this,MiniGameActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -124,10 +125,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
 
-        storage = FirebaseStorage.getInstance();
-        database = FirebaseDatabase.getInstance();
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        friendlist_fragment = new FriendlistFragment();
         photo_fragment = new PhotoFragment();
         search_fragment = new SearchFragment();
         board_fragment = new BoardFragment();
@@ -162,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void init(){
+            storage = FirebaseStorage.getInstance();
+            database = FirebaseDatabase.getInstance();
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             if (firebaseUser == null) {
                 myStartActivity(LoginActivity.class);

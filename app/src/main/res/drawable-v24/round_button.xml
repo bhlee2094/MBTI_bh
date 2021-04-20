@@ -7,7 +7,7 @@
             <!-- 각 모서리 dip 만큼 코너형식 -->
             <corners android:radius="100dp"/>
             <!-- 배경색 -->
-            <solid android:color="#BF6C6C"/>
+            <solid android:color="@color/mint"/>
         </shape>
     </item>
 </selector>
