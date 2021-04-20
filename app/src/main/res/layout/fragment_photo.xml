@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@android:color/holo_green_light"
+        android:background="@drawable/round_button"
         android:text="앨범선택"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/photo_recyclerview" />
