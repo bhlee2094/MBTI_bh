@@ -26,15 +26,31 @@ public class FriendVO {
         return userNum;
     }
 
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getStateMessage() {
         return stateMessage;
     }
 
+    public void setStateMessage(String stateMessage) {
+        this.stateMessage = stateMessage;
+    }
+
     public String getMbti() {
         return mbti;
+    }
+
+    public void setMbti(String mbti) {
+        this.mbti = mbti;
     }
 }

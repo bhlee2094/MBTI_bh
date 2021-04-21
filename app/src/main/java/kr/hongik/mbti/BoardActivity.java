@@ -59,7 +59,7 @@ public class BoardActivity extends AppCompatActivity {
     public static String commentId;
     private Integer i_up, i_comment;
     private ImageView starButton;
-    CollectionReference collectionReference;
+    private CollectionReference collectionReference;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
