@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,6 +115,15 @@ public class MiniGameActivity extends AppCompatActivity {
                 mini_ImageView = view.findViewById(R.id.mini_ImageView);
                 tv_myUid = view.findViewById(R.id.tv_myUid);
                 tv_friendUid = view.findViewById(R.id.tv_friendUid);
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MiniGameActivity.this, SubMiniGameActivity.class);
+                        intent.putExtra("friendUid",list.get(getAdapterPosition()).getFriendUid());
+                        startActivity(intent);
+                    }
+                });
             }
         }
     }//미니게임 어뎁터 끝

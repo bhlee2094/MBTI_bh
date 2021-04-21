@@ -21,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-        <activity android:name=".MiniGameActivity"></activity>
+        <activity android:name=".SubMiniGameActivity"></activity>
+        <activity android:name=".MiniGameActivity" />
         <activity android:name=".MatchingActivity" />
         <activity android:name=".DetailgchatActivity" />
         <activity android:name=".GroupchatActivity" />
