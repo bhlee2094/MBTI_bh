@@ -3,6 +3,7 @@ package kr.hongik.mbti;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -24,27 +25,27 @@ import com.google.firebase.firestore.SetOptions;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.hongik.mbti.databinding.ActivityPostBinding;
 import kr.hongik.mbti.navigation.BoardFragment;
 
 public class PostActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private ActivityPostBinding binding;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseDatabase database;
-    private EditText mtitle, mcontent;
     private String mnickname;
     DocumentReference usersRef = db.collection("users").document(user.getUid());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        binding = ActivityPostBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         database = FirebaseDatabase.getInstance();
 
-        mtitle = findViewById(R.id.post_title);
-        mcontent = findViewById(R.id.post_content);
         usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -65,8 +66,8 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         if(mAuth.getCurrentUser()!=null){
             String postId = db.collection("board").document().getId();
             Map<String, Object> data = new HashMap<>();
-            data.put(Board.p_title, mtitle.getText().toString());
-            data.put(Board.p_content, mcontent.getText().toString());
+            data.put(Board.p_title, binding.postTitle.getText().toString());
+            data.put(Board.p_content, binding.postContent.getText().toString());
             data.put(Board.p_nickname, mnickname);
             data.put(Board.p_up, "0");
             data.put(Board.p_comment, "0");

@@ -25,11 +25,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.hongik.mbti.databinding.ActivitySubMiniGameBinding;
+
 public class SubMiniGameActivity extends AppCompatActivity {
 
-    private TextView mini_TextView;
-    private EditText editText;
-    private Button button;
+    private ActivitySubMiniGameBinding binding;
     private String myUid, friendUid;
     private int[] RandomNum;
     private int count = 0;
@@ -38,7 +38,8 @@ public class SubMiniGameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sub_mini_game);
+        binding = ActivitySubMiniGameBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         Intent intent = getIntent();
         myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -58,15 +59,12 @@ public class SubMiniGameActivity extends AppCompatActivity {
         randomMap.put("num3", RandomNum[2]);
         db.collection("miniGame/"+myUid+"/miniGame").document(friendUid).set(randomMap);
 
-        editText = (EditText) findViewById(R.id.mini_EditText);
-        mini_TextView = (TextView) findViewById(R.id.mini_TextView);
-        mini_TextView.setText("");
-        button = (Button) findViewById(R.id.btnSubmit);
+        binding.miniTextView.setText("");
 
-        button.setOnClickListener(new View.OnClickListener() {
+        binding.btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editText.getText().length()>3){
+                if(binding.miniEditText.getText().length()>3){
                     startToast("3개 숫자만 입력하세요");
                 }
                 else{
@@ -82,24 +80,24 @@ public class SubMiniGameActivity extends AppCompatActivity {
                                             int ball = 0;
                                             for(int i=0;i<3;i++){
                                                 for(int j=0;j<3;j++){
-                                                    if(Integer.parseInt(String.valueOf(editText.getText().charAt(i)))==RandomNum[j]){
+                                                    if(Integer.parseInt(String.valueOf(binding.miniEditText.getText().charAt(i)))==RandomNum[j]){
                                                         if(i==j) strike++;
                                                         else ball++;
                                                     }
                                                 }
                                             }
                                             if(strike==3) {
-                                                mini_TextView.append("Perfect!");
+                                                binding.miniTextView.append("Perfect!");
                                                 Map<String, Integer> countMap = new HashMap<>();
                                                 countMap.put("count", count);
                                                 db.collection("miniGame/"+myUid+"/miniGame/"+friendUid+"/count").document().set(countMap);
                                             }
                                             else{
-                                                mini_TextView.append(editText.getText().toString() + " Strike : " + strike + " Ball : " + ball + "\n");
+                                                binding.miniTextView.append(binding.miniEditText.getText().toString() + " Strike : " + strike + " Ball : " + ball + "\n");
                                                 count++;
                                             }
-                                            inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                                            editText.setText("");
+                                            inputMethodManager.hideSoftInputFromWindow(binding.miniEditText.getWindowToken(), 0);
+                                            binding.miniEditText.setText("");
                                         }
                                     }
                                 }

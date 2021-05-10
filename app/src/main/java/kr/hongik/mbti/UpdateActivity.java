@@ -24,14 +24,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 
+import kr.hongik.mbti.databinding.ActivityUpdateBinding;
 import kr.hongik.mbti.navigation.MyinfoFragment;
 
 public class UpdateActivity extends AppCompatActivity {
 
-    private Button btn_updateButton, mbti_link;
+    private ActivityUpdateBinding binding;
 
     final String TAG = UpdateActivity.class.getName();
-    private ImageView iv_profile;
     ProfileImage profileImage;
     Uri profileImageUri;
     private final int GET_GALLERY_IMAGE = 200;
@@ -41,16 +41,13 @@ public class UpdateActivity extends AppCompatActivity {
     DocumentReference usersRef = db.collection("users").document(user.getUid());
     private String myUid = user.getUid();
 
-    EditText u_nickname, u_age, u_mbti, u_address ,u_stateMessage;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update);
+        binding = ActivityUpdateBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        mbti_link = findViewById(R.id.mbtiLink2);
-
-        mbti_link.setOnClickListener(new View.OnClickListener() {
+        binding.mbtiLink2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Uri uri = Uri.parse("https://www.16personalities.com/ko/%EB%AC%B4%EB%A3%8C-%EC%84%B1%EA%B2%A9-%EC%9C%A0%ED%98%95-%EA%B2%80%EC%82%AC");
@@ -59,16 +56,7 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
 
-
-        btn_updateButton = findViewById(R.id.btn_updateButton);
-
-        u_nickname = (EditText) findViewById(R.id.u_nickname);
-        u_age = (EditText) findViewById(R.id.u_age);
-        u_mbti = (EditText) findViewById(R.id.u_mbti);
-        u_address = (EditText) findViewById(R.id.u_address);
-        u_stateMessage = (EditText) findViewById(R.id.u_stateMessage);
-
-        btn_updateButton.setOnClickListener(new View.OnClickListener() {
+        binding.btnUpdateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 profileUpdate2();
@@ -78,13 +66,12 @@ public class UpdateActivity extends AppCompatActivity {
 
 
         getCurrentProfile();
-        iv_profile = (ImageView)findViewById(R.id.ImageForUpdate);
         profileImage = new ProfileImage(getApplicationContext(),myUid);
-        profileImage.showProfileImage(iv_profile);
+        profileImage.showProfileImage(binding.ImageForUpdate);
 
 
-        //iv_profile 클릭시 프로필이미지 재업로드 가능
-        iv_profile.setOnClickListener(new View.OnClickListener() {
+        //binding.ImageForUpdate 클릭시 프로필이미지 재업로드 가능
+        binding.ImageForUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
@@ -120,7 +107,7 @@ public class UpdateActivity extends AppCompatActivity {
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             //imageview에 보여지는 image 변경
             profileImageUri = data.getData();
-            iv_profile.setImageURI(profileImageUri);
+            binding.ImageForUpdate.setImageURI(profileImageUri);
         }
     }
 
@@ -137,11 +124,11 @@ public class UpdateActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                u_nickname.setText(document.getString("nickname"));
-                                u_age.setText(document.getString("age"));
-                                u_mbti.setText(document.getString("mbti"));
-                                u_address.setText(document.getString("address"));
-                                u_stateMessage.setText(document.getString("stateMessage"));
+                                binding.uNickname.setText(document.getString("nickname"));
+                                binding.uAge.setText(document.getString("age"));
+                                binding.uMbti.setText(document.getString("mbti"));
+                                binding.uAddress.setText(document.getString("address"));
+                                binding.uStateMessage.setText(document.getString("stateMessage"));
                             } else {
                                 Log.d(TAG, "getCurrentProfile: No such document");
                             }

@@ -4,22 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import kr.hongik.mbti.databinding.ActivityMatchingBinding;
 
 public class MatchingActivity extends AppCompatActivity {
 
-    private TextView roundTextView;
+    private ActivityMatchingBinding binding;
     TextView[] matchTV = new TextView[4];
-    private Button button;
     static int round;
     static int match[][] = new int[4][4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_matching);
+        binding = ActivityMatchingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         round=0;
         for(int i=0;i<match.length;i++){
@@ -32,28 +32,27 @@ public class MatchingActivity extends AppCompatActivity {
         matchTV[1] = (TextView) findViewById(R.id.match2);
         matchTV[2] = (TextView) findViewById(R.id.match3);
         matchTV[3] = (TextView) findViewById(R.id.match4);
-        roundTextView = (TextView) findViewById(R.id.roundTextView);
-        button = (Button) findViewById(R.id.btn_round);
-        button.setOnClickListener(new View.OnClickListener() {
+
+        binding.btnRound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(round%4==0){// 라운드 0 -> 1
                     matchingAlgorithm();
                     round++;
-                    roundTextView.setText("라운드"+round);
+                    binding.roundTextView.setText("라운드"+round);
                 }else if(round%4==1){// 라운드 1 -> 2
                     matchingAlgorithm();
                     round++;
-                    roundTextView.setText("라운드"+round);
+                    binding.roundTextView.setText("라운드"+round);
                 }else if(round%4==2){// 라운드 2 -> 3
                     matchingAlgorithm();
                     round++;
-                    roundTextView.setText("라운드"+round);
+                    binding.roundTextView.setText("라운드"+round);
                 }else{// 라운드 3 -> 4
                     matchingAlgorithm();
                     round++;
-                    roundTextView.setText("라운드"+round);
-                    button.setEnabled(false);
+                    binding.roundTextView.setText("라운드"+round);
+                    binding.btnRound.setEnabled(false);
                 }
             }
         });

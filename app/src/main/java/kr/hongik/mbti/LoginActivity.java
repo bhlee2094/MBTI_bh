@@ -35,18 +35,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-/**
- * class LoginActivity
- * @author 장혜리
- */
+import kr.hongik.mbti.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
 
     final String TAG = LoginActivity.class.getName();
 
-    // 버튼
-    private SignInButton btn_login_google;
-    private LoginButton btn_login_facebook;
+    private ActivityLoginBinding binding;
 
     //result 상수
     private static final int RC_SIGN_IN = 900;
@@ -58,7 +53,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         setLoginButton();
 
@@ -74,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        btn_login_google.setOnClickListener(new View.OnClickListener() {
+        binding.btnGoogleLogin.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -88,8 +84,8 @@ public class LoginActivity extends AppCompatActivity {
 
         //3.facebook login 설정
         mCallbackManager = CallbackManager.Factory.create();
-        btn_login_facebook.setReadPermissions("email", "public_profile");
-        btn_login_facebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+        binding.btnFacebookLogin.setReadPermissions("email", "public_profile");
+        binding.btnFacebookLogin.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 handleFacebookAccessToken(loginResult.getAccessToken());
@@ -238,12 +234,10 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void setLoginButton(){
 
-        btn_login_google = findViewById(R.id.btn_google_login);
-        TextView textView = (TextView)btn_login_google.getChildAt(0);
+        TextView textView = (TextView)binding.btnGoogleLogin.getChildAt(0);
         textView.setText(getString(R.string.sing_in_google));
 
-        btn_login_facebook = (LoginButton) findViewById(R.id.btn_facebook_login);
-        btn_login_facebook.setLoginText(getString(R.string.sing_in_facebook));
+        binding.btnFacebookLogin.setLoginText(getString(R.string.sing_in_facebook));
 
     }
 }
