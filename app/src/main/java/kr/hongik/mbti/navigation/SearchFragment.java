@@ -32,11 +32,11 @@ import kr.hongik.mbti.SearchingPersonActivity;
 public class SearchFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "SearchingActivity";
-    String mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, ck_gender, mp_gender2, mp_userNum;
+    private String mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, ck_gender, mp_gender2, mp_userNum;
 
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference usersRef = db.collection("users");
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference usersRef = db.collection("users");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -121,8 +121,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                             }
                         }
                     });
-        } else {
-
         }
     }
 }

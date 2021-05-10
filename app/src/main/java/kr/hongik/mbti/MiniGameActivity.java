@@ -29,11 +29,8 @@ import java.util.ArrayList;
 public class MiniGameActivity extends AppCompatActivity {
 
     private RecyclerView mini_RecyclerView;
-    private RecyclerView.LayoutManager layoutManager;
     private ArrayList<VOMiniGame> mini_list;
-    private CollectionReference collectionReference;
     private MiniGameAdapter miniGameAdapter;
-    private FirebaseFirestore db;
     private FirebaseUser user;
 
     @Override
@@ -47,13 +44,13 @@ public class MiniGameActivity extends AppCompatActivity {
     private void MiniInit(){ //미니게임 초기설정
         mini_RecyclerView = (RecyclerView) findViewById(R.id.mini_RecyclerView);
         mini_list = new ArrayList<>();
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mini_RecyclerView.setHasFixedSize(true);
         mini_RecyclerView.setLayoutManager(layoutManager);
         mini_RecyclerView.addItemDecoration(new DividerItemDecoration(mini_RecyclerView.getContext(),1));
         user = FirebaseAuth.getInstance().getCurrentUser();
-        db = FirebaseFirestore.getInstance();
-        collectionReference = db.collection("friendList/"+user.getUid()+"/friends");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = db.collection("friendList/" + user.getUid() + "/friends");
         collectionReference.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

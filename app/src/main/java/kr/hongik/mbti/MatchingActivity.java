@@ -13,7 +13,7 @@ public class MatchingActivity extends AppCompatActivity {
     private ActivityMatchingBinding binding;
     TextView[] matchTV = new TextView[4];
     static int round;
-    static int match[][] = new int[4][4];
+    static int[][] match = new int[4][4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

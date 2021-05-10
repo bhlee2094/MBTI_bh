@@ -36,10 +36,10 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
     private Uri profileImageUri;
     private final int GET_GALLERY_IMAGE = 200;
 
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private DocumentReference usersRef = db.collection("users").document(user.getUid());
-    private String myUid = user.getUid();
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final DocumentReference usersRef = db.collection("users").document(user.getUid());
+    private final String myUid = user.getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

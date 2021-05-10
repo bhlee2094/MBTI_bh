@@ -51,10 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int FROM_PHOTO = 10;
     private FirebaseStorage storage;
-    private  StorageReference storageRef;
-    private String photoPath;
     private FirebaseDatabase database;
-    private ActivityMainBinding binding;
 
     PhotoFragment photo_fragment;
     SearchFragment search_fragment;
@@ -122,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        kr.hongik.mbti.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         init();
 
@@ -259,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (requestCode){
             case FROM_PHOTO:{
-                photoPath = getRealPathFromURI(data.getData());
+                String photoPath = getRealPathFromURI(data.getData());
                 upload(photoPath);
                 break;
             }
@@ -278,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void upload(String uri){
         VOPhoto VOPhoto = new VOPhoto();
-        storageRef = storage.getReferenceFromUrl("gs://mbti-bd577.appspot.com/");
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://mbti-bd577.appspot.com/");
         Uri file = Uri.fromFile(new File(uri));
         VOPhoto.photo_id = file.getLastPathSegment();
         StorageReference riversRef = storageRef.child("images/"+ VOPhoto.photo_id);

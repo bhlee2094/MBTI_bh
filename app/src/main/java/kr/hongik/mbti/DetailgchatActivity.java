@@ -28,12 +28,14 @@ import java.util.ArrayList;
 
 public class DetailgchatActivity extends AppCompatActivity {
 
-    private TextView gct_title;
-    private String gc_title, gc_id, my_nickname, dgc_nickname, dgc_message;
+    private String gc_id;
+    private String my_nickname;
+    private String dgc_nickname;
+    private String dgc_message;
     private RecyclerView dgrecyclerView;
     private DetailchatAdapter mAdapter;
     private ArrayList<VODetailgroupchat> mlist;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     EditText editText;
     Button btnsend;
@@ -44,9 +46,9 @@ public class DetailgchatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detailgchat);
 
         Intent intent = getIntent();
-        gc_title = intent.getStringExtra("title");
+        String gc_title = intent.getStringExtra("title");
         gc_id = intent.getStringExtra("gchatId");
-        gct_title = findViewById(R.id.title);
+        TextView gct_title = findViewById(R.id.title);
         gct_title.setText(gc_title);
         db.collection("users").document(user.getUid())
                 .get()

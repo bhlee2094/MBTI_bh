@@ -24,10 +24,10 @@ import kr.hongik.mbti.databinding.ActivityPostBinding;
 
 public class PostActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private ActivityPostBinding binding;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseDatabase database;
     private String mnickname;
     DocumentReference usersRef = db.collection("users").document(user.getUid());

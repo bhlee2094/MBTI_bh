@@ -26,35 +26,28 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import kr.hongik.mbti.databinding.ActivityChatBinding;
+
 public class ChatActivity extends AppCompatActivity {
 
-    private static final String TAG = "ChatActivity";
-    private RecyclerView recyclerView;
-    EditText editText;
-    Button btnFinish, btnSend;
-    String otherUserNum;
-    private String uid;
-    private String chatRoomUid;
+    private ActivityChatBinding binding;
+    private String otherUserNum, uid, chatRoomUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        binding = ActivityChatBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         Intent intent = getIntent();
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //로그인된 아이디
         otherUserNum =intent.getStringExtra("otherUserNum"); //채팅 당하는 아이디
 
-        editText = (EditText) findViewById(R.id.edittext);
+        binding.btnFinish.setOnClickListener((v) -> {finish();});
 
-        btnFinish = (Button) findViewById(R.id.btnFinish);
-        btnFinish.setOnClickListener((v) -> {finish();});
+        binding.chatRecyclerview.setHasFixedSize(true); //높이 고정
 
-        recyclerView = (RecyclerView) findViewById(R.id.chat_recyclerview);
-        recyclerView.setHasFixedSize(true); //높이 고정
-
-        btnSend = (Button) findViewById(R.id.btnSend);
-        btnSend.setOnClickListener(new View.OnClickListener() {
+        binding.btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 VOChat VOChat = new VOChat();
@@ -62,7 +55,7 @@ public class ChatActivity extends AppCompatActivity {
                 VOChat.users.put(otherUserNum,true);
 
                 if(chatRoomUid == null){
-                    btnSend.setEnabled(false);
+                    binding.btnSend.setEnabled(false);
                     FirebaseDatabase.getInstance().getReference().child("chatrooms").push().setValue(VOChat).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -73,11 +66,11 @@ public class ChatActivity extends AppCompatActivity {
                 }else{
                     VOChat.Comment comment = new VOChat.Comment();
                     comment.uid = uid;
-                    comment.message = editText.getText().toString();
+                    comment.message = binding.edittext.getText().toString();
                     FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments").push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            editText.setText("");
+                            binding.edittext.setText("");
                         }
                     });
                 }
@@ -94,9 +87,9 @@ public class ChatActivity extends AppCompatActivity {
                     VOChat VOChat = item.getValue(VOChat.class);
                     if(VOChat.users.containsKey(otherUserNum)){
                         chatRoomUid = item.getKey();
-                        btnSend.setEnabled(true);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
-                        recyclerView.setAdapter(new RecyclerViewAdapter());
+                        binding.btnSend.setEnabled(true);
+                        binding.chatRecyclerview.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+                        binding.chatRecyclerview.setAdapter(new RecyclerViewAdapter());
                     }
                 }
             }
@@ -108,7 +101,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{//채팅 어뎁터
 
         List<VOChat.Comment> comments;
 
@@ -169,5 +162,5 @@ public class ChatActivity extends AppCompatActivity {
                 textView_message = view.findViewById(R.id.tvChat);
             }
         }
-    }
+    }//채팅 어뎁터 마지막
 }

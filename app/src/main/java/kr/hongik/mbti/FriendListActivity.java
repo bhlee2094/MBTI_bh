@@ -27,7 +27,7 @@ public class FriendListActivity extends AppCompatActivity {
 
     final Map<String, Object> emptyObject = new HashMap<>();
 
-    private boolean isFreindsFragment = true ;
+    private final boolean isFreindsFragment = true ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

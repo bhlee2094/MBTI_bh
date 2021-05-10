@@ -35,7 +35,7 @@ import java.nio.channels.FileChannel;
 public class ProfileImage {
 
 
-    private StorageReference mStorageRef;
+    private final StorageReference mStorageRef;
     final String TAG = ProfileImage.class.getName();
     File cacheDir;
     File cacheFile;

@@ -14,7 +14,6 @@ import kr.hongik.mbti.databinding.FragmentFriendsBinding;
 
 public class FriendsFragment extends Fragment {
 
-    private FragmentFriendsBinding binding;
     FriendListAdapter adapter;
     ListView lv_friends;
 

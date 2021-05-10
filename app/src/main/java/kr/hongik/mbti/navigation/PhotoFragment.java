@@ -38,12 +38,10 @@ import kr.hongik.mbti.R;
 
 public class PhotoFragment extends Fragment implements View.OnClickListener {
 
-    private RecyclerView photo_recyclerview;
     private ArrayList<VOPhoto> VOPhotoArrayList;
     private List<String> uidLists;
     private PhotoAdapter photoAdapter;
     private FirebaseDatabase database;
-    private FirebaseStorage storage;
     private StorageReference storageRef;
 
     @Override
@@ -53,14 +51,14 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
         Context context = root.getContext();
 
         database = FirebaseDatabase.getInstance();
-        storage = FirebaseStorage.getInstance();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
         storageRef = storage.getReferenceFromUrl("gs://mbti-bd577.appspot.com/");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},0);
         }
 
-        photo_recyclerview = (RecyclerView) root.findViewById(R.id.photo_recyclerview);
+        RecyclerView photo_recyclerview = (RecyclerView) root.findViewById(R.id.photo_recyclerview);
         photo_recyclerview.setHasFixedSize(true);
         VOPhotoArrayList = new ArrayList<>();
         uidLists = new ArrayList<>();

@@ -43,34 +43,30 @@ import kr.hongik.mbti.databinding.ActivityBoardBinding;
 public class BoardActivity extends AppCompatActivity {
 
     private ActivityBoardBinding binding;
+
     private ArrayList<VOPostComment> mlist;
     private CommentAdapter commentAdapter;
     private FirebaseDatabase database;
     private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String str_boardId, str_up, str_comment, str_nickname, com_nickname, com_content;
     public static String commentId;
     private Integer i_up, i_comment;
     private CollectionReference collectionReference;
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            Intent intent = new Intent(BoardActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
-        return false;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityBoardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Intent intent = getIntent();
 
+        boardInit();
+    }
+
+    private void boardInit(){
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
+        Intent intent = getIntent();
 
         str_boardId = intent.getStringExtra("boardId");
         str_up = intent.getStringExtra("up");
@@ -109,7 +105,7 @@ public class BoardActivity extends AppCompatActivity {
         binding.mboardUp.setText(str_up);
         binding.mboardComment.setText(str_comment);
 
-        binding.btnComment.setOnClickListener(new View.OnClickListener() {
+        binding.btnComment.setOnClickListener(new View.OnClickListener() {//댓글 버튼
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(BoardActivity.this);
@@ -171,7 +167,6 @@ public class BoardActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 
     private void onStarClicked(DatabaseReference postRef) { //좋아요 버튼
@@ -288,4 +283,13 @@ public class BoardActivity extends AppCompatActivity {
             };
         }
     }//댓글 어뎁터 끝
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            Intent intent = new Intent(BoardActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+        return false;
+    }
 }

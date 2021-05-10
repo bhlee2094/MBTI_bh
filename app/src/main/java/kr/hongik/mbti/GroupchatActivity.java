@@ -19,7 +19,6 @@ import java.util.List;
 
 public class GroupchatActivity extends AppCompatActivity {
 
-    private RecyclerView gchat_recyclerView;
     private GroupchatAdapter mAdapter;
 
     @Override
@@ -31,7 +30,7 @@ public class GroupchatActivity extends AppCompatActivity {
     }
 
     private void init(){//리사이클러뷰 초기화
-        gchat_recyclerView = findViewById(R.id.gchat_recyclerView);
+        RecyclerView gchat_recyclerView = findViewById(R.id.gchat_recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         gchat_recyclerView.setLayoutManager(linearLayoutManager);
         gchat_recyclerView.setHasFixedSize(true);

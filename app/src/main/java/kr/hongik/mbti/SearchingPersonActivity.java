@@ -24,8 +24,8 @@ public class SearchingPersonActivity extends AppCompatActivity implements View.O
     private ActivitySearchingPersonBinding binding;
 
     private static final String TAG = "SearchingPersonActivity";
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String UserNum = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final String UserNum = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String otherUserNum;
     private VOMemberInfo VOMemberInfo;
     private DocumentReference docRef;

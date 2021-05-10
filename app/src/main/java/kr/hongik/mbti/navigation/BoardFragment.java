@@ -47,7 +47,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
     private RecyclerView mRecyclerView;
     private BoardAdapter mAdapter;
     private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseDatabase database;
     private String all_title, all_content,all_nickname, all_boardId, all_up, all_comment;
     @Override
