@@ -1,16 +1,16 @@
 package kr.hongik.mbti;
 
-public class Detailgroupchat {
+public class VODetailgroupchat {
     private String nickname;
     private String message;
 
     public static String dgc_message = "message";
     public static String dgc_nickname = "nickname";
 
-    public Detailgroupchat() {
+    public VODetailgroupchat() {
     }
 
-    public Detailgroupchat(String nickname, String message) {
+    public VODetailgroupchat(String nickname, String message) {
         this.nickname = nickname;
         this.message = message;
     }

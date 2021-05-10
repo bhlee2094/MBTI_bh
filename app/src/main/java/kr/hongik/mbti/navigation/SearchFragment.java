@@ -25,7 +25,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import kr.hongik.mbti.MatchingActivity;
-import kr.hongik.mbti.MemberInfo;
+import kr.hongik.mbti.VOMemberInfo;
 import kr.hongik.mbti.R;
 import kr.hongik.mbti.SearchingPersonActivity;
 
@@ -109,10 +109,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                                     mp_stateMessage = document.getString("stateMessage");
                                     mp_userNum = document.getString("userNum");
 
-                                    MemberInfo m = new MemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, mp_userNum);
+                                    VOMemberInfo m = new VOMemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, mp_userNum);
 
                                     Intent intent = new Intent(getActivity(), SearchingPersonActivity.class);
-                                    intent.putExtra("MemberInfo", m);
+                                    intent.putExtra("VOMemberInfo", m);
                                     intent.putExtra("otherUserNum", document.getId());
                                     startActivity(intent);
                                 }

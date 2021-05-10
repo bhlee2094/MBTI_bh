@@ -27,18 +27,18 @@ import java.io.File;
 import kr.hongik.mbti.databinding.ActivityUpdateBinding;
 import kr.hongik.mbti.navigation.MyinfoFragment;
 
-public class UpdateActivity extends AppCompatActivity {
+public class UpdateActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityUpdateBinding binding;
 
     final String TAG = UpdateActivity.class.getName();
-    ProfileImage profileImage;
-    Uri profileImageUri;
+    private ProfileImage profileImage;
+    private Uri profileImageUri;
     private final int GET_GALLERY_IMAGE = 200;
 
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    DocumentReference usersRef = db.collection("users").document(user.getUid());
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private DocumentReference usersRef = db.collection("users").document(user.getUid());
     private String myUid = user.getUid();
 
     @Override
@@ -47,39 +47,13 @@ public class UpdateActivity extends AppCompatActivity {
         binding = ActivityUpdateBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.mbtiLink2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Uri uri = Uri.parse("https://www.16personalities.com/ko/%EB%AC%B4%EB%A3%8C-%EC%84%B1%EA%B2%A9-%EC%9C%A0%ED%98%95-%EA%B2%80%EC%82%AC");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-            }
-        });
-
-        binding.btnUpdateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                profileUpdate2();
-                myStartActivity(MainActivity.class);
-            }
-        });
-
-
         getCurrentProfile();
         profileImage = new ProfileImage(getApplicationContext(),myUid);
         profileImage.showProfileImage(binding.ImageForUpdate);
 
-
-        //binding.ImageForUpdate 클릭시 프로필이미지 재업로드 가능
-        binding.ImageForUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(intent, GET_GALLERY_IMAGE);
-            }
-        });
-
+        binding.mbtiLink2.setOnClickListener(this);
+        binding.btnUpdateButton.setOnClickListener(this);
+        binding.ImageForUpdate.setOnClickListener(this);
     }
 
 
@@ -155,8 +129,35 @@ public class UpdateActivity extends AppCompatActivity {
         return path;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.mbtiLink2 :
+            {
+                Uri uri = Uri.parse("https://www.16personalities.com/ko/%EB%AC%B4%EB%A3%8C-%EC%84%B1%EA%B2%A9-%EC%9C%A0%ED%98%95-%EA%B2%80%EC%82%AC");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                break;
+            }
+            case R.id.btn_updateButton :
+            {
+                profileUpdate2();
+                myStartActivity(MainActivity.class);
+                break;
+            }
+            //binding.ImageForUpdate 클릭시 프로필이미지 재업로드 가능
+            case R.id.ImageForUpdate :
+            {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(intent, GET_GALLERY_IMAGE);
+                break;
+            }
+        }
+    }
+
     private void myStartActivity(Class c) {
         Intent intent = new Intent(this, c);
-        startActivityForResult(intent, 1);
+        startActivity(intent);
     }
 }

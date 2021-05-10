@@ -30,7 +30,7 @@ public class MiniGameActivity extends AppCompatActivity {
 
     private RecyclerView mini_RecyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<MiniGame> mini_list;
+    private ArrayList<VOMiniGame> mini_list;
     private CollectionReference collectionReference;
     private MiniGameAdapter miniGameAdapter;
     private FirebaseFirestore db;
@@ -61,8 +61,8 @@ public class MiniGameActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             if(task.getResult()!=null){
                                 for(DocumentSnapshot documentSnapshot : task.getResult()){
-                                    MiniGame miniGame = new MiniGame(user.getUid(), documentSnapshot.getId());
-                                    mini_list.add(miniGame);
+                                    VOMiniGame VOMiniGame = new VOMiniGame(user.getUid(), documentSnapshot.getId());
+                                    mini_list.add(VOMiniGame);
                                 }
 
                                 miniGameAdapter = new MiniGameAdapter(MiniGameActivity.this, mini_list);
@@ -75,10 +75,10 @@ public class MiniGameActivity extends AppCompatActivity {
 
     public class MiniGameAdapter extends RecyclerView.Adapter<MiniGameAdapter.MiniGameViewHolder>{ //미니게임 어뎁터
 
-        private ArrayList<MiniGame> list;
+        private ArrayList<VOMiniGame> list;
         private Context context;
 
-        public MiniGameAdapter(Context context, ArrayList<MiniGame> list){
+        public MiniGameAdapter(Context context, ArrayList<VOMiniGame> list){
             this.context = context;
             this.list = list;
         }
@@ -93,11 +93,11 @@ public class MiniGameActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull MiniGameAdapter.MiniGameViewHolder holder, int position) {
-            MiniGame miniGame = list.get(position);
-            ProfileImage profileImage = new ProfileImage(context, miniGame.getFriendUid());
+            VOMiniGame VOMiniGame = list.get(position);
+            ProfileImage profileImage = new ProfileImage(context, VOMiniGame.getFriendUid());
             profileImage.showProfileImage(holder.mini_ImageView);
-            holder.tv_myUid.setText(miniGame.getMyUid());
-            holder.tv_friendUid.setText(miniGame.getFriendUid());
+            holder.tv_myUid.setText(VOMiniGame.getMyUid());
+            holder.tv_friendUid.setText(VOMiniGame.getFriendUid());
         }
 
         @Override

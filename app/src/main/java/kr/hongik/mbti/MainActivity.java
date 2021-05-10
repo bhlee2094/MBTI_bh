@@ -4,7 +4,6 @@ package kr.hongik.mbti;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.loader.content.CursorLoader;
 
 import android.app.AlertDialog;
@@ -40,6 +39,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 
+import kr.hongik.mbti.databinding.ActivityMainBinding;
 import kr.hongik.mbti.navigation.BoardFragment;
 import kr.hongik.mbti.navigation.MyinfoFragment;
 import kr.hongik.mbti.navigation.PhotoFragment;
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private  StorageReference storageRef;
     private String photoPath;
     private FirebaseDatabase database;
+    private ActivityMainBinding binding;
 
     PhotoFragment photo_fragment;
     SearchFragment search_fragment;
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference usersRef = db.collection("users").document(user.getUid());
-    Toolbar toolbar;
 
     private String myUid = user.getUid();
 
@@ -122,11 +122,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         init();
 
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
 
         photo_fragment = new PhotoFragment();
         search_fragment = new SearchFragment();
@@ -277,11 +277,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void upload(String uri){
-        Photo photo = new Photo();
+        VOPhoto VOPhoto = new VOPhoto();
         storageRef = storage.getReferenceFromUrl("gs://mbti-bd577.appspot.com/");
         Uri file = Uri.fromFile(new File(uri));
-        photo.photo_id = file.getLastPathSegment();
-        StorageReference riversRef = storageRef.child("images/"+photo.photo_id);
+        VOPhoto.photo_id = file.getLastPathSegment();
+        StorageReference riversRef = storageRef.child("images/"+ VOPhoto.photo_id);
         UploadTask uploadTask = riversRef.putFile(file);
 
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -298,8 +298,8 @@ public class MainActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
 
                     Uri downloadUri = task.getResult();
-                    photo.imageurl = downloadUri.toString();
-                    database.getReference().child("images").push().setValue(photo);
+                    VOPhoto.imageurl = downloadUri.toString();
+                    database.getReference().child("images").push().setValue(VOPhoto);
                 }
             }
         });

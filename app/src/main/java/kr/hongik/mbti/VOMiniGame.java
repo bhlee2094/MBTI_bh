@@ -1,10 +1,10 @@
 package kr.hongik.mbti;
 
-public class MiniGame {
+public class VOMiniGame {
     private String myUid;
     private String friendUid;
 
-    public MiniGame(String myUid, String friendUid) {
+    public VOMiniGame(String myUid, String friendUid) {
         this.myUid = myUid;
         this.friendUid = friendUid;
     }

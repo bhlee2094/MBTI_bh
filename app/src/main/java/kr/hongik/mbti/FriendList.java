@@ -37,9 +37,9 @@ public class FriendList{
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String UserNum = user.getUid();
 
-    public ArrayList<FriendVO> Friends = new ArrayList<FriendVO>();
-    public ArrayList<FriendVO> friendRequests = new ArrayList<FriendVO>();
-    public ArrayList<FriendVO> sentFriendRequests = new ArrayList<FriendVO>();
+    public ArrayList<VOFriend> Friends = new ArrayList<VOFriend>();
+    public ArrayList<VOFriend> friendRequests = new ArrayList<VOFriend>();
+    public ArrayList<VOFriend> sentFriendRequests = new ArrayList<VOFriend>();
 
     public FriendList(){
 
@@ -95,7 +95,7 @@ public class FriendList{
      * @param myFriendList
      * @param adapter
      */
-    public void getUserinfo(String userNum, ArrayList<FriendVO> myFriendList , FriendListAdapter adapter ){
+    public void getUserinfo(String userNum, ArrayList<VOFriend> myFriendList , FriendListAdapter adapter ){
         DocumentReference docRef = db.document("users/"+userNum);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -103,7 +103,7 @@ public class FriendList{
                 if(task.isSuccessful()){
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        myFriendList.add(new FriendVO(userNum, document.getString("nickname"), document.getString("stateMessage"), document.getString("mbti")));
+                        myFriendList.add(new VOFriend(userNum, document.getString("nickname"), document.getString("stateMessage"), document.getString("mbti")));
                         adapter.notifyDataSetChanged();
                         Log.d(TAG, "current Friendlist size : "+ myFriendList.size());
                     }
@@ -155,17 +155,5 @@ public class FriendList{
         colRef2.document(UserNum).delete();
 
     }
-
-    //데모 시연용 데이터 만듦
-    /*public void makeSampleData(String OtherUserNum){
-        CollectionReference colRef = db.collection("friendList/"+ UserNum +"/friendRequets");
-        if(OtherUserNum != null)
-        colRef.document(OtherUserNum).set(emptyObject);
-
-        colRef.document("4MEeO638oeZqTzaQ545suXEOgF82").set(emptyObject);
-        colRef.document("YP6jS2oqzPc4gSaAGXBGJB5aWIf1").set(emptyObject);
-        colRef.document("rwH4ZolyfHTUscod2gs49sWRqu33").set(emptyObject);
-
-    }*/
 
 }

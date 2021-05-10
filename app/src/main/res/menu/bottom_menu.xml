@@ -4,7 +4,7 @@
         android:id="@+id/action_photo"
         android:icon="@drawable/camera"
         android:enabled="true"
-        android:title="photo"/>
+        android:title="VOPhoto"/>
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/search"
@@ -17,7 +17,7 @@
         android:title="myinfo"/>
     <item
         android:id="@+id/action_board"
-        android:icon="@drawable/board"
+        android:icon="@drawable/VOBoard"
         android:enabled="true"
-        android:title="board"/>
+        android:title="VOBoard"/>
 </menu>

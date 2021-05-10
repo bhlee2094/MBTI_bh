@@ -15,13 +15,10 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.hongik.mbti.MainActivity;
-import kr.hongik.mbti.Photo;
+import kr.hongik.mbti.VOPhoto;
 import kr.hongik.mbti.PhotoItemDecoration;
 import kr.hongik.mbti.R;
 
@@ -42,7 +39,7 @@ import kr.hongik.mbti.R;
 public class PhotoFragment extends Fragment implements View.OnClickListener {
 
     private RecyclerView photo_recyclerview;
-    private ArrayList<Photo> photoArrayList;
+    private ArrayList<VOPhoto> VOPhotoArrayList;
     private List<String> uidLists;
     private PhotoAdapter photoAdapter;
     private FirebaseDatabase database;
@@ -65,9 +62,9 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
 
         photo_recyclerview = (RecyclerView) root.findViewById(R.id.photo_recyclerview);
         photo_recyclerview.setHasFixedSize(true);
-        photoArrayList= new ArrayList<>();
+        VOPhotoArrayList = new ArrayList<>();
         uidLists = new ArrayList<>();
-        photoAdapter = new PhotoAdapter(photoArrayList, context);
+        photoAdapter = new PhotoAdapter(VOPhotoArrayList, context);
         photo_recyclerview.setAdapter(photoAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(context,3); // 리사이클러뷰 레이아웃 변경
         photo_recyclerview.setLayoutManager(layoutManager);
@@ -76,12 +73,12 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
         database.getReference().child("images").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                photoArrayList.clear();
+                VOPhotoArrayList.clear();
                 uidLists.clear();
                 for(DataSnapshot ds : snapshot.getChildren()){
-                        Photo photo = ds.getValue(Photo.class);
+                        VOPhoto VOPhoto = ds.getValue(VOPhoto.class);
                         String uidKey = ds.getKey();
-                        photoArrayList.add(photo);
+                        VOPhotoArrayList.add(VOPhoto);
                         uidLists.add(uidKey);
                 }
                 photoAdapter.notifyDataSetChanged();
@@ -112,10 +109,10 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
 
     public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {// 사진 어뎁터
 
-        private ArrayList<Photo> mDataSet = new ArrayList<>();
+        private ArrayList<VOPhoto> mDataSet = new ArrayList<>();
         private Context context;
 
-        public PhotoAdapter(ArrayList<Photo> mDataSet, Context context){
+        public PhotoAdapter(ArrayList<VOPhoto> mDataSet, Context context){
             this.context = context;
             this.mDataSet = mDataSet;
         }
@@ -161,10 +158,10 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
                     switch (item.getItemId()){
                         case R.id.menu_delete:
                             database.getReference().child("images").child(uidLists.get(getAdapterPosition())).removeValue();
-                            storageRef.child("images/"+photoArrayList.get(getAdapterPosition()).photo_id).delete();
-                            photoArrayList.remove(getAdapterPosition());
+                            storageRef.child("images/"+ VOPhotoArrayList.get(getAdapterPosition()).photo_id).delete();
+                            VOPhotoArrayList.remove(getAdapterPosition());
                             notifyItemRemoved(getAdapterPosition());
-                            notifyItemRangeChanged(getAdapterPosition(), photoArrayList.size());
+                            notifyItemRangeChanged(getAdapterPosition(), VOPhotoArrayList.size());
 
                     }
                     return true;

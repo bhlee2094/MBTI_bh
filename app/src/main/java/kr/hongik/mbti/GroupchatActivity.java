@@ -45,18 +45,18 @@ public class GroupchatActivity extends AppCompatActivity {
         List<Integer> listResId = Arrays.asList(R.drawable.game, R.drawable.developer, R.drawable.artist, R.drawable.intj);
         List<String> listId = Arrays.asList("abcdefg1","abcdefg2","abcdefg3","abcdefg4");
         for(int i=0; i<listTitle.size(); i++){
-            Groupchat groupchat = new Groupchat();
-            groupchat.setGchat_title(listTitle.get(i));
-            groupchat.setGchat_image(listResId.get(i));
-            groupchat.setGchatId(listId.get(i));
+            VOGroupchat VOGroupchat = new VOGroupchat();
+            VOGroupchat.setGchat_title(listTitle.get(i));
+            VOGroupchat.setGchat_image(listResId.get(i));
+            VOGroupchat.setGchatId(listId.get(i));
 
-            mAdapter.addItem(groupchat);
+            mAdapter.addItem(VOGroupchat);
         }
         mAdapter.notifyDataSetChanged();
     }
 
     public class GroupchatAdapter extends RecyclerView.Adapter<GroupchatAdapter.GroupchatViewHolder>{//그룹채팅 어뎁터
-        private ArrayList<Groupchat> list = new ArrayList<>();
+        private ArrayList<VOGroupchat> list = new ArrayList<>();
 
         @Override
         public GroupchatViewHolder onCreateViewHolder (ViewGroup parent, int viewType){
@@ -75,8 +75,8 @@ public class GroupchatActivity extends AppCompatActivity {
             return list.size();
         }
 
-        void addItem(Groupchat groupchat){
-            list.add(groupchat);
+        void addItem(VOGroupchat VOGroupchat){
+            list.add(VOGroupchat);
         }
 
         public class GroupchatViewHolder extends RecyclerView.ViewHolder {
@@ -100,9 +100,9 @@ public class GroupchatActivity extends AppCompatActivity {
                 });
             }
 
-            void onBind(Groupchat groupchat){
-                image.setImageResource(groupchat.getGchat_image());
-                title.setText(groupchat.getGchat_title());
+            void onBind(VOGroupchat VOGroupchat){
+                image.setImageResource(VOGroupchat.getGchat_image());
+                title.setText(VOGroupchat.getGchat_title());
             }
         }
     }//그룹채팅 어뎁터 마지막

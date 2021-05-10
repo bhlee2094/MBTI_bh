@@ -9,10 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,14 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,12 +38,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import kr.hongik.mbti.databinding.ActivityBoardBinding;
+
 public class BoardActivity extends AppCompatActivity {
 
-    private TextView b_title, b_content, b_up, b_comment;
-    private Button btn_comment;
-    private ArrayList<PostComment> mlist;
-    private RecyclerView recyclerView;
+    private ActivityBoardBinding binding;
+    private ArrayList<VOPostComment> mlist;
     private CommentAdapter commentAdapter;
     private FirebaseDatabase database;
     private FirebaseAuth firebaseAuth;
@@ -58,7 +51,6 @@ public class BoardActivity extends AppCompatActivity {
     private String str_boardId, str_up, str_comment, str_nickname, com_nickname, com_content;
     public static String commentId;
     private Integer i_up, i_comment;
-    private ImageView starButton;
     private CollectionReference collectionReference;
 
     @Override
@@ -73,17 +65,12 @@ public class BoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_board);
+        binding = ActivityBoardBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         Intent intent = getIntent();
 
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        starButton = (ImageView)findViewById(R.id.starButton);
-
-        b_title = findViewById(R.id.mboard_title);
-        b_content = findViewById(R.id.mboard_content);
-        b_up = findViewById(R.id.mboard_up);
-        b_comment = findViewById(R.id.mboard_comment);
 
         str_boardId = intent.getStringExtra("boardId");
         str_up = intent.getStringExtra("up");
@@ -93,10 +80,9 @@ public class BoardActivity extends AppCompatActivity {
         i_comment = Integer.parseInt(str_comment);
 
         mlist = new ArrayList<>();
-        recyclerView = (RecyclerView)findViewById(R.id.mboard_recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(BoardActivity.this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),1));
+        binding.mboardRecyclerView.setHasFixedSize(true);
+        binding.mboardRecyclerView.setLayoutManager(new LinearLayoutManager(BoardActivity.this));
+        binding.mboardRecyclerView.addItemDecoration(new DividerItemDecoration(binding.mboardRecyclerView.getContext(),1));
         collectionReference = db.collection("comment/"+str_boardId+"/comment");// collection path 항상 홀수로
         collectionReference.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -107,24 +93,23 @@ public class BoardActivity extends AppCompatActivity {
                                 for(DocumentSnapshot snap : task.getResult()){
                                     com_nickname = snap.getString("nickname");
                                     com_content = snap.getString("comment");
-                                    PostComment postComment = new PostComment(com_nickname, com_content);
-                                    mlist.add(postComment);
+                                    VOPostComment VOPostComment = new VOPostComment(com_nickname, com_content);
+                                    mlist.add(VOPostComment);
                                 }
 
                                 commentAdapter = new CommentAdapter(BoardActivity.this, mlist);
-                                recyclerView.setAdapter(commentAdapter);
+                                binding.mboardRecyclerView.setAdapter(commentAdapter);
                             }
                         }
                     }
                 });
 
-        b_title.setText(intent.getStringExtra("title"));
-        b_content.setText(intent.getStringExtra("content"));
-        b_up.setText(str_up);
-        b_comment.setText(str_comment);
+        binding.mboardTitle.setText(intent.getStringExtra("title"));
+        binding.mboardContent.setText(intent.getStringExtra("content"));
+        binding.mboardUp.setText(str_up);
+        binding.mboardComment.setText(str_comment);
 
-        btn_comment = (Button)findViewById(R.id.btn_comment);//댓글 버튼
-        btn_comment.setOnClickListener(new View.OnClickListener() {
+        binding.btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(BoardActivity.this);
@@ -139,20 +124,20 @@ public class BoardActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         i_comment++;
                         str_comment = i_comment.toString();
-                        b_comment.setText(str_comment);
+                        binding.mboardComment.setText(str_comment);
                         db.collection("board").document(str_boardId)
                                 .update("comment", str_comment);
                         String str_comment2 = editComment.getText().toString();
                         commentId = db.collection("comment/"+str_boardId+"/comment").document().getId();
-                        PostComment postComment = new PostComment(str_nickname, str_comment2, commentId);
+                        VOPostComment VOPostComment = new VOPostComment(str_nickname, str_comment2, commentId);
                         collectionReference.document(commentId)
-                                .set(postComment)
+                                .set(VOPostComment)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        mlist.add(postComment);
+                                        mlist.add(VOPostComment);
                                         commentAdapter = new CommentAdapter(BoardActivity.this, mlist);
-                                        recyclerView.setAdapter(commentAdapter);
+                                        binding.mboardRecyclerView.setAdapter(commentAdapter);
                                         dialog.dismiss();
                                     }
                                 });
@@ -162,7 +147,7 @@ public class BoardActivity extends AppCompatActivity {
             }
         });//댓글 버튼 마지막
 
-        starButton.setOnClickListener(new View.OnClickListener() {
+        binding.starButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onStarClicked(database.getReference().child("board").child(str_boardId));
@@ -178,9 +163,9 @@ public class BoardActivity extends AppCompatActivity {
                             if(documentSnapshot.exists()){
                                 Boolean bl_up = documentSnapshot.getBoolean("up");
                                 if(bl_up==true){
-                                    starButton.setImageResource(R.drawable.baseline_favorite_black_24dp);
+                                    binding.starButton.setImageResource(R.drawable.baseline_favorite_black_24dp);
                                 }else{
-                                    starButton.setImageResource(R.drawable.baseline_favorite_border_black_24dp);
+                                    binding.starButton.setImageResource(R.drawable.baseline_favorite_border_black_24dp);
                                 }
                             }
                         }
@@ -193,7 +178,7 @@ public class BoardActivity extends AppCompatActivity {
         postRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
-                Board p = mutableData.getValue(Board.class);
+                VOBoard p = mutableData.getValue(VOBoard.class);
                 if (p == null) {
                     return Transaction.success(mutableData);
                 }
@@ -204,25 +189,25 @@ public class BoardActivity extends AppCompatActivity {
                     p.stars.remove(firebaseAuth.getCurrentUser().getUid());
                     i_up--;
                     str_up = i_up.toString();
-                    b_up.setText(str_up);
+                    binding.mboardUp.setText(str_up);
                     db.collection("board").document(str_boardId)
                             .update("up", str_up);
-                    starButton.setImageResource(R.drawable.baseline_favorite_border_black_24dp);
-                    PostUp postUp = new PostUp(false);
-                    db.collection("up/"+str_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).set(postUp);
+                    binding.starButton.setImageResource(R.drawable.baseline_favorite_border_black_24dp);
+                    VOPostUp VOPostUp = new VOPostUp(false);
+                    db.collection("up/"+str_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).set(VOPostUp);
                 } else {
                     // Star the post and add self to stars
                     p.starCount = p.starCount + 1;
                     p.stars.put(firebaseAuth.getCurrentUser().getUid(), true);
                     i_up++;
                     str_up = i_up.toString();
-                    b_up.setText(str_up);
+                    binding.mboardUp.setText(str_up);
                     db.collection("board").document(str_boardId)
                             .update("up", str_up);
 
-                    starButton.setImageResource(R.drawable.baseline_favorite_black_24dp);
-                    PostUp postUp = new PostUp(true);
-                    db.collection("up/"+str_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).set(postUp);
+                    binding.starButton.setImageResource(R.drawable.baseline_favorite_black_24dp);
+                    VOPostUp VOPostUp = new VOPostUp(true);
+                    db.collection("up/"+str_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).set(VOPostUp);
                 }
 
                 // Set value and report transaction success
@@ -240,10 +225,10 @@ public class BoardActivity extends AppCompatActivity {
 
     public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder>{//댓글 어뎁터
 
-        private ArrayList<PostComment> list;
+        private ArrayList<VOPostComment> list;
         private Context context;
 
-        public CommentAdapter(Context context, ArrayList<PostComment> list){
+        public CommentAdapter(Context context, ArrayList<VOPostComment> list){
             this.context = context;
             this.list = list;
         }
@@ -257,9 +242,9 @@ public class BoardActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(CommentViewHolder holder, int position){
-            PostComment postComment = list.get(position);
-            holder.nickname.setText(postComment.getNickname());
-            holder.comment.setText(postComment.getComment());
+            VOPostComment VOPostComment = list.get(position);
+            holder.nickname.setText(VOPostComment.getNickname());
+            holder.comment.setText(VOPostComment.getComment());
         }
 
         @Override
@@ -291,7 +276,7 @@ public class BoardActivity extends AppCompatActivity {
                         case R.id.menu_delete:
                             i_comment--;
                             str_comment = i_comment.toString();
-                            b_comment.setText(str_comment);
+                            binding.mboardComment.setText(str_comment);
                             db.collection("board").document(str_boardId).update("comment", str_comment);
                             collectionReference.document(list.get(getAdapterPosition()).getCommentId()).delete();
                             list.remove(getAdapterPosition());

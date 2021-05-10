@@ -72,9 +72,9 @@ public class JoinActivity extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             String UserNum = user.getUid();
 
-            MemberInfo memberInfo = new MemberInfo(nickname, gender, age, address, mbti, stateMessage, UserNum);
+            VOMemberInfo VOMemberInfo = new VOMemberInfo(nickname, gender, age, address, mbti, stateMessage, UserNum);
             if(user !=null){
-                db.collection("users").document(user.getUid()).set(memberInfo)
+                db.collection("users").document(user.getUid()).set(VOMemberInfo)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {

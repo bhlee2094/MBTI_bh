@@ -57,13 +57,13 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Chat chat = new Chat();
-                chat.users.put(uid,true);
-                chat.users.put(otherUserNum,true);
+                VOChat VOChat = new VOChat();
+                VOChat.users.put(uid,true);
+                VOChat.users.put(otherUserNum,true);
 
                 if(chatRoomUid == null){
                     btnSend.setEnabled(false);
-                    FirebaseDatabase.getInstance().getReference().child("chatrooms").push().setValue(chat).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    FirebaseDatabase.getInstance().getReference().child("chatrooms").push().setValue(VOChat).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             checkChatRoom();
@@ -71,7 +71,7 @@ public class ChatActivity extends AppCompatActivity {
                     });
 
                 }else{
-                    Chat.Comment comment = new Chat.Comment();
+                    VOChat.Comment comment = new VOChat.Comment();
                     comment.uid = uid;
                     comment.message = editText.getText().toString();
                     FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments").push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -91,8 +91,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot item : snapshot.getChildren()){
-                    Chat chat = item.getValue(Chat.class);
-                    if(chat.users.containsKey(otherUserNum)){
+                    VOChat VOChat = item.getValue(VOChat.class);
+                    if(VOChat.users.containsKey(otherUserNum)){
                         chatRoomUid = item.getKey();
                         btnSend.setEnabled(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
@@ -110,7 +110,7 @@ public class ChatActivity extends AppCompatActivity {
 
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-        List<Chat.Comment> comments;
+        List<VOChat.Comment> comments;
 
         public RecyclerViewAdapter(){
             comments = new ArrayList<>();
@@ -120,7 +120,7 @@ public class ChatActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     comments.clear();
                     for(DataSnapshot item : snapshot.getChildren()){
-                        comments.add(item.getValue(Chat.Comment.class));
+                        comments.add(item.getValue(VOChat.Comment.class));
                     }
                     notifyDataSetChanged();
                 }

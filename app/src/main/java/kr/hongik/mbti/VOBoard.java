@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Board implements Serializable {
+public class VOBoard implements Serializable {
     private String title;
     private String content;
     private String nickname;
@@ -24,10 +24,10 @@ public class Board implements Serializable {
     public static String p_uId = "uId";
 
 
-    public Board() {
+    public VOBoard() {
     }
 
-    public Board(String title, String content, String nickname, String up, String comment, String boardId) {
+    public VOBoard(String title, String content, String nickname, String up, String comment, String boardId) {
         this.title = title;
         this.content = content;
         this.nickname = nickname;

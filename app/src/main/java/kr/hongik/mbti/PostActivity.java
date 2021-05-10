@@ -3,20 +3,15 @@ package kr.hongik.mbti;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.hongik.mbti.databinding.ActivityPostBinding;
-import kr.hongik.mbti.navigation.BoardFragment;
 
 public class PostActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -64,19 +58,19 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v){
         if(mAuth.getCurrentUser()!=null){
-            String postId = db.collection("board").document().getId();
+            String postId = db.collection("VOBoard").document().getId();
             Map<String, Object> data = new HashMap<>();
-            data.put(Board.p_title, binding.postTitle.getText().toString());
-            data.put(Board.p_content, binding.postContent.getText().toString());
-            data.put(Board.p_nickname, mnickname);
-            data.put(Board.p_up, "0");
-            data.put(Board.p_comment, "0");
-            data.put(Board.p_boardId, postId);
-            data.put(Board.p_uId, user.getUid());
-            db.collection("board").document(postId).set(data, SetOptions.merge());
+            data.put(VOBoard.p_title, binding.postTitle.getText().toString());
+            data.put(VOBoard.p_content, binding.postContent.getText().toString());
+            data.put(VOBoard.p_nickname, mnickname);
+            data.put(VOBoard.p_up, "0");
+            data.put(VOBoard.p_comment, "0");
+            data.put(VOBoard.p_boardId, postId);
+            data.put(VOBoard.p_uId, user.getUid());
+            db.collection("VOBoard").document(postId).set(data, SetOptions.merge());
 
-            Board board = new Board();
-            database.getReference().child("board").child(postId).setValue(board);
+            VOBoard VOBoard = new VOBoard();
+            database.getReference().child("VOBoard").child(postId).setValue(VOBoard);
 
             myStartActivity(MainActivity.class);
         }

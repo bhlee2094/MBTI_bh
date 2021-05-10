@@ -28,9 +28,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
  **/
 public class FriendListAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<FriendVO> Data;
+    private ArrayList<VOFriend> Data;
 
-    public FriendListAdapter(Context context, int textViewResourceId, ArrayList<FriendVO> list) {
+    public FriendListAdapter(Context context, int textViewResourceId, ArrayList<VOFriend> list) {
         this.context = context;
         this.Data = list;
     }
@@ -139,10 +139,10 @@ public class FriendListAdapter extends BaseAdapter {
                         String mp_stateMessage = document.getString("stateMessage");
                         String userNum = document.getString("userNum");
 
-                        MemberInfo m = new MemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, userNum);
+                        VOMemberInfo m = new VOMemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, userNum);
 
                         Intent intent = new Intent(context, SearchingPersonActivity.class);
-                        intent.putExtra("MemberInfo", m);
+                        intent.putExtra("VOMemberInfo", m);
                         intent.putExtra("otherUserNum", document.getId());
                         context.startActivity(intent);
                     }
@@ -151,33 +151,5 @@ public class FriendListAdapter extends BaseAdapter {
             }
         });
     }
-
-    /*
-        ColRef.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String mp_nickname = document.getString("nickname");
-                                String mp_gender = document.getString("gender");
-                                String mp_age = document.getString("age");
-                                String mp_mbti = document.getString("mbti");
-                                String mp_address = document.getString("address");
-                                String mp_stateMessage = document.getString("stateMessage");
-
-                                MemberInfo m = new MemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage);
-
-                                Intent intent = new Intent(getActivity(), SearchingPersonActivity.class);
-                                intent.putExtra("MemberInfo", m);
-                                intent.putExtra("otherUserNum", document.getId());
-                                startActivity(intent);
-                            }
-                        } else { }
-                    }
-                });
-
-
-         */
 
 }

@@ -20,15 +20,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DetailgchatActivity extends AppCompatActivity {
 
@@ -36,7 +32,7 @@ public class DetailgchatActivity extends AppCompatActivity {
     private String gc_title, gc_id, my_nickname, dgc_nickname, dgc_message;
     private RecyclerView dgrecyclerView;
     private DetailchatAdapter mAdapter;
-    private ArrayList<Detailgroupchat> mlist;
+    private ArrayList<VODetailgroupchat> mlist;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     EditText editText;
@@ -79,8 +75,8 @@ public class DetailgchatActivity extends AppCompatActivity {
                                 for(DocumentSnapshot snapshot : task.getResult()){
                                     dgc_message = snapshot.getString("message");
                                     dgc_nickname = snapshot.getString("nickname");
-                                    Detailgroupchat detailgroupchat = new Detailgroupchat(dgc_nickname, dgc_message);
-                                    mlist.add(detailgroupchat);
+                                    VODetailgroupchat VODetailgroupchat = new VODetailgroupchat(dgc_nickname, dgc_message);
+                                    mlist.add(VODetailgroupchat);
                                 }
                                 mAdapter = new DetailchatAdapter(DetailgchatActivity.this, mlist);
                                 dgrecyclerView.setAdapter(mAdapter);
@@ -95,12 +91,12 @@ public class DetailgchatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String dgcId = db.collection("groupchat/"+gc_id+"/detailchat").document().getId();
                 String str_message = editText.getText().toString();
-                Detailgroupchat detailgroupchat = new Detailgroupchat(my_nickname, str_message);
-                db.collection("groupchat/"+gc_id+"/detailchat").document(dgcId).set(detailgroupchat)
+                VODetailgroupchat VODetailgroupchat = new VODetailgroupchat(my_nickname, str_message);
+                db.collection("groupchat/"+gc_id+"/detailchat").document(dgcId).set(VODetailgroupchat)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                mlist.add(detailgroupchat);
+                                mlist.add(VODetailgroupchat);
                                 mAdapter = new DetailchatAdapter(DetailgchatActivity.this, mlist);
                                 dgrecyclerView.setAdapter(mAdapter);
                                 editText.setText("");
@@ -111,10 +107,10 @@ public class DetailgchatActivity extends AppCompatActivity {
     }
 
     class DetailchatAdapter extends RecyclerView.Adapter<DetailchatAdapter.DetailchatViewHolder>{//그룹 채팅 코멘트 어뎁터
-        private ArrayList<Detailgroupchat> list;
+        private ArrayList<VODetailgroupchat> list;
         private Context context;
 
-        public DetailchatAdapter(Context context, ArrayList<Detailgroupchat> list){
+        public DetailchatAdapter(Context context, ArrayList<VODetailgroupchat> list){
             this.context=context;
             this.list=list;
         }
@@ -128,9 +124,9 @@ public class DetailgchatActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(DetailchatViewHolder holder, int position){
-            Detailgroupchat detailgroupchat = list.get(position);
-            holder.nickname.setText(detailgroupchat.getNickname());
-            holder.message.setText(detailgroupchat.getMessage());
+            VODetailgroupchat VODetailgroupchat = list.get(position);
+            holder.nickname.setText(VODetailgroupchat.getNickname());
+            holder.message.setText(VODetailgroupchat.getMessage());
         }
 
         @Override

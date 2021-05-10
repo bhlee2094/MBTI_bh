@@ -5,17 +5,17 @@ package kr.hongik.mbti;
  * Freind value object
  * @author 장혜리
  **/
-public class FriendVO {
+public class VOFriend {
 
     private String userNum;
     private String name; //name
     private String stateMessage; //statemessage
     private String mbti; //mbti
 
-    public FriendVO() {
+    public VOFriend() {
     }
 
-    public FriendVO(String userNum, String name, String stateMessage, String mbti) {
+    public VOFriend(String userNum, String name, String stateMessage, String mbti) {
         this.userNum = userNum;
         this.name = name;
         this.stateMessage = stateMessage;
