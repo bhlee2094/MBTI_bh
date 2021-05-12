@@ -173,7 +173,7 @@ public class BoardActivity extends AppCompatActivity {
         postRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
-                VOBoard p = mutableData.getValue(VOBoard.class);
+                Board p = mutableData.getValue(Board.class);
                 if (p == null) {
                     return Transaction.success(mutableData);
                 }

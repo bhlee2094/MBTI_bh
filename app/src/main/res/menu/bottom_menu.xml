@@ -17,7 +17,7 @@
         android:title="myinfo"/>
     <item
         android:id="@+id/action_board"
-        android:icon="@drawable/VOBoard"
+        android:icon="@drawable/board"
         android:enabled="true"
-        android:title="VOBoard"/>
+        android:title="Board"/>
 </menu>

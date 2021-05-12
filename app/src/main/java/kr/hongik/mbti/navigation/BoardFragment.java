@@ -33,7 +33,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 
-import kr.hongik.mbti.VOBoard;
+import kr.hongik.mbti.Board;
 import kr.hongik.mbti.BoardActivity;
 import kr.hongik.mbti.PostActivity;
 import kr.hongik.mbti.R;
@@ -43,7 +43,7 @@ import static kr.hongik.mbti.BoardActivity.commentId;
 public class BoardFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = "BoardFragment";
-    private ArrayList<VOBoard> mlist;
+    private ArrayList<Board> mlist;
     private RecyclerView mRecyclerView;
     private BoardAdapter mAdapter;
     private FirebaseAuth firebaseAuth;
@@ -80,8 +80,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                                     all_up = snap.getString("up");
                                     all_comment = snap.getString("comment");
                                     all_boardId = snap.getId();
-                                    VOBoard VOBoard = new VOBoard(all_title, all_content, all_nickname, all_up, all_comment, all_boardId);
-                                    mlist.add(VOBoard);
+                                    Board Board = new Board(all_title, all_content, all_nickname, all_up, all_comment, all_boardId);
+                                    mlist.add(Board);
                                 }
 
                                 mAdapter = new BoardAdapter(getActivity(), mlist);
@@ -113,10 +113,10 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
 
     public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHolder>{// 게시판 어뎁터
 
-        private ArrayList<VOBoard> list;
+        private ArrayList<Board> list;
         private Context context;
 
-        public BoardAdapter(Context context, ArrayList<VOBoard> list){
+        public BoardAdapter(Context context, ArrayList<Board> list){
             this.context = context;
             this.list = list;
         }
@@ -131,12 +131,12 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
 
         @Override
         public void onBindViewHolder(BoardViewHolder holder, int position){
-            VOBoard VOBoard = list.get(position);
-            holder.title.setText(VOBoard.getTitle());
-            holder.content.setText(VOBoard.getContent());
-            holder.nickname.setText(VOBoard.getNickname());
-            holder.up.setText(VOBoard.getUp());
-            holder.comment.setText(VOBoard.getComment());
+            Board Board = list.get(position);
+            holder.title.setText(Board.getTitle());
+            holder.content.setText(Board.getContent());
+            holder.nickname.setText(Board.getNickname());
+            holder.up.setText(Board.getUp());
+            holder.comment.setText(Board.getComment());
 
         }
 
@@ -209,14 +209,14 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                                     String strup = list.get(getAdapterPosition()).getUp();
                                     String strcomment = list.get(getAdapterPosition()).getComment();
                                     String strboardId = list.get(getAdapterPosition()).getBoardId();
-                                    VOBoard VOBoard = new VOBoard(strTitle, strContent, strnickname, strup, strcomment, strboardId);
+                                    Board Board = new Board(strTitle, strContent, strnickname, strup, strcomment, strboardId);
 
-                                    db.collection("VOBoard").document(list.get(getAdapterPosition()).getBoardId())
+                                    db.collection("Board").document(list.get(getAdapterPosition()).getBoardId())
                                             .update("title", strTitle, "content", strContent)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
-                                                    list.set(getAdapterPosition(), VOBoard);
+                                                    list.set(getAdapterPosition(), Board);
                                                     notifyItemChanged(getAdapterPosition());
                                                     dialog.dismiss();
                                                 }
