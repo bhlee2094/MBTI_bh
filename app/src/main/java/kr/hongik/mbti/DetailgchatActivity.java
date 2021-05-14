@@ -46,10 +46,74 @@ public class DetailgchatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detailgchat);
 
         Intent intent = getIntent();
-        String gc_title = intent.getStringExtra("title");
         gc_id = intent.getStringExtra("gchatId");
         TextView gct_title = findViewById(R.id.title);
-        gct_title.setText(gc_title);
+        switch (gc_id){
+            case "abcdefg1" : {
+                gct_title.setText("ENFJ");
+                break;
+            }
+            case "abcdefg2" : {
+                gct_title.setText("ENFP");
+                break;
+            }
+            case "abcdefg3" : {
+                gct_title.setText("ENTJ");
+                break;
+            }
+            case "abcdefg4" : {
+                gct_title.setText("ENTP");
+                break;
+            }
+            case "abcdefg5" : {
+                gct_title.setText("ESFJ");
+                break;
+            }
+            case "abcdefg6" : {
+                gct_title.setText("ESFP");
+                break;
+            }
+            case "abcdefg7" : {
+                gct_title.setText("ESTJ");
+                break;
+            }
+            case "abcdefg8" : {
+                gct_title.setText("ESTP");
+                break;
+            }
+            case "abcdefg9" : {
+                gct_title.setText("INFJ");
+                break;
+            }
+            case "abcdefg10" : {
+                gct_title.setText("INFP");
+                break;
+            }
+            case "abcdefg11" : {
+                gct_title.setText("INTJ");
+                break;
+            }
+            case "abcdefg12" : {
+                gct_title.setText("INTP");
+                break;
+            }
+            case "abcdefg13" : {
+                gct_title.setText("ISFJ");
+                break;
+            }
+            case "abcdefg14" : {
+                gct_title.setText("ISFP");
+                break;
+            }
+            case "abcdefg15" : {
+                gct_title.setText("ISTJ");
+                break;
+            }
+            case "abcdefg16" : {
+                gct_title.setText("ISTP");
+                break;
+            }
+        }
         db.collection("users").document(user.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

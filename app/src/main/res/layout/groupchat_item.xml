@@ -7,20 +7,8 @@
 
     <ImageView
         android:id="@+id/gchat_imageView"
-        android:layout_width="129dp"
-        android:layout_height="103dp"
-        android:layout_gravity="center"
-        android:layout_marginRight="10dp"
-        app:srcCompat="@drawable/game" />
+        android:layout_width="70dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center" />
 
-    <TextView
-        android:id="@+id/gchat_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:gravity="center"
-        android:text="게임 채팅방"
-        android:textColor="#020000"
-        android:textSize="24sp" />
 </LinearLayout>

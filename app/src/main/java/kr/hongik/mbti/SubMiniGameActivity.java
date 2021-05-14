@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -30,10 +31,10 @@ import kr.hongik.mbti.databinding.ActivitySubMiniGameBinding;
 public class SubMiniGameActivity extends AppCompatActivity {
 
     private ActivitySubMiniGameBinding binding;
-    private String myUid, friendUid;
     private int[] RandomNum;
     private int count = 0;
     private FirebaseFirestore db;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +42,8 @@ public class SubMiniGameActivity extends AppCompatActivity {
         binding = ActivitySubMiniGameBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Intent intent = getIntent();
-        myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        friendUid = intent.getStringExtra("friendUid");
-
         db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         RandomNum = new int[3];
         while(true){
             for(int i=0;i<3;i++){
@@ -57,7 +55,7 @@ public class SubMiniGameActivity extends AppCompatActivity {
         randomMap.put("num1", RandomNum[0]);
         randomMap.put("num2", RandomNum[1]);
         randomMap.put("num3", RandomNum[2]);
-        db.collection("miniGame/"+myUid+"/miniGame").document(friendUid).set(randomMap);
+        db.collection("miniGame/"+user.getUid()+"/miniGame").document(user.getUid()).set(randomMap);
 
         binding.miniTextView.setText("");
 
@@ -69,7 +67,7 @@ public class SubMiniGameActivity extends AppCompatActivity {
                 }
                 else{
                     InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    db.collection("miniGame/"+myUid+"/miniGame").document(friendUid).get()
+                    db.collection("miniGame/"+user.getUid()+"/miniGame").document(user.getUid()).get()
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -90,7 +88,6 @@ public class SubMiniGameActivity extends AppCompatActivity {
                                                 binding.miniTextView.append("Perfect!");
                                                 Map<String, Integer> countMap = new HashMap<>();
                                                 countMap.put("count", count);
-                                                db.collection("miniGame/"+myUid+"/miniGame/"+friendUid+"/count").document().set(countMap);
                                             }
                                             else{
                                                 binding.miniTextView.append(binding.miniEditText.getText().toString() + " Strike : " + strike + " Ball : " + ball + "\n");

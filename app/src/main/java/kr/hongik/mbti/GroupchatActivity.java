@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,21 +32,19 @@ public class GroupchatActivity extends AppCompatActivity {
 
     private void init(){//리사이클러뷰 초기화
         RecyclerView gchat_recyclerView = findViewById(R.id.gchat_recyclerView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        gchat_recyclerView.setLayoutManager(linearLayoutManager);
+        GridLayoutManager layoutManager = new GridLayoutManager(this,4);
+        gchat_recyclerView.setLayoutManager(layoutManager);
         gchat_recyclerView.setHasFixedSize(true);
-        gchat_recyclerView.addItemDecoration(new DividerItemDecoration(gchat_recyclerView.getContext(),1));
+        gchat_recyclerView.addItemDecoration(new ItemDecoration(gchat_recyclerView.getContext()));
         mAdapter = new GroupchatAdapter();
         gchat_recyclerView.setAdapter(mAdapter);
     }
 
     private void getData(){//그룹채팅방 데이터 입력
-        List<String> listTitle = Arrays.asList("게임채팅방", "프로그래머채팅방", "예술가채팅방", "INTJ채팅방");
-        List<Integer> listResId = Arrays.asList(R.drawable.game, R.drawable.developer, R.drawable.artist, R.drawable.intj);
-        List<String> listId = Arrays.asList("abcdefg1","abcdefg2","abcdefg3","abcdefg4");
-        for(int i=0; i<listTitle.size(); i++){
+        List<Integer> listResId = Arrays.asList(R.drawable.enfj, R.drawable.enfp, R.drawable.entj, R.drawable.entp, R.drawable.esfj,R.drawable.esfp,R.drawable.estj,R.drawable.estp,R.drawable.infj,R.drawable.infp,R.drawable.intj,R.drawable.intp,R.drawable.isfj,R.drawable.isfp,R.drawable.istj,R.drawable.istp);
+        List<String> listId = Arrays.asList("abcdefg1","abcdefg2","abcdefg3","abcdefg4","abcdefg5","abcdefg6","abcdefg7","abcdefg8","abcdefg9","abcdefg10","abcdefg11","abcdefg12","abcdefg13","abcdefg14","abcdefg15","abcdefg16");
+        for(int i=0; i<listResId.size(); i++){
             VOGroupchat VOGroupchat = new VOGroupchat();
-            VOGroupchat.setGchat_title(listTitle.get(i));
             VOGroupchat.setGchat_image(listResId.get(i));
             VOGroupchat.setGchatId(listId.get(i));
 
@@ -80,19 +79,16 @@ public class GroupchatActivity extends AppCompatActivity {
 
         public class GroupchatViewHolder extends RecyclerView.ViewHolder {
             private ImageView image;
-            private TextView title;
 
             public GroupchatViewHolder (View view){
                 super(view);
                 image = view.findViewById(R.id.gchat_imageView);
-                title = view.findViewById(R.id.gchat_title);
 
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int position = getAdapterPosition();
                         Intent intent = new Intent(GroupchatActivity.this, DetailgchatActivity.class);
-                        intent.putExtra("title", list.get(getAdapterPosition()).getGchat_title());
                         intent.putExtra("gchatId", list.get(getAdapterPosition()).getGchatId());
                         startActivityForResult(intent, 102);
                     }
@@ -101,7 +97,6 @@ public class GroupchatActivity extends AppCompatActivity {
 
             void onBind(VOGroupchat VOGroupchat){
                 image.setImageResource(VOGroupchat.getGchat_image());
-                title.setText(VOGroupchat.getGchat_title());
             }
         }
     }//그룹채팅 어뎁터 마지막

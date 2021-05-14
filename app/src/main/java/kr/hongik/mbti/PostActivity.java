@@ -67,10 +67,10 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
             data.put(Board.p_comment, "0");
             data.put(Board.p_boardId, postId);
             data.put(Board.p_uId, user.getUid());
-            db.collection("Board").document(postId).set(data, SetOptions.merge());
+            db.collection("board").document(postId).set(data, SetOptions.merge());
 
             Board Board = new Board();
-            database.getReference().child("Board").child(postId).setValue(Board);
+            database.getReference().child("board").child(postId).setValue(Board);
 
             myStartActivity(MainActivity.class);
         }

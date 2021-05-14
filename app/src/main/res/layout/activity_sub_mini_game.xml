@@ -7,6 +7,18 @@
     tools:context=".SubMiniGameActivity">
 
     <TextView
+        android:id="@+id/mini_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3 숫자 야구 게임"
+        android:textColor="#050000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/mini_TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/mini_TextView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -15,29 +27,29 @@
         app:layout_constraintBottom_toTopOf="@+id/btnSubmit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/mini_Title" />
 
     <Button
+        android:id="@+id/btnSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="제출"
-        android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
-        android:textSize="18sp"
         android:background="@drawable/round_button"
-        android:id="@+id/btnSubmit"/>
+        android:text="제출"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/mini_EditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="number"
         android:digits="0123456789"
         android:hint="숫자만 입력해주세요."
+        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnSubmit"
         app:layout_constraintStart_toStartOf="parent" />

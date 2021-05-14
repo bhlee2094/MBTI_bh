@@ -31,7 +31,6 @@ public class MiniGameActivity extends AppCompatActivity {
     private RecyclerView mini_RecyclerView;
     private ArrayList<VOMiniGame> mini_list;
     private MiniGameAdapter miniGameAdapter;
-    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,26 +47,10 @@ public class MiniGameActivity extends AppCompatActivity {
         mini_RecyclerView.setHasFixedSize(true);
         mini_RecyclerView.setLayoutManager(layoutManager);
         mini_RecyclerView.addItemDecoration(new DividerItemDecoration(mini_RecyclerView.getContext(),1));
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection("friendList/" + user.getUid() + "/friends");
-        collectionReference.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            if(task.getResult()!=null){
-                                for(DocumentSnapshot documentSnapshot : task.getResult()){
-                                    VOMiniGame VOMiniGame = new VOMiniGame(user.getUid(), documentSnapshot.getId());
-                                    mini_list.add(VOMiniGame);
-                                }
-
-                                miniGameAdapter = new MiniGameAdapter(MiniGameActivity.this, mini_list);
-                                mini_RecyclerView.setAdapter(miniGameAdapter);
-                            }
-                        }
-                    }
-                });
+        VOMiniGame VOMiniGame = new VOMiniGame("숫자야구(클릭)");
+        mini_list.add(VOMiniGame);
+        miniGameAdapter = new MiniGameAdapter(this, mini_list);
+        mini_RecyclerView.setAdapter(miniGameAdapter);
     } //미니게임 초기설정 끝
 
     public class MiniGameAdapter extends RecyclerView.Adapter<MiniGameAdapter.MiniGameViewHolder>{ //미니게임 어뎁터
@@ -91,10 +74,7 @@ public class MiniGameActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull MiniGameAdapter.MiniGameViewHolder holder, int position) {
             VOMiniGame VOMiniGame = list.get(position);
-            ProfileImage profileImage = new ProfileImage(context, VOMiniGame.getFriendUid());
-            profileImage.showProfileImage(holder.mini_ImageView);
-            holder.tv_myUid.setText(VOMiniGame.getMyUid());
-            holder.tv_friendUid.setText(VOMiniGame.getFriendUid());
+            holder.mini_name.setText(VOMiniGame.getMininame());
         }
 
         @Override
@@ -103,21 +83,16 @@ public class MiniGameActivity extends AppCompatActivity {
         }
 
         public class MiniGameViewHolder extends RecyclerView.ViewHolder{
-            private ImageView mini_ImageView;
-            private TextView tv_myUid;
-            private TextView tv_friendUid;
+            private TextView mini_name;
 
             public MiniGameViewHolder(View view) {
                 super(view);
-                mini_ImageView = view.findViewById(R.id.mini_ImageView);
-                tv_myUid = view.findViewById(R.id.tv_myUid);
-                tv_friendUid = view.findViewById(R.id.tv_friendUid);
+                mini_name = view.findViewById(R.id.mini_name);
 
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(MiniGameActivity.this, SubMiniGameActivity.class);
-                        intent.putExtra("friendUid",list.get(getAdapterPosition()).getFriendUid());
                         startActivity(intent);
                     }
                 });

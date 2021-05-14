@@ -1,27 +1,18 @@
 package kr.hongik.mbti;
 
 public class VOMiniGame {
-    private String myUid;
-    private String friendUid;
+    private String mininame;
 
-    public VOMiniGame(String myUid, String friendUid) {
-        this.myUid = myUid;
-        this.friendUid = friendUid;
+    public VOMiniGame(String mininame) {
+        this.mininame = mininame;
+
     }
 
-    public String getMyUid() {
-        return myUid;
+    public String getMininame() {
+        return mininame;
     }
 
-    public void setMyUid(String myUid) {
-        this.myUid = myUid;
-    }
-
-    public String getFriendUid() {
-        return friendUid;
-    }
-
-    public void setFriendUid(String friendUid) {
-        this.friendUid = friendUid;
+    public void setMininame(String mininame) {
+        this.mininame = mininame;
     }
 }

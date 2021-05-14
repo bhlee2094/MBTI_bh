@@ -9,10 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PhotoItemDecoration extends RecyclerView.ItemDecoration {
+public class ItemDecoration extends RecyclerView.ItemDecoration {
     private final int size10;
 
-    public PhotoItemDecoration(Context context){
+    public ItemDecoration(Context context){
         size10 = dpToPx(context,10);
         int size5 = dpToPx(context, 5);
     }

@@ -32,7 +32,7 @@ import java.util.List;
 
 import kr.hongik.mbti.MainActivity;
 import kr.hongik.mbti.VOPhoto;
-import kr.hongik.mbti.PhotoItemDecoration;
+import kr.hongik.mbti.ItemDecoration;
 import kr.hongik.mbti.R;
 
 
@@ -66,7 +66,7 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
         photo_recyclerview.setAdapter(photoAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(context,3); // 리사이클러뷰 레이아웃 변경
         photo_recyclerview.setLayoutManager(layoutManager);
-        photo_recyclerview.addItemDecoration(new PhotoItemDecoration(photo_recyclerview.getContext()));
+        photo_recyclerview.addItemDecoration(new ItemDecoration(photo_recyclerview.getContext()));
 
         database.getReference().child("images").addValueEventListener(new ValueEventListener() {
             @Override
