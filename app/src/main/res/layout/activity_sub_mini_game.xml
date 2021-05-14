@@ -18,11 +18,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
         android:id="@+id/mini_TextView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:textColor="#070000"
+        android:background="@drawable/edge"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/btnSubmit"
         app:layout_constraintEnd_toEndOf="parent"

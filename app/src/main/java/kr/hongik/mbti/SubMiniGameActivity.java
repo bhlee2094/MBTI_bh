@@ -57,7 +57,7 @@ public class SubMiniGameActivity extends AppCompatActivity {
         randomMap.put("num3", RandomNum[2]);
         db.collection("miniGame/"+user.getUid()+"/miniGame").document(user.getUid()).set(randomMap);
 
-        binding.miniTextView.setText("");
+        binding.miniTextView.setText("중복없이 3개 숫자 입력해주세요\n");
 
         binding.btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override

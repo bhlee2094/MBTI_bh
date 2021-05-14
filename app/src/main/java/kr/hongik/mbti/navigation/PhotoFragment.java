@@ -2,6 +2,7 @@ package kr.hongik.mbti.navigation;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.hongik.mbti.MainActivity;
+import kr.hongik.mbti.PhotoActivity;
 import kr.hongik.mbti.VOPhoto;
 import kr.hongik.mbti.ItemDecoration;
 import kr.hongik.mbti.R;
@@ -142,6 +144,17 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
                 photo = (ImageView)view.findViewById(R.id.photo_imageView);
 
                 view.setOnCreateContextMenuListener(this);
+
+                /*view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), PhotoActivity.class);
+                        intent.putExtra("photourl", mDataSet.get(getAdapterPosition()).getImageurl());
+                        intent.putExtra("photoid", mDataSet.get(getAdapterPosition()).getPhoto_id());
+                        intent.putExtra("photokey", mDataSet.get(getAdapterPosition()).getPhoto_key());
+                        startActivity(intent);
+                    }
+                });*/
             }
 
             @Override
