@@ -37,9 +37,9 @@ public class FriendList{
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String UserNum = user.getUid();
 
-    public ArrayList<VOFriend> Friends = new ArrayList<VOFriend>();
-    public ArrayList<VOFriend> friendRequests = new ArrayList<VOFriend>();
-    public ArrayList<VOFriend> sentFriendRequests = new ArrayList<VOFriend>();
+    public ArrayList<Friend> Friends = new ArrayList<Friend>();
+    public ArrayList<Friend> friendRequests = new ArrayList<Friend>();
+    public ArrayList<Friend> sentFriendRequests = new ArrayList<Friend>();
 
     public FriendList(){
 
@@ -95,7 +95,7 @@ public class FriendList{
      * @param myFriendList
      * @param adapter
      */
-    public void getUserinfo(String userNum, ArrayList<VOFriend> myFriendList , FriendListAdapter adapter ){
+    public void getUserinfo(String userNum, ArrayList<Friend> myFriendList , FriendListAdapter adapter ){
         DocumentReference docRef = db.document("users/"+userNum);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -103,7 +103,7 @@ public class FriendList{
                 if(task.isSuccessful()){
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        myFriendList.add(new VOFriend(userNum, document.getString("nickname"), document.getString("stateMessage"), document.getString("mbti")));
+                        myFriendList.add(new Friend(userNum, document.getString("nickname"), document.getString("stateMessage"), document.getString("mbti")));
                         adapter.notifyDataSetChanged();
                         Log.d(TAG, "current Friendlist size : "+ myFriendList.size());
                     }

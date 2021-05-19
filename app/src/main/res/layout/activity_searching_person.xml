@@ -3,8 +3,8 @@
 
     <data>
         <variable
-            name="VOMemberInfo"
-            type="kr.hongik.mbti.VOMemberInfo" />
+            name="MemberInfo"
+            type="kr.hongik.mbti.MemberInfo" />
     </data>
 
         <LinearLayout
@@ -43,7 +43,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:background="@drawable/edge"
-                    android:text="@{VOMemberInfo.nickname}"
+                    android:text="@{MemberInfo.nickname}"
                     android:textSize="24sp" />
             </LinearLayout>
 
@@ -68,7 +68,7 @@
                     android:background="@drawable/edge"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="@{VOMemberInfo.gender}"
+                    android:text="@{MemberInfo.gender}"
                     android:textSize="24sp" />
             </LinearLayout>
 
@@ -93,7 +93,7 @@
                     android:background="@drawable/edge"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="@{VOMemberInfo.age}"
+                    android:text="@{MemberInfo.age}"
                     android:textSize="24sp" />
             </LinearLayout>
 
@@ -118,7 +118,7 @@
                     android:background="@drawable/edge"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="@{VOMemberInfo.mbti}"
+                    android:text="@{MemberInfo.mbti}"
                     android:textSize="24sp" />
             </LinearLayout>
 
@@ -143,7 +143,7 @@
                     android:background="@drawable/edge"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="@{VOMemberInfo.address}"
+                    android:text="@{MemberInfo.address}"
                     android:textSize="24sp" />
             </LinearLayout>
 
@@ -168,7 +168,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/edge"
                     android:gravity="center"
-                    android:text="@{VOMemberInfo.stateMessage}"
+                    android:text="@{MemberInfo.stateMessage}"
                     android:textSize="24sp" />
             </LinearLayout>
 

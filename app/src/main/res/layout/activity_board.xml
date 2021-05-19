@@ -9,13 +9,14 @@
 
     <TextView
         android:id="@+id/mboard_title"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="Title"
         android:textColor="#070000"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
@@ -29,6 +30,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:text="content"
+        android:textColor="#090000"
         android:textSize="18sp" />
 
     <View

@@ -1,21 +1,21 @@
 package kr.hongik.mbti;
 
-public class VOPhoto {
+public class Photo {
 
     public String imageurl;
     public String photo_id;
     public String photo_key;
 
-    public VOPhoto() {
+    public Photo() {
     }
 
-    public VOPhoto(String imageurl, String photo_id, String photo_key) {
+    public Photo(String imageurl, String photo_id, String photo_key) {
         this.imageurl = imageurl;
         this.photo_id = photo_id;
         this.photo_key = photo_key;
     }
 
-    public VOPhoto(String imageurl, String photo_id) {
+    public Photo(String imageurl, String photo_id) {
         this.imageurl = imageurl;
         this.photo_id = photo_id;
     }

@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,13 +48,13 @@ public class ChatActivity extends AppCompatActivity {
         binding.btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VOChat VOChat = new VOChat();
-                VOChat.users.put(uid,true);
-                VOChat.users.put(otherUserNum,true);
+                Chat Chat = new Chat();
+                Chat.users.put(uid,true);
+                Chat.users.put(otherUserNum,true);
 
                 if(chatRoomUid == null){
                     binding.btnSend.setEnabled(false);
-                    FirebaseDatabase.getInstance().getReference().child("chatrooms").push().setValue(VOChat).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    FirebaseDatabase.getInstance().getReference().child("chatrooms").push().setValue(Chat).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             checkChatRoom();
@@ -64,7 +62,7 @@ public class ChatActivity extends AppCompatActivity {
                     });
 
                 }else{
-                    VOChat.Comment comment = new VOChat.Comment();
+                    Chat.Comment comment = new Chat.Comment();
                     comment.uid = uid;
                     comment.message = binding.edittext.getText().toString();
                     FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments").push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -84,8 +82,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot item : snapshot.getChildren()){
-                    VOChat VOChat = item.getValue(VOChat.class);
-                    if(VOChat.users.containsKey(otherUserNum)){
+                    Chat Chat = item.getValue(Chat.class);
+                    if(Chat.users.containsKey(otherUserNum)){
                         chatRoomUid = item.getKey();
                         binding.btnSend.setEnabled(true);
                         binding.chatRecyclerview.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
@@ -103,7 +101,7 @@ public class ChatActivity extends AppCompatActivity {
 
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{//채팅 어뎁터
 
-        List<VOChat.Comment> comments;
+        List<Chat.Comment> comments;
 
         public RecyclerViewAdapter(){
             comments = new ArrayList<>();
@@ -113,7 +111,7 @@ public class ChatActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     comments.clear();
                     for(DataSnapshot item : snapshot.getChildren()){
-                        comments.add(item.getValue(VOChat.Comment.class));
+                        comments.add(item.getValue(Chat.Comment.class));
                     }
                     notifyDataSetChanged();
                 }

@@ -1,13 +1,13 @@
 package kr.hongik.mbti;
 
-public class VOGroupchat {
+public class Groupchat {
     private int gchat_image;
     private String gchatId;
 
-    public VOGroupchat() {
+    public Groupchat() {
     }
 
-    public VOGroupchat(int gchat_image, String gchatId) {
+    public Groupchat(int gchat_image, String gchatId) {
         this.gchat_image = gchat_image;
         this.gchatId = gchatId;
     }

@@ -1,10 +1,10 @@
 package kr.hongik.mbti;
 
-public class VOPostUp {
+public class PostUp {
     private Boolean up;
 
 
-    public VOPostUp(Boolean up) {
+    public PostUp(Boolean up) {
         this.up = up;
     }
 

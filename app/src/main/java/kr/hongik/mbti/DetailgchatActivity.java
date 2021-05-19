@@ -34,7 +34,7 @@ public class DetailgchatActivity extends AppCompatActivity {
     private String dgc_message;
     private RecyclerView dgrecyclerView;
     private DetailchatAdapter mAdapter;
-    private ArrayList<VODetailgroupchat> mlist;
+    private ArrayList<Detailgroupchat> mlist;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     EditText editText;
@@ -141,8 +141,8 @@ public class DetailgchatActivity extends AppCompatActivity {
                                 for(DocumentSnapshot snapshot : task.getResult()){
                                     dgc_message = snapshot.getString("message");
                                     dgc_nickname = snapshot.getString("nickname");
-                                    VODetailgroupchat VODetailgroupchat = new VODetailgroupchat(dgc_nickname, dgc_message);
-                                    mlist.add(VODetailgroupchat);
+                                    Detailgroupchat Detailgroupchat = new Detailgroupchat(dgc_nickname, dgc_message);
+                                    mlist.add(Detailgroupchat);
                                 }
                                 mAdapter = new DetailchatAdapter(DetailgchatActivity.this, mlist);
                                 dgrecyclerView.setAdapter(mAdapter);
@@ -157,12 +157,12 @@ public class DetailgchatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String dgcId = db.collection("groupchat/"+gc_id+"/detailchat").document().getId();
                 String str_message = editText.getText().toString();
-                VODetailgroupchat VODetailgroupchat = new VODetailgroupchat(my_nickname, str_message);
-                db.collection("groupchat/"+gc_id+"/detailchat").document(dgcId).set(VODetailgroupchat)
+                Detailgroupchat Detailgroupchat = new Detailgroupchat(my_nickname, str_message);
+                db.collection("groupchat/"+gc_id+"/detailchat").document(dgcId).set(Detailgroupchat)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                mlist.add(VODetailgroupchat);
+                                mlist.add(Detailgroupchat);
                                 mAdapter = new DetailchatAdapter(DetailgchatActivity.this, mlist);
                                 dgrecyclerView.setAdapter(mAdapter);
                                 editText.setText("");
@@ -173,10 +173,10 @@ public class DetailgchatActivity extends AppCompatActivity {
     }
 
     class DetailchatAdapter extends RecyclerView.Adapter<DetailchatAdapter.DetailchatViewHolder>{//그룹 채팅 코멘트 어뎁터
-        private ArrayList<VODetailgroupchat> list;
+        private ArrayList<Detailgroupchat> list;
         private Context context;
 
-        public DetailchatAdapter(Context context, ArrayList<VODetailgroupchat> list){
+        public DetailchatAdapter(Context context, ArrayList<Detailgroupchat> list){
             this.context=context;
             this.list=list;
         }
@@ -190,9 +190,9 @@ public class DetailgchatActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(DetailchatViewHolder holder, int position){
-            VODetailgroupchat VODetailgroupchat = list.get(position);
-            holder.nickname.setText(VODetailgroupchat.getNickname());
-            holder.message.setText(VODetailgroupchat.getMessage());
+            Detailgroupchat Detailgroupchat = list.get(position);
+            holder.nickname.setText(Detailgroupchat.getNickname());
+            holder.message.setText(Detailgroupchat.getMessage());
         }
 
         @Override

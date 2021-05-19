@@ -28,9 +28,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
  **/
 public class FriendListAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<VOFriend> Data;
+    private ArrayList<Friend> Data;
 
-    public FriendListAdapter(Context context, int textViewResourceId, ArrayList<VOFriend> list) {
+    public FriendListAdapter(Context context, int textViewResourceId, ArrayList<Friend> list) {
         this.context = context;
         this.Data = list;
     }
@@ -139,10 +139,10 @@ public class FriendListAdapter extends BaseAdapter {
                         String mp_stateMessage = document.getString("stateMessage");
                         String userNum = document.getString("userNum");
 
-                        VOMemberInfo m = new VOMemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, userNum);
+                        MemberInfo m = new MemberInfo(mp_nickname, mp_gender, mp_age, mp_mbti, mp_address, mp_stateMessage, userNum);
 
                         Intent intent = new Intent(context, SearchingPersonActivity.class);
-                        intent.putExtra("VOMemberInfo", m);
+                        intent.putExtra("MemberInfo", m);
                         intent.putExtra("otherUserNum", document.getId());
                         context.startActivity(intent);
                     }

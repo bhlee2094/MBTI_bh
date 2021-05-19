@@ -9,12 +9,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/post_title"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_weight="1"
-            android:hint="제목"
+            android:gravity="center"
+            android:text="글 쓰기"
+            android:textColor="#090000"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -22,6 +25,7 @@
             android:id="@+id/btn_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/round_button"
             android:text="완료"
@@ -29,10 +33,18 @@
     </LinearLayout>
 
     <EditText
+        android:id="@+id/post_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="제목"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
         android:id="@+id/post_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:hint="게시판 내용"
+        android:hint="내용을 입력하세요"
         android:textSize="16sp" />
 </LinearLayout>

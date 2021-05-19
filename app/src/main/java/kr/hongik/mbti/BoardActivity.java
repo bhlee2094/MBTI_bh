@@ -44,7 +44,7 @@ public class BoardActivity extends AppCompatActivity {
 
     private ActivityBoardBinding binding;
 
-    private ArrayList<VOPostComment> mlist;
+    private ArrayList<PostComment> mlist;
     private CommentAdapter commentAdapter;
     private FirebaseDatabase database;
     private FirebaseAuth firebaseAuth;
@@ -89,8 +89,8 @@ public class BoardActivity extends AppCompatActivity {
                                 for(DocumentSnapshot snap : task.getResult()){
                                     com_nickname = snap.getString("nickname");
                                     com_content = snap.getString("comment");
-                                    VOPostComment VOPostComment = new VOPostComment(com_nickname, com_content);
-                                    mlist.add(VOPostComment);
+                                    PostComment PostComment = new PostComment(com_nickname, com_content);
+                                    mlist.add(PostComment);
                                 }
 
                                 commentAdapter = new CommentAdapter(BoardActivity.this, mlist);
@@ -125,13 +125,13 @@ public class BoardActivity extends AppCompatActivity {
                                 .update("comment", str_comment);
                         String str_comment2 = editComment.getText().toString();
                         commentId = db.collection("comment/"+str_boardId+"/comment").document().getId();
-                        VOPostComment VOPostComment = new VOPostComment(str_nickname, str_comment2, commentId);
+                        PostComment PostComment = new PostComment(str_nickname, str_comment2, commentId);
                         collectionReference.document(commentId)
-                                .set(VOPostComment)
+                                .set(PostComment)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        mlist.add(VOPostComment);
+                                        mlist.add(PostComment);
                                         commentAdapter = new CommentAdapter(BoardActivity.this, mlist);
                                         binding.mboardRecyclerView.setAdapter(commentAdapter);
                                         dialog.dismiss();
@@ -188,8 +188,8 @@ public class BoardActivity extends AppCompatActivity {
                     db.collection("board").document(str_boardId)
                             .update("up", str_up);
                     binding.starButton.setImageResource(R.drawable.baseline_favorite_border_black_24dp);
-                    VOPostUp VOPostUp = new VOPostUp(false);
-                    db.collection("up/"+str_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).set(VOPostUp);
+                    PostUp PostUp = new PostUp(false);
+                    db.collection("up/"+str_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).set(PostUp);
                 } else {
                     // Star the post and add self to stars
                     p.starCount = p.starCount + 1;
@@ -201,8 +201,8 @@ public class BoardActivity extends AppCompatActivity {
                             .update("up", str_up);
 
                     binding.starButton.setImageResource(R.drawable.baseline_favorite_black_24dp);
-                    VOPostUp VOPostUp = new VOPostUp(true);
-                    db.collection("up/"+str_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).set(VOPostUp);
+                    PostUp PostUp = new PostUp(true);
+                    db.collection("up/"+str_boardId+"/up").document(firebaseAuth.getCurrentUser().getUid()).set(PostUp);
                 }
 
                 // Set value and report transaction success
@@ -220,10 +220,10 @@ public class BoardActivity extends AppCompatActivity {
 
     public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder>{//댓글 어뎁터
 
-        private ArrayList<VOPostComment> list;
+        private ArrayList<PostComment> list;
         private Context context;
 
-        public CommentAdapter(Context context, ArrayList<VOPostComment> list){
+        public CommentAdapter(Context context, ArrayList<PostComment> list){
             this.context = context;
             this.list = list;
         }
@@ -237,9 +237,9 @@ public class BoardActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(CommentViewHolder holder, int position){
-            VOPostComment VOPostComment = list.get(position);
-            holder.nickname.setText(VOPostComment.getNickname());
-            holder.comment.setText(VOPostComment.getComment());
+            PostComment PostComment = list.get(position);
+            holder.nickname.setText(PostComment.getNickname());
+            holder.comment.setText(PostComment.getComment());
         }
 
         @Override

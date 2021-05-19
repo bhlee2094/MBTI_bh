@@ -1,20 +1,20 @@
 package kr.hongik.mbti;
 
-public class VOPostComment {
+public class PostComment {
     private String nickname;
     private String comment;
     private String commentId;
 
-    public VOPostComment() {
+    public PostComment() {
     }
 
-    public VOPostComment(String nickname, String comment, String commentId) {
+    public PostComment(String nickname, String comment, String commentId) {
         this.nickname = nickname;
         this.comment = comment;
         this.commentId = commentId;
     }
 
-    public VOPostComment(String nickname, String comment) {
+    public PostComment(String nickname, String comment) {
         this.nickname = nickname;
         this.comment = comment;
     }

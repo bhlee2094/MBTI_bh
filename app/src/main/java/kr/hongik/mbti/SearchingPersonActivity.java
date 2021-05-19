@@ -27,7 +27,7 @@ public class SearchingPersonActivity extends AppCompatActivity implements View.O
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String UserNum = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String otherUserNum;
-    private VOMemberInfo VOMemberInfo;
+    private MemberInfo MemberInfo;
     private DocumentReference docRef;
     CollectionReference friendRef = db.collection("friendList/"+ UserNum + "/friends");
 
@@ -38,9 +38,9 @@ public class SearchingPersonActivity extends AppCompatActivity implements View.O
         setContentView(binding.getRoot());
 
         Intent intent = getIntent();
-        VOMemberInfo = (VOMemberInfo) intent.getSerializableExtra("VOMemberInfo");
+        MemberInfo = (MemberInfo) intent.getSerializableExtra("MemberInfo");
         otherUserNum =intent.getStringExtra("otherUserNum");
-        binding.setVOMemberInfo(VOMemberInfo);
+        binding.setMemberInfo(MemberInfo);
 
         docRef = friendRef.document(otherUserNum);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -86,7 +86,7 @@ public class SearchingPersonActivity extends AppCompatActivity implements View.O
             case R.id.btn_delete_friend :
             {
                 docRef.delete();
-                db.collection("friendList/" + VOMemberInfo.getUserNum() +"/friends").document(UserNum).delete();
+                db.collection("friendList/" + MemberInfo.getUserNum() +"/friends").document(UserNum).delete();
                 startToast("친구 삭제 성공");
                 finish();
                 break;

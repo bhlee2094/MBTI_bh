@@ -4,7 +4,7 @@
         android:id="@+id/action_photo"
         android:icon="@drawable/camera"
         android:enabled="true"
-        android:title="VOPhoto"/>
+        android:title="Photo"/>
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/search"

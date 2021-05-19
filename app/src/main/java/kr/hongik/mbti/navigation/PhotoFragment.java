@@ -32,15 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.hongik.mbti.MainActivity;
+import kr.hongik.mbti.Photo;
 import kr.hongik.mbti.PhotoActivity;
-import kr.hongik.mbti.VOPhoto;
 import kr.hongik.mbti.ItemDecoration;
 import kr.hongik.mbti.R;
 
 
 public class PhotoFragment extends Fragment implements View.OnClickListener {
 
-    private ArrayList<VOPhoto> VOPhotoArrayList;
+    private ArrayList<Photo> PhotoArrayList;
     private List<String> uidLists;
     private PhotoAdapter photoAdapter;
     private FirebaseDatabase database;
@@ -62,9 +62,9 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
 
         RecyclerView photo_recyclerview = (RecyclerView) root.findViewById(R.id.photo_recyclerview);
         photo_recyclerview.setHasFixedSize(true);
-        VOPhotoArrayList = new ArrayList<>();
+        PhotoArrayList = new ArrayList<>();
         uidLists = new ArrayList<>();
-        photoAdapter = new PhotoAdapter(VOPhotoArrayList, context);
+        photoAdapter = new PhotoAdapter(PhotoArrayList, context);
         photo_recyclerview.setAdapter(photoAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(context,3); // 리사이클러뷰 레이아웃 변경
         photo_recyclerview.setLayoutManager(layoutManager);
@@ -73,12 +73,12 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
         database.getReference().child("images").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                VOPhotoArrayList.clear();
+                PhotoArrayList.clear();
                 uidLists.clear();
                 for(DataSnapshot ds : snapshot.getChildren()){
-                        VOPhoto VOPhoto = ds.getValue(VOPhoto.class);
+                        Photo Photo = ds.getValue(Photo.class);
                         String uidKey = ds.getKey();
-                        VOPhotoArrayList.add(VOPhoto);
+                        PhotoArrayList.add(Photo);
                         uidLists.add(uidKey);
                 }
                 photoAdapter.notifyDataSetChanged();
@@ -109,10 +109,10 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
 
     public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {// 사진 어뎁터
 
-        private ArrayList<VOPhoto> mDataSet = new ArrayList<>();
+        private ArrayList<Photo> mDataSet = new ArrayList<>();
         private Context context;
 
-        public PhotoAdapter(ArrayList<VOPhoto> mDataSet, Context context){
+        public PhotoAdapter(ArrayList<Photo> mDataSet, Context context){
             this.context = context;
             this.mDataSet = mDataSet;
         }
@@ -145,16 +145,14 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
 
                 view.setOnCreateContextMenuListener(this);
 
-                /*view.setOnClickListener(new View.OnClickListener() {
+                view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), PhotoActivity.class);
-                        intent.putExtra("photourl", mDataSet.get(getAdapterPosition()).getImageurl());
-                        intent.putExtra("photoid", mDataSet.get(getAdapterPosition()).getPhoto_id());
-                        intent.putExtra("photokey", mDataSet.get(getAdapterPosition()).getPhoto_key());
+                        intent.putExtra("photourl", mDataSet.get(getBindingAdapterPosition()).getImageurl());
                         startActivity(intent);
                     }
-                });*/
+                });
             }
 
             @Override
@@ -169,10 +167,10 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
                     switch (item.getItemId()){
                         case R.id.menu_delete:
                             database.getReference().child("images").child(uidLists.get(getAdapterPosition())).removeValue();
-                            storageRef.child("images/"+ VOPhotoArrayList.get(getAdapterPosition()).photo_id).delete();
-                            VOPhotoArrayList.remove(getAdapterPosition());
+                            storageRef.child("images/"+ PhotoArrayList.get(getAdapterPosition()).photo_id).delete();
+                            PhotoArrayList.remove(getAdapterPosition());
                             notifyItemRemoved(getAdapterPosition());
-                            notifyItemRangeChanged(getAdapterPosition(), VOPhotoArrayList.size());
+                            notifyItemRangeChanged(getAdapterPosition(), PhotoArrayList.size());
 
                     }
                     return true;

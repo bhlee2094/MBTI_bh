@@ -1,9 +1,9 @@
 package kr.hongik.mbti;
 
-public class VOMiniGame {
+public class MiniGame {
     private String mininame;
 
-    public VOMiniGame(String mininame) {
+    public MiniGame(String mininame) {
         this.mininame = mininame;
 
     }

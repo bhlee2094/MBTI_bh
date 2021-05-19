@@ -6,12 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -44,17 +41,17 @@ public class GroupchatActivity extends AppCompatActivity {
         List<Integer> listResId = Arrays.asList(R.drawable.enfj, R.drawable.enfp, R.drawable.entj, R.drawable.entp, R.drawable.esfj,R.drawable.esfp,R.drawable.estj,R.drawable.estp,R.drawable.infj,R.drawable.infp,R.drawable.intj,R.drawable.intp,R.drawable.isfj,R.drawable.isfp,R.drawable.istj,R.drawable.istp);
         List<String> listId = Arrays.asList("abcdefg1","abcdefg2","abcdefg3","abcdefg4","abcdefg5","abcdefg6","abcdefg7","abcdefg8","abcdefg9","abcdefg10","abcdefg11","abcdefg12","abcdefg13","abcdefg14","abcdefg15","abcdefg16");
         for(int i=0; i<listResId.size(); i++){
-            VOGroupchat VOGroupchat = new VOGroupchat();
-            VOGroupchat.setGchat_image(listResId.get(i));
-            VOGroupchat.setGchatId(listId.get(i));
+            Groupchat Groupchat = new Groupchat();
+            Groupchat.setGchat_image(listResId.get(i));
+            Groupchat.setGchatId(listId.get(i));
 
-            mAdapter.addItem(VOGroupchat);
+            mAdapter.addItem(Groupchat);
         }
         mAdapter.notifyDataSetChanged();
     }
 
     public class GroupchatAdapter extends RecyclerView.Adapter<GroupchatAdapter.GroupchatViewHolder>{//그룹채팅 어뎁터
-        private ArrayList<VOGroupchat> list = new ArrayList<>();
+        private ArrayList<Groupchat> list = new ArrayList<>();
 
         @Override
         public GroupchatViewHolder onCreateViewHolder (ViewGroup parent, int viewType){
@@ -73,8 +70,8 @@ public class GroupchatActivity extends AppCompatActivity {
             return list.size();
         }
 
-        void addItem(VOGroupchat VOGroupchat){
-            list.add(VOGroupchat);
+        void addItem(Groupchat Groupchat){
+            list.add(Groupchat);
         }
 
         public class GroupchatViewHolder extends RecyclerView.ViewHolder {
@@ -95,8 +92,8 @@ public class GroupchatActivity extends AppCompatActivity {
                 });
             }
 
-            void onBind(VOGroupchat VOGroupchat){
-                image.setImageResource(VOGroupchat.getGchat_image());
+            void onBind(Groupchat Groupchat){
+                image.setImageResource(Groupchat.getGchat_image());
             }
         }
     }//그룹채팅 어뎁터 마지막

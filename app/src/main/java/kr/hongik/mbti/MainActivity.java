@@ -274,11 +274,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void upload(String uri){
-        VOPhoto VOPhoto = new VOPhoto();
+        Photo Photo = new Photo();
         StorageReference storageRef = storage.getReferenceFromUrl("gs://mbti-bd577.appspot.com/");
         Uri file = Uri.fromFile(new File(uri));
-        VOPhoto.photo_id = file.getLastPathSegment();
-        StorageReference riversRef = storageRef.child("images/"+ VOPhoto.photo_id);
+        Photo.photo_id = file.getLastPathSegment();
+        StorageReference riversRef = storageRef.child("images/"+ Photo.photo_id);
         UploadTask uploadTask = riversRef.putFile(file);
 
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -295,8 +295,8 @@ public class MainActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
 
                     Uri downloadUri = task.getResult();
-                    VOPhoto.imageurl = downloadUri.toString();
-                    database.getReference().child("images").push().setValue(VOPhoto);
+                    Photo.imageurl = downloadUri.toString();
+                    database.getReference().child("images").push().setValue(Photo);
                 }
             }
         });

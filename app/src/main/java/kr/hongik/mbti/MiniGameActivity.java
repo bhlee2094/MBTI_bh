@@ -12,24 +12,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 public class MiniGameActivity extends AppCompatActivity {
 
     private RecyclerView mini_RecyclerView;
-    private ArrayList<VOMiniGame> mini_list;
+    private ArrayList<MiniGame> mini_list;
     private MiniGameAdapter miniGameAdapter;
 
     @Override
@@ -47,18 +37,18 @@ public class MiniGameActivity extends AppCompatActivity {
         mini_RecyclerView.setHasFixedSize(true);
         mini_RecyclerView.setLayoutManager(layoutManager);
         mini_RecyclerView.addItemDecoration(new DividerItemDecoration(mini_RecyclerView.getContext(),1));
-        VOMiniGame VOMiniGame = new VOMiniGame("숫자야구(클릭)");
-        mini_list.add(VOMiniGame);
+        MiniGame MiniGame = new MiniGame("숫자야구(클릭)");
+        mini_list.add(MiniGame);
         miniGameAdapter = new MiniGameAdapter(this, mini_list);
         mini_RecyclerView.setAdapter(miniGameAdapter);
     } //미니게임 초기설정 끝
 
     public class MiniGameAdapter extends RecyclerView.Adapter<MiniGameAdapter.MiniGameViewHolder>{ //미니게임 어뎁터
 
-        private ArrayList<VOMiniGame> list;
+        private ArrayList<MiniGame> list;
         private Context context;
 
-        public MiniGameAdapter(Context context, ArrayList<VOMiniGame> list){
+        public MiniGameAdapter(Context context, ArrayList<MiniGame> list){
             this.context = context;
             this.list = list;
         }
@@ -73,8 +63,8 @@ public class MiniGameActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull MiniGameAdapter.MiniGameViewHolder holder, int position) {
-            VOMiniGame VOMiniGame = list.get(position);
-            holder.mini_name.setText(VOMiniGame.getMininame());
+            MiniGame MiniGame = list.get(position);
+            holder.mini_name.setText(MiniGame.getMininame());
         }
 
         @Override

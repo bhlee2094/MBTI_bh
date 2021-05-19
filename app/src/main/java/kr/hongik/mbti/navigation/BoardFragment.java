@@ -38,8 +38,6 @@ import kr.hongik.mbti.BoardActivity;
 import kr.hongik.mbti.PostActivity;
 import kr.hongik.mbti.R;
 
-import static kr.hongik.mbti.BoardActivity.commentId;
-
 public class BoardFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = "BoardFragment";
@@ -49,7 +47,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
     private FirebaseAuth firebaseAuth;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseDatabase database;
-    private String all_title, all_content,all_nickname, all_boardId, all_up, all_comment;
+    private String all_title, all_content,all_nickname, all_boardId, all_up, all_comment, commentId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         ViewGroup root = (ViewGroup)inflater.inflate(R.layout.fragment_board, container, false);
@@ -57,6 +55,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
         Context context = root.getContext();
 
         mlist = new ArrayList<>();
+
+        commentId = db.collection("comment/"+all_boardId+"/comment").document().getId();
 
         database = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -211,7 +211,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener{
                                     String strboardId = list.get(getAdapterPosition()).getBoardId();
                                     Board Board = new Board(strTitle, strContent, strnickname, strup, strcomment, strboardId);
 
-                                    db.collection("Board").document(list.get(getAdapterPosition()).getBoardId())
+                                    db.collection("board").document(list.get(getAdapterPosition()).getBoardId())
                                             .update("title", strTitle, "content", strContent)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override

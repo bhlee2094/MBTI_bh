@@ -48,9 +48,9 @@ public class JoinActivity extends AppCompatActivity implements View.OnClickListe
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             String UserNum = user.getUid();
 
-            VOMemberInfo VOMemberInfo = new VOMemberInfo(nickname, gender, age, address, mbti, stateMessage, UserNum);
+            MemberInfo MemberInfo = new MemberInfo(nickname, gender, age, address, mbti, stateMessage, UserNum);
             if(user !=null){
-                db.collection("users").document(user.getUid()).set(VOMemberInfo)
+                db.collection("users").document(user.getUid()).set(MemberInfo)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {

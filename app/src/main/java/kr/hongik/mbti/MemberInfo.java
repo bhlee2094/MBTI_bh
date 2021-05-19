@@ -2,7 +2,7 @@ package kr.hongik.mbti;
 
 import java.io.Serializable;
 
-public class VOMemberInfo implements Serializable {
+public class MemberInfo implements Serializable {
     private static final long serialVersionUID = 1L;
     private int profile_image;
     private String nickname;
@@ -17,7 +17,7 @@ public class VOMemberInfo implements Serializable {
     public static String title = "title";
     public static String contents = "contents";
 
-    public VOMemberInfo(String nickname, String gender, String age, String address, String mbti, String stateMessage, String userNum){
+    public MemberInfo(String nickname, String gender, String age, String address, String mbti, String stateMessage, String userNum){
         this.nickname=nickname;
         this.gender=gender;
         this.age=age;
